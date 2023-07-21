@@ -1,28 +1,18 @@
-// In App.js in a new project
-
-import * as React from "react";
-import { View, Text } from "react-native";
+import { useState, useContext } from "react";
+import { StyleSheet, View } from "react-native";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import AppNavigator from "./src/navigation/AppNavigator";
+import ThemeContextProvider from "./src/contexts/themeContext";
 
-function HomeScreen() {
+export default function App() {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
-    </View>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <ThemeContextProvider>
+          <AppNavigator />
+        </ThemeContextProvider>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
-
-const Stack = createStackNavigator();
-
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-export default App;

@@ -1,19 +1,34 @@
-import { useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { useContext, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+} from "react-native";
 import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/themeContext";
+import { TextInput } from "react-native-paper";
 
 export default function InputScreen() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
+  const textStyle = [styles.text, { color: colors[themeT].text }];
+  const [input, setInput] = useState("");
+
   return (
-    <View
+    <Pressable
+      onPress={() => Keyboard.dismiss()}
       style={[styles.container, { backgroundColor: colors[themeT].background }]}
     >
-      <Text style={[styles.text, { color: colors[themeT].text }]}>
-        Input Screen
-      </Text>
-    </View>
+      <TextInput
+        style={styles.textInput}
+        value={input}
+        onChangeText={(text) => setInput(text)}
+      />
+    </Pressable>
   );
 }
 
@@ -23,6 +38,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+  textInput: {
+    flex: 0.2,
   },
   text: {
     fontSize: 20,

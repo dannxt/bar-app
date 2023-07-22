@@ -1,6 +1,6 @@
 const colors = {
   darkTheme: {
-    tabBar: "#000000e0",
+    tabBar: "black",
     background: "#000000e0",
     tabFocused: "white",
     tabUnfocused: "grey",
@@ -11,7 +11,7 @@ const colors = {
   },
 
   lightTheme: {
-    tabBar: "#251d1d",
+    tabBar: "#141d26",
     background: "white",
     tabFocused: "white",
     tabUnfocused: "grey",

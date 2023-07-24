@@ -2,7 +2,7 @@ import { createContext, useState, useContext } from "react";
 import colors from "../themes/colors";
 
 export const ThemeContext = createContext({
-  theme: "lightTheme",
+  theme: "dark",
   toggleTheme: () => {},
 });
 
@@ -11,11 +11,9 @@ type ThemeProviderProps = {
 };
 
 export default function ThemeContextProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState("darkTheme");
+  const [theme, setTheme] = useState("light");
   const toggleTheme = () => {
-    setTheme((prevtheme) =>
-      prevtheme === "darkTheme" ? "lightTheme" : "darkTheme"
-    );
+    setTheme((prevtheme) => (prevtheme === "dark" ? "light" : "dark"));
   };
   const themeT = theme as keyof typeof colors;
   return (

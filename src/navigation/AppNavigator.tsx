@@ -8,15 +8,17 @@ import ResultScreen from "../screens/ResultScreen";
 import ThirdScreen from "../screens/ThirdScreen";
 import SettingScreen from "../screens/SettingScreen";
 import colors from "../themes/colors";
-import { ThemeContext } from "../contexts/themeContext";
+import { DimensionsContext } from "../contexts/DimensionsContext";
+import { ThemeContext } from "../contexts/ThemeContext";
 import * as Haptics from "expo-haptics";
+import TabBarButton from "../components/TabBarButton";
 import { BlurView } from "expo-blur";
 
 export default function AppNavigator() {
-  const { width } = useWindowDimensions();
+  const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const Tab = createBottomTabNavigator();
   const insets = useSafeAreaInsets();
-  const { theme, toggleTheme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const triggerHaptic = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -27,6 +29,8 @@ export default function AppNavigator() {
         styles.outerCont,
         {
           paddingLeft: insets.left,
+          paddingRight: insets.right,
+          paddingBottom: insets.bottom,
         },
       ]}
     >
@@ -37,7 +41,7 @@ export default function AppNavigator() {
             tabBarLabel: () => null,
             tabBarStyle: {
               backgroundColor: colors[themeT].tabBar,
-              width: width * 0.08,
+              width: deviceWidth * 0.07,
             },
           })}
         >
@@ -53,7 +57,7 @@ export default function AppNavigator() {
               tabBarIcon: ({ focused }) => (
                 <Ionicons
                   name={focused ? "film" : "film-outline"}
-                  size={width * 0.03}
+                  size={deviceWidth * 0.03}
                   color={focused ? "white" : "grey"}
                 />
               ),
@@ -72,7 +76,7 @@ export default function AppNavigator() {
               tabBarIcon: ({ focused }) => (
                 <Ionicons
                   name={focused ? "keypad" : "keypad-outline"}
-                  size={width * 0.03}
+                  size={deviceWidth * 0.03}
                   color={focused ? "white" : "grey"}
                 />
               ),
@@ -91,7 +95,7 @@ export default function AppNavigator() {
               tabBarIcon: ({ focused }) => (
                 <Ionicons
                   name={focused ? "ios-cube" : "ios-cube-outline"}
-                  size={width * 0.03}
+                  size={deviceWidth * 0.03}
                   color={focused ? "white" : "grey"}
                 />
               ),
@@ -110,7 +114,7 @@ export default function AppNavigator() {
               tabBarIcon: ({ focused }) => (
                 <Ionicons
                   name={focused ? "cog" : "cog-outline"}
-                  size={width * 0.03}
+                  size={deviceWidth * 0.03}
                   color={focused ? "white" : "grey"}
                 />
               ),
@@ -127,6 +131,7 @@ const styles = StyleSheet.create({
   outerCont: {
     flex: 1,
     backgroundColor: "black",
+    elevation: 25,
   },
   innerCont: {
     flex: 1,

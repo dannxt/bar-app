@@ -1,13 +1,12 @@
 import { useState, useContext } from "react";
 import { View, Text, StyleSheet, Switch } from "react-native";
-import { ThemeContext } from "../contexts/themeContext";
-
+import { ThemeContext } from "../contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../themes/colors";
 
 export default function SettingScreen() {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
     setIsEnabled((previousState: boolean) => !previousState);
     toggleTheme();
@@ -15,7 +14,11 @@ export default function SettingScreen() {
   const themeT = theme as keyof typeof colors;
 
   return (
-    <View
+    <LinearGradient
+      colors={["black", "transparent"]}
+      start={[0, 0]}
+      end={[1, 0]}
+      locations={[0, 0.005]}
       style={[styles.container, { backgroundColor: colors[themeT].background }]}
     >
       <Text style={[styles.text, { color: colors[themeT].text }]}>
@@ -29,7 +32,7 @@ export default function SettingScreen() {
         onValueChange={toggleSwitch}
         value={isEnabled}
       />
-    </View>
+    </LinearGradient>
   );
 }
 

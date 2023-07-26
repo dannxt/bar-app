@@ -8,6 +8,7 @@ type PlayButtonProps = {
   fontSize?: number;
   buttonColor?: string;
   width?: string;
+  height?: string;
   contentStyle?: object;
 };
 
@@ -18,6 +19,7 @@ const PlayButton = ({
   fontSize,
   buttonColor,
   width,
+  height,
   contentStyle,
 }: PlayButtonProps) => (
   <Button
@@ -31,17 +33,21 @@ const PlayButton = ({
       alignItems: "center",
       alignSelf: "center",
       shadowColor: "black",
+      fontWeight: "bold",
+      flexWrap: "nowrap",
     }}
     mode="contained"
     buttonColor={buttonColor}
     style={{
-      height: "50%",
+      height: height,
       width: width,
       justifyContent: "center",
-
-      shadowOffset: { width: 1, height: 1 },
+      shadowOffset: { width: 2, height: 2 },
       shadowOpacity: 0.5,
       shadowRadius: 1,
+      marginHorizontal: 5,
+      marginBottom: 15,
+      padding: 0,
     }}
     onPress={onPress}
   >

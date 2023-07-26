@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@tarikfp/react-native-tabs-sidebar";
-import { useState, useContext, useEffect } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 import { StyleSheet, View, useWindowDimensions, Animated } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,6 +23,17 @@ export default function AppNavigator() {
   const triggerHaptic = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
+
+  //States
+  const [isThereResult, setIsThereResult] = useState(false);
+  const [isResultTabPressed, setIsResultTabPressed] = useState(false);
+
+  //useEffects
+  useEffect(() => {
+    if (isThereResult) {
+      setIsResultTabPressed(false);
+    }
+  }, [isThereResult]);
   return (
     <View
       style={[
@@ -68,11 +79,19 @@ export default function AppNavigator() {
             listeners={() => ({
               tabPress: () => {
                 triggerHaptic();
+                setIsResultTabPressed(true);
+                setIsResultTabPressed(false);
+                setIsThereResult(false);
               },
             })}
             name="ResultScreen"
             component={ResultScreen}
             options={{
+              tabBarBadge: "!",
+              tabBarBadgeStyle: {
+                backgroundColor: "red",
+                opacity: isThereResult && !isResultTabPressed ? 1 : 0,
+              },
               tabBarIcon: ({ focused }) => (
                 <Ionicons
                   name={focused ? "keypad" : "keypad-outline"}
@@ -126,7 +145,6 @@ export default function AppNavigator() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   outerCont: {
     flex: 1,

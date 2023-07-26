@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Pressable,
   Image,
 } from "react-native";
+import * as Haptics from "expo-haptics";
 import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { DimensionsContext } from "../contexts/DimensionsContext";
@@ -15,12 +16,49 @@ import { LinearGradient } from "expo-linear-gradient";
 import SmallBoard from "../components/SmallBoard";
 import PlayButton from "../components/PlayButton";
 import SearchOptionButtons from "../components/SearchOptionButtons";
+import InputBoard from "../components/InputBoard";
 
 export default function InputScreen() {
+  const emptyGrid = [
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""],
+    ["", "", "", "", "", ""], //28 rows
+  ];
   const { theme, toggleTheme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const textStyle = [styles.text, { color: colors[themeT].text }];
+
+  //States
   const [input, setInput] = useState("");
+  const [inputGrid, setInputGrid] = useState(emptyGrid);
+  const [inputGridHistory, setInputGridHistory] = useState([emptyGrid]);
+
+  //Contexts
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
 
   const undoButtonHandler = () => {
@@ -33,15 +71,101 @@ export default function InputScreen() {
     console.log("right button pressed");
   };
   const bankerButtonHandler = () => {
-    console.log("banker button pressed");
+    setInput((input) => input + "B");
+    setInputGrid(updateInputGrid(input, inputGrid));
   };
   const playerButtonHandler = () => {
-    console.log("player button pressed");
+    setInput((input) => input + "P");
+    setInputGrid(updateInputGrid(input, inputGrid));
   };
-  const searchButtonHandler = () => {
-    console.log("search button pressed");
+  const searchButtonHandler = () => {};
+  const clearButtonHandler = () => {
+    setInput("");
+    setInputGrid(emptyGrid);
   };
 
+  function updateInputGrid(input: string, inputGrid: Array<string[]>) {
+    let prevRow = 0;
+    let prevColumn = 0;
+    let currentColumn = 0;
+    let currentRow = 0;
+    let maxColumn = 29;
+    let maxRow = 5;
+    let topColumnPointer = 0;
+    let grid = inputGrid;
+
+    function getCurrentPosition() {
+      return [currentRow, currentColumn];
+    }
+    function setCurrentPosition(row: number, column: number) {
+      currentRow = row;
+      currentColumn = column;
+    }
+
+    function getPrevPosition() {
+      return [prevRow, prevColumn];
+    }
+
+    function setPrevPosition(row: number, column: number) {
+      prevRow = row;
+      prevColumn = column;
+    }
+
+    function getInputAtPosition(position: number[]) {
+      return grid[position[0]][position[1]];
+    }
+
+    function setInputAtPosition(position: number[], input: string) {
+      grid[position[0]][position[1]] = input;
+    }
+    function getColumnPointerPosition() {
+      return [0, topColumnPointer];
+    }
+    function advanceColumnPointerPosition() {
+      topColumnPointer = currentColumn;
+    }
+    function setNextInput(input: string) {
+      const prevPos = getPrevPosition();
+      const prevInput = getInputAtPosition(prevPos);
+      if (prevInput === input) {
+        // if prev input === current input (same color):
+        if (
+          // check if current column is max row or next row is blocked:
+          // if yes, move to next column in the same row, and update column pointer
+          currentRow === maxRow ||
+          grid[currentRow + 1][currentColumn] !== ""
+        ) {
+          //move rightwards
+          setPrevPosition(currentRow, currentColumn);
+          setCurrentPosition(currentRow, currentColumn + 1);
+          setInputAtPosition(getCurrentPosition(), input);
+          advanceColumnPointerPosition();
+        } else {
+          // not blocked, not max row -> move to next row in the same column
+          setPrevPosition(currentRow, currentColumn);
+          setCurrentPosition(currentRow + 1, currentColumn);
+          setInputAtPosition(getCurrentPosition(), input);
+        }
+      } else {
+        // if prev input !== current input:
+        // move to the next column and update column pointer
+        setPrevPosition(currentRow, currentColumn);
+        setCurrentPosition(0, currentColumn + 1);
+        advanceColumnPointerPosition();
+      }
+    }
+    for (let i = 0; i < input.length; i++) {
+      console.log(input[i]);
+      setNextInput(input[i]);
+    }
+    return grid;
+  }
+  useEffect(() => {
+    updateInputGrid(input, inputGrid);
+    return () => {
+      console.log("clean up");
+    };
+  }, [input, inputGrid]);
   return (
     <Pressable onPress={() => Keyboard.dismiss()} style={styles.container}>
       <LinearGradient
@@ -59,29 +183,45 @@ export default function InputScreen() {
             style={[styles.textInput, { height: 0.1 * deviceHeight }]}
             value={input}
             onChangeText={(text) => setInput(text)}
+            autoCapitalize="characters"
+            autoComplete="off"
+            autoCorrect={false}
+            maxLength={26}
             keyboardAppearance={theme === "light" ? "light" : "dark"}
             theme={{ dark: theme === "light" ? false : true }}
           />
-          <SmallBoard style={styles.smallBoard} />
+          <View style={styles.boardCont}>
+            <SmallBoard style={styles.smallBoard} />
+            <InputBoard style={styles.inputBoard} inputGrid={inputGrid} />
+          </View>
           <View style={styles.buttonMainCont}>
             <View style={styles.leftRightContOuter}>
               <PlayButton
-                icon={"arrow-left-top-bold"}
-                fontSize={40}
+                icon={"undo"}
+                fontSize={35}
                 contentStyle={{ marginLeft: 16 }}
-                onPress={undoButtonHandler}
+                height="35%"
+                width="37%"
+                onPress={leftButtonHandler}
+                buttonColor={colors[themeT].undo}
               />
-              <View style={styles.leftRightContInner}>
-                <PlayButton
-                  icon={"arrow-left-thick"}
-                  fontSize={40}
-                  contentStyle={{ marginLeft: 16 }}
-                  onPress={leftButtonHandler}
-                />
+              <View style={styles.leftRightContBottom}>
                 <PlayButton
                   icon={"arrow-right-thick"}
                   fontSize={40}
                   contentStyle={{ marginLeft: 16 }}
+                  height="45%"
+                  width="30%"
+                  buttonColor={colors[themeT].left}
+                  onPress={leftButtonHandler}
+                />
+                <PlayButton
+                  icon={"arrow-left-thick"}
+                  fontSize={40}
+                  contentStyle={{ marginLeft: 16 }}
+                  height="45%"
+                  width="30%"
+                  buttonColor={colors[themeT].right}
                   onPress={rightButtonHandler}
                 />
               </View>
@@ -91,24 +231,40 @@ export default function InputScreen() {
               <SearchOptionButtons />
               <PlayButton
                 title={"Search"}
+                height="40%"
                 fontSize={15}
                 onPress={searchButtonHandler}
                 buttonColor={colors[themeT].search}
               />
             </View>
-            <View style={styles.playerBankerCont}>
+            <View style={styles.leftRightContOuter}>
               <PlayButton
-                title={"Banker"}
-                fontSize={12}
-                onPress={bankerButtonHandler}
-                buttonColor={colors[themeT].banker}
+                icon={"eraser"}
+                fontSize={35}
+                contentStyle={{ marginLeft: 16 }}
+                height="35%"
+                width="37%"
+                onPress={clearButtonHandler}
+                buttonColor={colors[themeT].clear}
               />
-              <PlayButton
-                title={"Player"}
-                fontSize={12}
-                onPress={playerButtonHandler}
-                buttonColor={colors[themeT].player}
-              />
+              <View style={styles.leftRightContBottom}>
+                <PlayButton
+                  title="P"
+                  fontSize={18}
+                  height="45%"
+                  width="30%"
+                  onPress={playerButtonHandler}
+                  buttonColor={colors[themeT].player}
+                />
+                <PlayButton
+                  title="B"
+                  fontSize={18}
+                  height="45%"
+                  width="30%"
+                  onPress={bankerButtonHandler}
+                  buttonColor={colors[themeT].banker}
+                />
+              </View>
             </View>
           </View>
         </View>
@@ -129,14 +285,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   textInput: {
-    width: "80%",
+    flex: 0.13,
+    width: "60%",
     mode: "flat",
     textAlign: "center",
   },
-  smallBoard: {
-    flex: 0.6,
-    resizeMode: "contain",
+  boardCont: {
+    flex: 0.5,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  inputBoard: {
+    flex: 1,
+    position: "absolute",
+    height: "82%",
     width: "90%",
+  },
+  smallBoard: {
+    height: "82%",
+    width: "90%",
+    resizeMode: "contain",
   },
   buttonMainCont: {
     flex: 0.4,
@@ -146,11 +316,11 @@ const styles = StyleSheet.create({
     flex: 0.35,
     width: "30%",
     flexDirection: "column",
+    alignItems: "center",
   },
-  leftRightContInner: {
+  leftRightContBottom: {
     height: "100%",
     flexDirection: "row",
-    justifyContent: "space-evenly",
   },
   searchOptionsCont: {
     flex: 0.3,
@@ -161,7 +331,7 @@ const styles = StyleSheet.create({
     flex: 0.35,
     width: "30%",
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
   },
   text: {
     fontSize: 20,

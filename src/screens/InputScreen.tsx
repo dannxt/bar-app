@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useMemo } from "react";
 import {
   View,
   Text,
@@ -8,11 +8,9 @@ import {
   Pressable,
   PixelRatio,
 } from "react-native";
-import * as Haptics from "expo-haptics";
 import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { DimensionsContext } from "../contexts/DimensionsContext";
-// import { TextInput } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import SmallBoard from "../components/SmallBoard";
 import PlayButton from "../components/PlayButton";
@@ -58,23 +56,27 @@ export default function InputScreen() {
 
   //States
   const [input, setInput] = useState("");
-  const [inputGrid, setInputGrid] = useState(emptyGrid);
   const [inputHistory, setInputHistory] = useState([""]);
+  const [inputGrid, setInputGrid] = useState(emptyGrid);
 
   //Contexts
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
 
   const gridHistoryHandler = () => {
-    if (inputHistory.length < 5) {
-      setInputHistory((history) => [...history, input]);
-    } else {
-      setInputHistory((history) => [...history.slice(1), input]);
+    if (input !== inputHistory[inputHistory.length - 1]) {
+      if (inputHistory.length < 6) {
+        setInputHistory((prevHistory) => [...prevHistory, input]);
+      } else {
+        setInputHistory((prevHistory) => [...prevHistory.slice(1), input]);
+      }
     }
   };
+
   const undoButtonHandler = () => {
     if (inputHistory.length > 1) {
-      setInput(inputHistory[inputHistory.length - 2]);
-      setInputHistory((history) => history.slice(0, -1));
+      const previousInputs = inputHistory.slice(0, -1);
+      setInput(previousInputs[previousInputs.length - 1]);
+      setInputHistory(previousInputs);
     }
   };
 
@@ -87,13 +89,11 @@ export default function InputScreen() {
   const bankerButtonHandler = () => {
     if (input.length < 28) {
       setInput((input) => input + "B");
-      // gridHistoryHandler();
     }
   };
   const playerButtonHandler = () => {
     if (input.length < 28) {
       setInput((input) => input + "P");
-      // gridHistoryHandler();
     }
   };
   const searchButtonHandler = () => {};
@@ -145,15 +145,12 @@ export default function InputScreen() {
     }
     return grid;
   }
-
   useEffect(() => {
-    setInputGrid(createGrid(input));
     gridHistoryHandler();
-    console.log(inputHistory.length);
-    console.log(inputHistory);
+    setInputGrid(createGrid(input));
   }, [input]);
   return (
-    <Pressable onPress={() => Keyboard.dismiss()} style={styles.container}>
+    <Pressable onPressIn={() => Keyboard.dismiss()} style={styles.container}>
       <LinearGradient
         colors={["black", "transparent"]}
         start={[0, 0]}
@@ -187,6 +184,7 @@ export default function InputScreen() {
                   paddingRight: deviceWidth * 0.02,
                   paddingTop: deviceHeight * 0.02,
                   marginHorizontal: 0,
+                  borderRadius: 3,
                 },
               ]}
               value={input}
@@ -224,7 +222,7 @@ export default function InputScreen() {
                 contentStyle={{ marginLeft: 16 }}
                 height="35%"
                 width="37%"
-                onPress={undoButtonHandler}
+                onPressIn={undoButtonHandler}
                 buttonColor={colors[themeT].undo}
               />
               <View style={styles.leftRightContBottom}>
@@ -235,7 +233,7 @@ export default function InputScreen() {
                   height="45%"
                   width="30%"
                   buttonColor={colors[themeT].left}
-                  onPress={leftButtonHandler}
+                  onPressIn={leftButtonHandler}
                 />
                 <PlayButton
                   icon={"arrow-left-thick"}
@@ -244,7 +242,7 @@ export default function InputScreen() {
                   height="45%"
                   width="30%"
                   buttonColor={colors[themeT].right}
-                  onPress={rightButtonHandler}
+                  onPressIn={rightButtonHandler}
                 />
               </View>
             </View>
@@ -255,7 +253,7 @@ export default function InputScreen() {
                 title={"Search"}
                 height="40%"
                 fontSize={15}
-                onPress={searchButtonHandler}
+                onPressIn={searchButtonHandler}
                 buttonColor={colors[themeT].search}
               />
             </View>
@@ -266,7 +264,7 @@ export default function InputScreen() {
                 contentStyle={{ marginLeft: 16 }}
                 height="35%"
                 width="37%"
-                onPress={clearButtonHandler}
+                onPressIn={clearButtonHandler}
                 buttonColor={colors[themeT].clear}
               />
               <View style={styles.leftRightContBottom}>
@@ -275,7 +273,7 @@ export default function InputScreen() {
                   fontSize={fontScale * 14}
                   height="45%"
                   width="30%"
-                  onPress={playerButtonHandler}
+                  onPressIn={playerButtonHandler}
                   buttonColor={colors[themeT].player}
                 />
                 <PlayButton
@@ -283,7 +281,7 @@ export default function InputScreen() {
                   fontSize={fontScale * 14}
                   height="45%"
                   width="30%"
-                  onPress={bankerButtonHandler}
+                  onPressIn={bankerButtonHandler}
                   buttonColor={colors[themeT].banker}
                 />
               </View>

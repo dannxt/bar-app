@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { View, Text, StyleSheet, PixelRatio } from "react-native";
 import { DimensionsContext } from "../contexts/DimensionsContext";
 
@@ -8,7 +8,10 @@ import colors from "../themes/colors";
 const NumberTextView = () => {
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
   const fontScale = PixelRatio.getFontScale();
-  const numbersArray = Array.from(Array(28).keys()).map((_) => _ + 1);
+  const numbersArray = useMemo(
+    () => Array.from(Array(28).keys()).map((_) => _ + 1),
+    []
+  );
   const { theme, toggleTheme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };

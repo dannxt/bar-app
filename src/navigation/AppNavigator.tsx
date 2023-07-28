@@ -18,6 +18,7 @@ import { ThemeContext } from "../contexts/ThemeContext";
 import * as Haptics from "expo-haptics";
 
 export default function AppNavigator() {
+  //variables
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
   const { theme, toggleTheme } = useContext(ThemeContext);
   const Tab = createBottomTabNavigator();
@@ -27,15 +28,16 @@ export default function AppNavigator() {
   const triggerHaptic = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
+  //Data
+  const DataTypeNine =
+    "BPBPBPBPBPBPBPBPBPBBBBBBBBBBBBBBBBBBBBBBBBBBBBPPPPPPPPPPPPPPPPPP";
 
   //States
   const [isThereResult, setIsThereResult] = useState(false);
-  const [isResultTabPressed, setIsResultTabPressed] = useState(false);
 
   //useEffects
   useEffect(() => {
     if (isThereResult) {
-      setIsResultTabPressed(false);
     }
   }, [isThereResult]);
   return (
@@ -83,19 +85,11 @@ export default function AppNavigator() {
             listeners={() => ({
               tabPress: () => {
                 triggerHaptic();
-                setIsResultTabPressed(true);
-                setIsResultTabPressed(false);
-                setIsThereResult(false);
               },
             })}
             name="ResultScreen"
             component={ResultScreen}
             options={{
-              tabBarBadge: "!",
-              tabBarBadgeStyle: {
-                backgroundColor: "red",
-                opacity: isThereResult && !isResultTabPressed ? 1 : 0,
-              },
               tabBarIcon: ({ focused }) => (
                 <Ionicons
                   name={focused ? "keypad" : "keypad-outline"}

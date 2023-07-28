@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button } from "react-native-paper";
 
 type PlayButtonProps = {
-  onPress: () => void;
+  onPressIn: () => void;
   icon?: string;
   title?: string;
   fontSize?: number;
@@ -13,7 +13,7 @@ type PlayButtonProps = {
 };
 
 const PlayButton = ({
-  onPress,
+  onPressIn,
   icon,
   title,
   fontSize,
@@ -34,7 +34,6 @@ const PlayButton = ({
       alignSelf: "center",
       shadowColor: "black",
       fontWeight: "bold",
-      flexWrap: "nowrap",
     }}
     mode="contained"
     buttonColor={buttonColor}
@@ -49,7 +48,7 @@ const PlayButton = ({
       marginBottom: 15,
       padding: 0,
     }}
-    onPress={onPress}
+    onPressIn={onPressIn}
   >
     {title}
   </Button>

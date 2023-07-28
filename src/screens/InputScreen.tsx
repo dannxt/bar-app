@@ -2,21 +2,23 @@ import { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
+  TextInput,
   StyleSheet,
   Keyboard,
   Pressable,
-  Image,
+  PixelRatio,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { DimensionsContext } from "../contexts/DimensionsContext";
-import { TextInput } from "react-native-paper";
+// import { TextInput } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import SmallBoard from "../components/SmallBoard";
 import PlayButton from "../components/PlayButton";
 import SearchOptionButtons from "../components/SearchOptionButtons";
 import InputBoard from "../components/InputBoard";
+import NumberTextView from "../components/NumberTextView";
 
 export default function InputScreen() {
   const emptyGrid = [
@@ -51,121 +53,105 @@ export default function InputScreen() {
   ];
   const { theme, toggleTheme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
-  const textStyle = [styles.text, { color: colors[themeT].text }];
+  const textColor = { color: colors[themeT].text };
+  const fontScale = PixelRatio.getFontScale();
 
   //States
   const [input, setInput] = useState("");
   const [inputGrid, setInputGrid] = useState(emptyGrid);
-  const [inputGridHistory, setInputGridHistory] = useState([emptyGrid]);
+  const [inputHistory, setInputHistory] = useState([""]);
 
   //Contexts
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
 
-  const undoButtonHandler = () => {
-    console.log("undo button pressed");
+  const gridHistoryHandler = () => {
+    if (inputHistory.length < 5) {
+      setInputHistory((history) => [...history, input]);
+    } else {
+      setInputHistory((history) => [...history.slice(1), input]);
+    }
   };
+  const undoButtonHandler = () => {
+    if (inputHistory.length > 1) {
+      setInput(inputHistory[inputHistory.length - 2]);
+      setInputHistory((history) => history.slice(0, -1));
+    }
+  };
+
   const leftButtonHandler = () => {
-    console.log("left button pressed");
+    setInput((input) => input.slice(1));
   };
   const rightButtonHandler = () => {
-    console.log("right button pressed");
+    setInput((input) => input.slice(0, -1));
   };
   const bankerButtonHandler = () => {
-    setInput((input) => input + "B");
-    setInputGrid(updateInputGrid(input, inputGrid));
+    if (input.length < 28) {
+      setInput((input) => input + "B");
+      // gridHistoryHandler();
+    }
   };
   const playerButtonHandler = () => {
-    setInput((input) => input + "P");
-    setInputGrid(updateInputGrid(input, inputGrid));
+    if (input.length < 28) {
+      setInput((input) => input + "P");
+      // gridHistoryHandler();
+    }
   };
   const searchButtonHandler = () => {};
   const clearButtonHandler = () => {
     setInput("");
-    setInputGrid(emptyGrid);
   };
 
-  function updateInputGrid(input: string, inputGrid: Array<string[]>) {
-    let prevRow = 0;
-    let prevColumn = 0;
+  function createGrid(input: string) {
     let currentColumn = 0;
     let currentRow = 0;
-    let maxColumn = 29;
     let maxRow = 5;
     let topColumnPointer = 0;
-    let grid = inputGrid;
+    let grid = emptyGrid;
 
     function getCurrentPosition() {
       return [currentRow, currentColumn];
     }
-    function setCurrentPosition(row: number, column: number) {
-      currentRow = row;
-      currentColumn = column;
+
+    function setGridAtPosition(position: number[], char: string) {
+      grid[position[1]][position[0]] = char;
     }
 
-    function getPrevPosition() {
-      return [prevRow, prevColumn];
-    }
+    let prevInput = "";
 
-    function setPrevPosition(row: number, column: number) {
-      prevRow = row;
-      prevColumn = column;
-    }
-
-    function getInputAtPosition(position: number[]) {
-      return grid[position[0]][position[1]];
-    }
-
-    function setInputAtPosition(position: number[], input: string) {
-      grid[position[0]][position[1]] = input;
-    }
-    function getColumnPointerPosition() {
-      return [0, topColumnPointer];
-    }
-    function advanceColumnPointerPosition() {
-      topColumnPointer = currentColumn;
-    }
-    function setNextInput(input: string) {
-      const prevPos = getPrevPosition();
-      const prevInput = getInputAtPosition(prevPos);
-      if (prevInput === input) {
-        // if prev input === current input (same color):
+    for (const currInput of input) {
+      if (prevInput === "" || prevInput === currInput) {
         if (
-          // check if current column is max row or next row is blocked:
-          // if yes, move to next column in the same row, and update column pointer
           currentRow === maxRow ||
-          grid[currentRow + 1][currentColumn] !== ""
+          grid[currentColumn][currentRow + 1] !== "" ||
+          (currentColumn >= 1 &&
+            grid[currentColumn - 1][currentRow + 1] === currInput) ||
+          (currentRow + 2 <= maxRow &&
+            grid[currentColumn][currentRow + 2] === currInput)
         ) {
-          //move rightwards
-          setPrevPosition(currentRow, currentColumn);
-          setCurrentPosition(currentRow, currentColumn + 1);
-          setInputAtPosition(getCurrentPosition(), input);
-          advanceColumnPointerPosition();
+          setGridAtPosition(getCurrentPosition(), currInput);
+          currentColumn++;
         } else {
-          // not blocked, not max row -> move to next row in the same column
-          setPrevPosition(currentRow, currentColumn);
-          setCurrentPosition(currentRow + 1, currentColumn);
-          setInputAtPosition(getCurrentPosition(), input);
+          setGridAtPosition(getCurrentPosition(), currInput);
+          currentRow++;
         }
-      } else {
-        // if prev input !== current input:
-        // move to the next column and update column pointer
-        setPrevPosition(currentRow, currentColumn);
-        setCurrentPosition(0, currentColumn + 1);
-        advanceColumnPointerPosition();
+      } else if (prevInput !== currInput) {
+        topColumnPointer++;
+        currentColumn = topColumnPointer;
+        currentRow = 0;
+        setGridAtPosition(getCurrentPosition(), currInput);
+        currentRow = 1;
       }
-    }
-    for (let i = 0; i < input.length; i++) {
-      console.log(input[i]);
-      setNextInput(input[i]);
+      prevInput = currInput;
     }
     return grid;
   }
+
   useEffect(() => {
-    updateInputGrid(input, inputGrid);
-    return () => {
-      console.log("clean up");
-    };
-  }, [input, inputGrid]);
+    setInputGrid(createGrid(input));
+    gridHistoryHandler();
+    console.log(inputHistory.length);
+    console.log(inputHistory);
+  }, [input]);
   return (
     <Pressable onPress={() => Keyboard.dismiss()} style={styles.container}>
       <LinearGradient
@@ -179,17 +165,53 @@ export default function InputScreen() {
         ]}
       >
         <View style={styles.innerCont}>
-          <TextInput
-            style={[styles.textInput, { height: 0.1 * deviceHeight }]}
-            value={input}
-            onChangeText={(text) => setInput(text)}
-            autoCapitalize="characters"
-            autoComplete="off"
-            autoCorrect={false}
-            maxLength={26}
-            keyboardAppearance={theme === "light" ? "light" : "dark"}
-            theme={{ dark: theme === "light" ? false : true }}
-          />
+          <NumberTextView />
+          <View
+            style={{
+              flex: 0.16,
+              width: "90%",
+              flexDirection: "row",
+            }}
+          >
+            <TextInput
+              style={[
+                textColor,
+                {
+                  backgroundColor: colors[themeT].textInput,
+                  flex: 1,
+                  fontSize: fontScale * 25,
+                  fontFamily: "UbuntuMono-Bold",
+                  textAlign: "justify",
+                  justifyContent: "space-evenly",
+                  paddingLeft: deviceWidth * 0.025,
+                  paddingRight: deviceWidth * 0.02,
+                  paddingTop: deviceHeight * 0.02,
+                  marginHorizontal: 0,
+                },
+              ]}
+              value={input}
+              onChangeText={(text) => setInput(text)}
+              autoCapitalize="characters"
+              autoComplete="off"
+              autoCorrect={false}
+              maxLength={28}
+              keyboardAppearance={theme === "light" ? "light" : "dark"}
+            />
+            <Text
+              style={[
+                textColor,
+                {
+                  position: "absolute",
+                  fontSize: fontScale * 9,
+                  fontWeight: "bold",
+                  fontStyle: "italic",
+                  textDecorationLine: "underline",
+                },
+              ]}
+            >
+              {input.length}
+            </Text>
+          </View>
           <View style={styles.boardCont}>
             <SmallBoard style={styles.smallBoard} />
             <InputBoard style={styles.inputBoard} inputGrid={inputGrid} />
@@ -198,17 +220,17 @@ export default function InputScreen() {
             <View style={styles.leftRightContOuter}>
               <PlayButton
                 icon={"undo"}
-                fontSize={35}
+                fontSize={fontScale * 40}
                 contentStyle={{ marginLeft: 16 }}
                 height="35%"
                 width="37%"
-                onPress={leftButtonHandler}
+                onPress={undoButtonHandler}
                 buttonColor={colors[themeT].undo}
               />
               <View style={styles.leftRightContBottom}>
                 <PlayButton
                   icon={"arrow-right-thick"}
-                  fontSize={40}
+                  fontSize={fontScale * 40}
                   contentStyle={{ marginLeft: 16 }}
                   height="45%"
                   width="30%"
@@ -217,7 +239,7 @@ export default function InputScreen() {
                 />
                 <PlayButton
                   icon={"arrow-left-thick"}
-                  fontSize={40}
+                  fontSize={fontScale * 40}
                   contentStyle={{ marginLeft: 16 }}
                   height="45%"
                   width="30%"
@@ -240,7 +262,7 @@ export default function InputScreen() {
             <View style={styles.leftRightContOuter}>
               <PlayButton
                 icon={"eraser"}
-                fontSize={35}
+                fontSize={fontScale * 30}
                 contentStyle={{ marginLeft: 16 }}
                 height="35%"
                 width="37%"
@@ -250,7 +272,7 @@ export default function InputScreen() {
               <View style={styles.leftRightContBottom}>
                 <PlayButton
                   title="P"
-                  fontSize={18}
+                  fontSize={fontScale * 14}
                   height="45%"
                   width="30%"
                   onPress={playerButtonHandler}
@@ -258,7 +280,7 @@ export default function InputScreen() {
                 />
                 <PlayButton
                   title="B"
-                  fontSize={18}
+                  fontSize={fontScale * 14}
                   height="45%"
                   width="30%"
                   onPress={bankerButtonHandler}
@@ -280,15 +302,9 @@ const styles = StyleSheet.create({
   innerCont: {
     flex: 1,
     paddingTop: "2%",
-    paddingBottom: "2%",
+    paddingBottom: "0.5%",
     alignItems: "center",
     justifyContent: "center",
-  },
-  textInput: {
-    flex: 0.13,
-    width: "60%",
-    mode: "flat",
-    textAlign: "center",
   },
   boardCont: {
     flex: 0.5,
@@ -332,9 +348,5 @@ const styles = StyleSheet.create({
     width: "30%",
     flexDirection: "row",
     justifyContent: "center",
-  },
-  text: {
-    fontSize: 20,
-    marginRight: 20,
   },
 });

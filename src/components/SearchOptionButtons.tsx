@@ -14,23 +14,42 @@ const SearchOptionButtons = () => {
       <SegmentedButtons
         value={value}
         onValueChange={setValue}
+        theme={{ colors: { primary: "green" } }}
         buttons={[
           {
             value: "nineData",
             label: "9路",
-            checkedColor: "red",
+            checkedColor: colors[themeT].banker,
+            style: {
+              backgroundColor:
+                value === "nineData"
+                  ? colors[themeT].textInput
+                  : colors[themeT].background,
+            },
             uncheckedColor: colors[themeT].text,
           },
           {
             value: "threeData",
             label: "3路",
-            checkedColor: "red",
+            checkedColor: colors[themeT].banker,
+            style: {
+              backgroundColor:
+                value === "threeData"
+                  ? colors[themeT].textInput
+                  : colors[themeT].background,
+            },
             uncheckedColor: colors[themeT].text,
           },
           {
             value: "fourData",
             label: "4路",
-            checkedColor: "red",
+            checkedColor: colors[themeT].banker,
+            style: {
+              backgroundColor:
+                value === "fourData"
+                  ? colors[themeT].textInput
+                  : colors[themeT].background,
+            },
             uncheckedColor: colors[themeT].text,
           },
         ]}

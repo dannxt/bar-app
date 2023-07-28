@@ -1,7 +1,8 @@
 const colors = {
   dark: {
+    textInput: "#424549",
     tabBar: "#1c1b1a",
-    background: "#424549",
+    background: "#282b30",
     tabFocused: "white",
     tabUnfocused: "grey",
     thumbColorTrue: "white",
@@ -9,16 +10,17 @@ const colors = {
     trackColorFalse: "#3e3e3e",
     board: "grey",
     text: "white",
-    undo: "#282b30",
-    left: "#36393e",
-    right: "#36393e",
-    clear: "#282b30",
-    banker: "#dc143c",
-    player: "#3c659e",
-    search: "#aa6f73",
+    undo: "#333538",
+    left: "#424549",
+    right: "#424549",
+    clear: "#333538",
+    banker: "#e03154",
+    player: "#5a7fb8",
+    search: "#5a7837",
   },
 
   light: {
+    textInput: "#c4bbbc",
     tabBar: "#473a41",
     background: "white",
     tabFocused: "white",
@@ -32,9 +34,9 @@ const colors = {
     left: "#a39193",
     right: "#a39193",
     clear: "#66545e",
-    banker: "#dc143c",
-    player: "#3c659e",
-    search: "#aa6f73",
+    banker: "#e03154",
+    player: "#5a7fb8",
+    search: "#5a7837",
   },
 };
 

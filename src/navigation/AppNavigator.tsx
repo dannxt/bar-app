@@ -1,6 +1,11 @@
 import { createBottomTabNavigator } from "@tarikfp/react-native-tabs-sidebar";
 import { useState, createContext, useContext, useEffect } from "react";
-import { StyleSheet, View, useWindowDimensions, Animated } from "react-native";
+import {
+  StyleSheet,
+  View,
+  useWindowDimensions,
+  PixelRatio,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import InputScreen from "../screens/InputScreen";
@@ -11,8 +16,6 @@ import colors from "../themes/colors";
 import { DimensionsContext } from "../contexts/DimensionsContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import * as Haptics from "expo-haptics";
-import TabBarButton from "../components/TabBarButton";
-import { BlurView } from "expo-blur";
 
 export default function AppNavigator() {
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
@@ -20,6 +23,7 @@ export default function AppNavigator() {
   const Tab = createBottomTabNavigator();
   const insets = useSafeAreaInsets();
   const themeT = theme as keyof typeof colors;
+  const fontScale = PixelRatio.getFontScale();
   const triggerHaptic = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };

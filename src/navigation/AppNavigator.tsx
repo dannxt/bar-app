@@ -17,6 +17,9 @@ import { DimensionsContext } from "../contexts/DimensionsContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import * as Haptics from "expo-haptics";
 
+const item9 = require("../../src/data/routeData9.tsx");
+const item10 = require("../../src/data/routeData10.tsx");
+
 export default function AppNavigator() {
   //variables
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);

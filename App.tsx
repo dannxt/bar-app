@@ -6,11 +6,11 @@ import ThemeContextProvider from "./src/contexts/ThemeContext";
 import DimensionsContextProvider from "./src/contexts/DimensionsContext";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { Asset } from "expo-asset";
-import * as FileSystem from "expo-file-system";
 
 SplashScreen.preventAutoHideAsync();
 export default function App() {
+  //variables
+  let routeDataList = [];
   //States
   const [dataString, setDataString] = useState("");
   const [fontsLoaded] = useFonts({
@@ -19,7 +19,10 @@ export default function App() {
   });
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
+      const start = performance.now();
       loadData();
+      const end = performance.now();
+      console.log(`loadData() took ${(end - start) / 1000} seconds to run`);
       await SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
@@ -27,24 +30,18 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  function loadData() {
-    console.log("Loading data...");
-    const data = readFileAsync();
-    console.log(data);
+
+  async function loadData() {
+    const routeDataList = [];
+    const item1 = require("./src/data/routeData1.tsx");
+    const item2 = require("./src/data/routeData2.tsx");
+    const item3 = require("./src/data/routeData3.tsx");
+    const item4 = require("./src/data/routeData4.tsx");
+    const item5 = require("./src/data/routeData5.tsx");
+    const item6 = require("./src/data/routeData6.tsx");
+    const item7 = require("./src/data/routeData7.tsx");
+    const item8 = require("./src/data/routeData8.tsx");
   }
-
-  // // File I/O Functions
-  const fileUri = FileSystem.bundleDirectory + "src/assets/data/routeData.txt";
-
-  const readFileAsync = async () => {
-    try {
-      const data = await FileSystem.readAsStringAsync(fileUri);
-      return data;
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-  };
 
   // Data Generation
   function generateDataString(roadNumber: number, len: number) {

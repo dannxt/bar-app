@@ -6,7 +6,7 @@ import colors from "../themes/colors";
 
 export default function SettingScreen() {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => {
     setIsEnabled((previousState: boolean) => !previousState);
     toggleTheme();

@@ -212,7 +212,11 @@ export default function InputScreen() {
           </View>
           <View style={styles.boardCont}>
             <SmallBoard style={styles.smallBoard} />
-            <InputBoard style={styles.inputBoard} inputGrid={inputGrid} />
+            <InputBoard
+              style={styles.inputBoard}
+              inputGrid={inputGrid}
+              numColumns={30}
+            />
           </View>
           <View style={styles.buttonMainCont}>
             <View style={styles.leftRightContOuter}>
@@ -314,7 +318,7 @@ const styles = StyleSheet.create({
   inputBoard: {
     flex: 1,
     position: "absolute",
-    height: "82%",
+    height: "81.5%",
     width: "90%",
   },
   smallBoard: {

@@ -4,13 +4,17 @@ import { DimensionsContext } from "../contexts/DimensionsContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import colors from "../themes/colors";
 
-type inputBoardProps = {
+type miniResultBoardProps = {
   style: object;
-  inputGrid: Array<string[]>;
+  inputGrid: Array<object[]>;
   numColumns: number;
 };
 
-const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
+const MiniResultBoard = ({
+  style,
+  inputGrid,
+  numColumns,
+}: miniResultBoardProps) => {
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
   const { theme, toggleTheme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
@@ -26,21 +30,22 @@ const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
   };
 
   type ItemProps = {
-    item: string[];
+    item: object[];
   };
 
   const renderItem = ({ item }: ItemProps) => {
     return (
       <View>
-        {item.map((char, index) => (
+        {item.map((obj: any, key) => (
           <View
-            key={index}
+            key={key}
             style={{
-              width: deviceWidth / 46,
-              height: deviceWidth / 46,
-              margin: 2.29,
-              borderRadius: 15,
-              backgroundColor: colorMap[char],
+              width: deviceWidth / 44.1,
+              height: deviceWidth / 44.1,
+              margin: 2.28,
+              borderRadius: obj.match === "yes" ? 0 : 15,
+              backgroundColor: colorMap[obj.value],
+              alignContent: "center",
             }}
           >
             <Text
@@ -51,7 +56,7 @@ const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
                 color: colors[themeT].text,
               }}
             >
-              {char}
+              {obj.value}
             </Text>
           </View>
         ))}
@@ -70,4 +75,4 @@ const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
   );
 };
 
-export default InputBoard;
+export default MiniResultBoard;

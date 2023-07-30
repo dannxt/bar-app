@@ -11,7 +11,7 @@ type ThemeProviderProps = {
 };
 
 export default function ThemeContextProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   const toggleTheme = () => {
     setTheme((prevtheme) => (prevtheme === "dark" ? "light" : "dark"));
   };

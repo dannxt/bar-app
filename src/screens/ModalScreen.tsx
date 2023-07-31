@@ -11,7 +11,7 @@ type resultScreenProps = {
   numMatches_9: number;
 };
 
-export default function ResultScreen({
+export default function ModalScreen({
   searchResultsGrid_9,
   numMatches_9,
 }: resultScreenProps) {

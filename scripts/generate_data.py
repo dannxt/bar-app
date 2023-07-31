@@ -15,7 +15,7 @@ def generateDataString(roadNumber, length):
     return resultString
 
 roadNumber = 9
-length = 9 * 2 ** 26
+length = 2 ** 26
 
 
 for i in range(1):

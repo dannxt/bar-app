@@ -7,6 +7,8 @@ import {
   Keyboard,
   Pressable,
   PixelRatio,
+  Button,
+  Modal,
 } from "react-native";
 import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
@@ -18,7 +20,7 @@ import SearchOptionButtons from "../components/SearchOptionButtons";
 import InputBoard from "../components/InputBoard";
 import NumberTextView from "../components/NumberTextView";
 
-export default function InputScreen() {
+export default function InputScreen({ route, navigation }: any) {
   const emptyGrid = [
     ["", "", "", "", "", ""],
     ["", "", "", "", "", ""],
@@ -53,6 +55,8 @@ export default function InputScreen() {
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
   const fontScale = PixelRatio.getFontScale();
+  //props
+  // const { handleSearch } = route.params;
 
   //States
   const [input, setInput] = useState("");
@@ -62,6 +66,7 @@ export default function InputScreen() {
   //Contexts
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
 
+  //Functions
   const gridHistoryHandler = () => {
     if (input !== inputHistory[inputHistory.length - 1]) {
       if (inputHistory.length < 6) {
@@ -71,7 +76,6 @@ export default function InputScreen() {
       }
     }
   };
-
   const undoButtonHandler = () => {
     if (inputHistory.length > 1) {
       const previousInputs = inputHistory.slice(0, -1);
@@ -79,7 +83,6 @@ export default function InputScreen() {
       setInputHistory(previousInputs);
     }
   };
-
   const leftButtonHandler = () => {
     setInput((input) => input.slice(1));
   };
@@ -96,11 +99,12 @@ export default function InputScreen() {
       setInput((input) => input + "P");
     }
   };
-  const searchButtonHandler = () => {};
+  const searchButtonHandler = () => {
+    // handleSearch(input);
+  };
   const clearButtonHandler = () => {
     setInput("");
   };
-
   function createGrid(input: string) {
     let currentColumn = 0;
     let currentRow = 0;
@@ -252,7 +256,11 @@ export default function InputScreen() {
             </View>
 
             <View style={styles.searchOptionsCont}>
-              <SearchOptionButtons />
+              {/* <SearchOptionButtons /> */}
+              <Button
+                onPress={() => navigation.navigate("MyModal")}
+                title="Open Modal"
+              />
               <PlayButton
                 title={"Search"}
                 height="40%"

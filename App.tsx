@@ -1,16 +1,41 @@
 import { useState, useCallback } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import AppNavigator from "./src/navigation/AppNavigator";
 import ThemeContextProvider from "./src/contexts/ThemeContext";
 import DimensionsContextProvider from "./src/contexts/DimensionsContext";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { LogBox } from "react-native";
 
+// Ignore log notification by message:
+if (__DEV__) {
+  const ignoreWarns = [
+    "exported from 'deprecated-react-native-prop-types'.",
+    "Non-serializable values were found in the navigation state.",
+  ];
+
+  const warn = console.warn;
+  console.warn = (...arg) => {
+    for (const warning of ignoreWarns) {
+      if (arg[0].startsWith(warning)) {
+        return;
+      }
+    }
+    warn(...arg);
+  };
+
+  LogBox.ignoreLogs(ignoreWarns);
+}
+// Prevent native splash screen from autohiding before App component declaration
 SplashScreen.preventAutoHideAsync();
+
+const RootStack = createStackNavigator();
+
 export default function App() {
   //variables
-  let routeDataList = [];
+  const routeDataList: string[] = [];
   //States
   const [dataString, setDataString] = useState("");
   const [fontsLoaded] = useFonts({
@@ -22,8 +47,9 @@ export default function App() {
       const start = performance.now();
       loadData();
       const end = performance.now();
-      console.log(`loadData() took ${(end - start) / 1000} seconds to run`);
+      console.log(`routeDatas took ${(end - start) / 1000} seconds to run`);
       await SplashScreen.hideAsync();
+      console.log("finished loading!");
     }
   }, [fontsLoaded]);
 
@@ -32,15 +58,8 @@ export default function App() {
   }
 
   async function loadData() {
-    const routeDataList = [];
-    const item1 = require("./src/data/routeData1.tsx");
-    const item2 = require("./src/data/routeData2.tsx");
-    const item3 = require("./src/data/routeData3.tsx");
-    const item4 = require("./src/data/routeData4.tsx");
-    const item5 = require("./src/data/routeData5.tsx");
-    const item6 = require("./src/data/routeData6.tsx");
-    const item7 = require("./src/data/routeData7.tsx");
-    const item8 = require("./src/data/routeData8.tsx");
+    // routeDataList.push(require("./src/data/routeData1.tsx"));
+    // const item2 = require("./src/data/routeData2.tsx");
   }
 
   // Data Generation
@@ -67,12 +86,26 @@ export default function App() {
     return resultString;
   }
 
+  function StackNavigator() {
+    return (
+      <RootStack.Navigator>
+        <RootStack.Group>
+          <RootStack.Screen name="Home" component={HomeScreen} />
+          <RootStack.Screen name="Details" component={DetailsScreen} />
+        </RootStack.Group>
+        <RootStack.Group screenOptions={{ presentation: "modal" }}>
+          <RootStack.Screen name="MyModal" component={ModalScreen} />
+        </RootStack.Group>
+      </RootStack.Navigator>
+    );
+  }
+
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <NavigationContainer>
         <ThemeContextProvider>
           <DimensionsContextProvider>
-            <AppNavigator />
+            <AppNavigator data={routeDataList} />
           </DimensionsContextProvider>
         </ThemeContextProvider>
       </NavigationContainer>

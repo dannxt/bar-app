@@ -1,26 +1,24 @@
 import { createBottomTabNavigator } from "@tarikfp/react-native-tabs-sidebar";
 import { useState, createContext, useContext, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  useWindowDimensions,
-  PixelRatio,
-} from "react-native";
+import { StyleSheet, View, PixelRatio } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import InputScreen from "../screens/InputScreen";
 import ResultScreen from "../screens/ResultScreen";
 import ThirdScreen from "../screens/ThirdScreen";
 import SettingScreen from "../screens/SettingScreen";
+import ModalScreen from "../screens/ModalScreen";
 import colors from "../themes/colors";
 import { DimensionsContext } from "../contexts/DimensionsContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import * as Haptics from "expo-haptics";
 
-const item9 = require("../../src/data/routeData9.tsx");
-const item10 = require("../../src/data/routeData10.tsx");
+type AppNavigatorProps = {
+  data: string[];
+};
 
-export default function AppNavigator() {
+export default function AppNavigator(data: AppNavigatorProps) {
   //variables
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -36,82 +34,72 @@ export default function AppNavigator() {
     "BPBPBPBPBPBPBPBPBPBBBBBBBBBBBBBBBBBBBBBBBBBBBBPPPPPPPPPPPPPPPPPP";
 
   //States
-  const emptyGrid = [
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-  ];
-  const sampleResultGrid = [
+  const emptyResultGrid = [
     [
-      { key: 1, value: "P", match: "yes" },
-      { key: 2, value: "B", match: "yes" },
-      { key: 3, value: "P", match: "yes" },
-      { key: 4, value: "B", match: "yes" },
-      { key: 5, value: "B", match: "yes" },
-      { key: 6, value: "P", match: "yes" },
-      { key: 7, value: "P", match: "yes" },
-      { key: 8, value: "B", match: "yes" },
-      { key: 9, value: "B", match: "yes" },
+      { key: 1, value: "", match: "no" },
+      { key: 2, value: "", match: "no" },
+      { key: 3, value: "", match: "no" },
+      { key: 4, value: "", match: "no" },
+      { key: 5, value: "", match: "no" },
+      { key: 6, value: "", match: "no" },
+      { key: 7, value: "", match: "no" },
+      { key: 8, value: "", match: "no" },
+      { key: 9, value: "", match: "no" },
     ],
     [
-      { key: 10, value: "B", match: "yes" },
-      { key: 11, value: "B", match: "yes" },
-      { key: 12, value: "B", match: "yes" },
-      { key: 13, value: "B", match: "yes" },
-      { key: 14, value: "B", match: "yes" },
-      { key: 15, value: "P", match: "yes" },
-      { key: 16, value: "B", match: "yes" },
-      { key: 17, value: "P", match: "yes" },
-      { key: 18, value: "B", match: "yes" },
+      { key: 10, value: "", match: "no" },
+      { key: 11, value: "", match: "no" },
+      { key: 12, value: "", match: "no" },
+      { key: 13, value: "", match: "no" },
+      { key: 14, value: "", match: "no" },
+      { key: 15, value: "", match: "no" },
+      { key: 16, value: "", match: "no" },
+      { key: 17, value: "", match: "no" },
+      { key: 18, value: "", match: "no" },
     ],
     [
-      { key: 19, value: "P", match: "yes" },
-      { key: 20, value: "B", match: "yes" },
-      { key: 21, value: "P", match: "yes" },
-      { key: 22, value: "B", match: "yes" },
-      { key: 23, value: "P", match: "yes" },
-      { key: 24, value: "B", match: "yes" },
-      { key: 25, value: "P", match: "yes" },
-      { key: 26, value: "B", match: "yes" },
-      { key: 27, value: "P", match: "yes" },
+      { key: 19, value: "", match: "no" },
+      { key: 20, value: "", match: "no" },
+      { key: 21, value: "", match: "no" },
+      { key: 22, value: "", match: "no" },
+      { key: 23, value: "", match: "no" },
+      { key: 24, value: "", match: "no" },
+      { key: 25, value: "", match: "no" },
+      { key: 26, value: "", match: "no" },
+      { key: 27, value: "", match: "no" },
     ],
     [
-      { key: 28, value: "B", match: "yes" },
-      { key: 29, value: "P", match: "no" },
-      { key: 30, value: "B", match: "no" },
-      { key: 31, value: "P", match: "no" },
-      { key: 32, value: "B", match: "no" },
-      { key: 33, value: "P", match: "no" },
-      { key: 34, value: "B", match: "no" },
-      { key: 35, value: "P", match: "no" },
-      { key: 36, value: "B", match: "no" },
+      { key: 28, value: "", match: "no" },
+      { key: 29, value: "", match: "no" },
+      { key: 30, value: "", match: "no" },
+      { key: 31, value: "", match: "no" },
+      { key: 32, value: "", match: "no" },
+      { key: 33, value: "", match: "no" },
+      { key: 34, value: "", match: "no" },
+      { key: 35, value: "", match: "no" },
+      { key: 36, value: "", match: "no" },
     ],
     [
-      { key: 37, value: "P", match: "no" },
-      { key: 38, value: "B", match: "no" },
-      { key: 39, value: "P", match: "no" },
-      { key: 40, value: "B", match: "no" },
-      { key: 41, value: "P", match: "no" },
-      { key: 42, value: "B", match: "no" },
-      { key: 43, value: "B", match: "no" },
-      { key: 44, value: "B", match: "no" },
-      { key: 45, value: "B", match: "no" },
+      { key: 37, value: "", match: "no" },
+      { key: 38, value: "", match: "no" },
+      { key: 39, value: "", match: "no" },
+      { key: 40, value: "", match: "no" },
+      { key: 41, value: "", match: "no" },
+      { key: 42, value: "", match: "no" },
+      { key: 43, value: "", match: "no" },
+      { key: 44, value: "", match: "no" },
+      { key: 45, value: "", match: "no" },
     ],
     [
-      { key: 46, value: "B", match: "no" },
-      { key: 47, value: "B", match: "no" },
-      { key: 48, value: "B", match: "no" },
-      { key: 49, value: "P", match: "no" },
-      { key: 50, value: "B", match: "no" },
-      { key: 51, value: "P", match: "no" },
-      { key: 52, value: "P", match: "no" },
-      { key: 53, value: "P", match: "no" },
-      { key: 54, value: "B", match: "no" },
+      { key: 46, value: "", match: "no" },
+      { key: 47, value: "", match: "no" },
+      { key: 48, value: "", match: "no" },
+      { key: 49, value: "", match: "no" },
+      { key: 50, value: "", match: "no" },
+      { key: 51, value: "", match: "no" },
+      { key: 52, value: "", match: "no" },
+      { key: 53, value: "", match: "no" },
+      { key: 54, value: "", match: "no" },
     ],
     [
       { key: 55, value: "", match: "no" },
@@ -138,18 +126,19 @@ export default function AppNavigator() {
   ];
 
   const [searchResultsGrid_9, setSearchResultsGrid_9] =
-    useState(sampleResultGrid);
+    useState(emptyResultGrid);
   const [numMatches_9, setNumMatches_9] = useState(28);
-  const [isThereResult, setIsThereResult] = useState(false);
 
   //handlers
   const handleSearch = (searchString: string) => {
-    const result = findResultString(mainString_A, searchString);
-    if (result.length > 0) {
+    const matchString = findResultString(mainString_A, searchString);
+    if (matchString.length > 0) {
       console.log("found match!");
-      const resultGrid = convertToNestedLists(result);
+      const resultGrid = convertToNestedResultObjects(
+        matchString,
+        searchString.length
+      );
       setSearchResultsGrid_9(resultGrid);
-      setIsThereResult(true);
     } else {
       console.log("no match!");
     }
@@ -165,11 +154,25 @@ export default function AppNavigator() {
     const desiredLength = Math.min(searchString.length + 18, maxLength);
     return mainString.slice(index, index + desiredLength);
   }
-  function convertToNestedLists(inputString: string) {
+  function convertToNestedResultObjects(
+    searchString: string,
+    numMatches: number,
+    totalLen: number = 72
+  ) {
     const nestedLists = [];
-    for (let i = 0; i < inputString.length; i += 9) {
-      const sublist = inputString.slice(i, i + 9).split("");
-      nestedLists.push(sublist);
+    let columnList = [];
+    for (let i = 1; i <= totalLen; i++) {
+      const item = {
+        key: i,
+        value: searchString[i - 1] ? searchString[i - 1] : "",
+        match: i <= numMatches ? "yes" : "no",
+      };
+      columnList.push(item);
+
+      if (i % 9 == 0) {
+        nestedLists.push(columnList);
+        columnList = [];
+      }
     }
     return nestedLists;
   }
@@ -182,6 +185,30 @@ export default function AppNavigator() {
       index = mainString.indexOf(searchString, index + 1);
     }
     return indices;
+  }
+
+  // Navigation and Component Rendering
+
+  const Stack = createStackNavigator();
+  function HomeScreenStackNavigator() {
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Group>
+          <Stack.Screen name="Home" component={InputScreen} />
+        </Stack.Group>
+        <Stack.Group screenOptions={{ presentation: "modal" }}>
+          <Stack.Screen
+            name="MyModal"
+            component={() => (
+              <ModalScreen
+                searchResultsGrid_9={searchResultsGrid_9}
+                numMatches_9={numMatches_9}
+              />
+            )}
+          />
+        </Stack.Group>
+      </Stack.Navigator>
+    );
   }
 
   return (
@@ -212,8 +239,11 @@ export default function AppNavigator() {
                 triggerHaptic();
               },
             })}
-            name="InputScreen"
-            component={InputScreen}
+            name="HomeScreenStackNavigator"
+            component={HomeScreenStackNavigator}
+            initialParams={{
+              handleSearch: handleSearch,
+            }}
             options={{
               tabBarIcon: ({ focused }) => (
                 <Ionicons
@@ -232,11 +262,6 @@ export default function AppNavigator() {
               },
             })}
             name="ResultScreen"
-            component={ResultScreen}
-            initialParams={{
-              searchResultsGrid_9: searchResultsGrid_9,
-              numMatches_9: numMatches_9,
-            }}
             options={{
               tabBarIcon: ({ focused }) => (
                 <Ionicons
@@ -247,7 +272,14 @@ export default function AppNavigator() {
               ),
               headerShown: false,
             }}
-          />
+          >
+            {() => (
+              <ResultScreen
+                searchResultsGrid_9={searchResultsGrid_9}
+                numMatches_9={numMatches_9}
+              />
+            )}
+          </Tab.Screen>
           <Tab.Screen
             listeners={() => ({
               tabPress: () => {

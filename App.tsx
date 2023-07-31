@@ -1,43 +1,20 @@
 import { useState, useCallback } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import AppNavigator from "./src/navigation/AppNavigator";
 import ThemeContextProvider from "./src/contexts/ThemeContext";
 import DimensionsContextProvider from "./src/contexts/DimensionsContext";
+import SearchResultGridContextProvider from "./src/contexts/SearchResultGridContext";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { LogBox } from "react-native";
 
-// Ignore log notification by message:
-if (__DEV__) {
-  const ignoreWarns = [
-    "exported from 'deprecated-react-native-prop-types'.",
-    "Non-serializable values were found in the navigation state.",
-  ];
-
-  const warn = console.warn;
-  console.warn = (...arg) => {
-    for (const warning of ignoreWarns) {
-      if (arg[0].startsWith(warning)) {
-        return;
-      }
-    }
-    warn(...arg);
-  };
-
-  LogBox.ignoreLogs(ignoreWarns);
-}
 // Prevent native splash screen from autohiding before App component declaration
 SplashScreen.preventAutoHideAsync();
-
-const RootStack = createStackNavigator();
 
 export default function App() {
   //variables
   const routeDataList: string[] = [];
   //States
-  const [dataString, setDataString] = useState("");
   const [fontsLoaded] = useFonts({
     "UbuntuMono-Regular": require("./src/assets/fonts/UbuntuMono-Regular.ttf"),
     "UbuntuMono-Bold": require("./src/assets/fonts/UbuntuMono-Bold.ttf"),
@@ -58,7 +35,9 @@ export default function App() {
   }
 
   async function loadData() {
-    // routeDataList.push(require("./src/data/routeData1.tsx"));
+    routeDataList.push(require("./src/data/routeData1.tsx"));
+    routeDataList.push(require("./src/data/routeData2.tsx"));
+    // const item2 = require("./src/data/routeData2.tsx");
     // const item2 = require("./src/data/routeData2.tsx");
   }
 
@@ -86,28 +65,16 @@ export default function App() {
     return resultString;
   }
 
-  function StackNavigator() {
-    return (
-      <RootStack.Navigator>
-        <RootStack.Group>
-          <RootStack.Screen name="Home" component={HomeScreen} />
-          <RootStack.Screen name="Details" component={DetailsScreen} />
-        </RootStack.Group>
-        <RootStack.Group screenOptions={{ presentation: "modal" }}>
-          <RootStack.Screen name="MyModal" component={ModalScreen} />
-        </RootStack.Group>
-      </RootStack.Navigator>
-    );
-  }
-
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <NavigationContainer>
-        <ThemeContextProvider>
-          <DimensionsContextProvider>
-            <AppNavigator data={routeDataList} />
-          </DimensionsContextProvider>
-        </ThemeContextProvider>
+        <SearchResultGridContextProvider>
+          <ThemeContextProvider>
+            <DimensionsContextProvider>
+              <AppNavigator data={routeDataList} />
+            </DimensionsContextProvider>
+          </ThemeContextProvider>
+        </SearchResultGridContextProvider>
       </NavigationContainer>
     </SafeAreaProvider>
   );

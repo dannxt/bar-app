@@ -17,24 +17,24 @@ const SearchOptionButtons = () => {
         theme={{ colors: { primary: "green" } }}
         buttons={[
           {
-            value: "nineData",
-            label: "9路",
-            checkedColor: colors[themeT].banker,
-            style: {
-              backgroundColor:
-                value === "nineData"
-                  ? colors[themeT].textInput
-                  : colors[themeT].background,
-            },
-            uncheckedColor: colors[themeT].text,
-          },
-          {
             value: "threeData",
             label: "3路",
             checkedColor: colors[themeT].banker,
             style: {
               backgroundColor:
                 value === "threeData"
+                  ? colors[themeT].textInput
+                  : colors[themeT].background,
+            },
+            uncheckedColor: colors[themeT].text,
+          },
+          {
+            value: "nineData",
+            label: "9路",
+            checkedColor: colors[themeT].banker,
+            style: {
+              backgroundColor:
+                value === "nineData"
                   ? colors[themeT].textInput
                   : colors[themeT].background,
             },

@@ -12,7 +12,7 @@ const NumberTextView = () => {
     () => Array.from(Array(28).keys()).map((_) => _ + 1),
     []
   );
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
 
@@ -21,7 +21,7 @@ const NumberTextView = () => {
       style={{
         flexDirection: "row",
         width: "90%",
-        top: deviceHeight * 0.03,
+        top: deviceHeight * 0.025,
         justifyContent: "space-evenly",
         position: "absolute",
         paddingLeft: deviceWidth * 0.025,
@@ -37,7 +37,7 @@ const NumberTextView = () => {
             {
               fontFamily: "UbuntuMono-Bold",
               textAlign: "center",
-              fontSize: fontScale * 7,
+              fontSize: fontScale * 10,
               fontWeight: "bold",
               paddingVertical: 5,
               width: deviceWidth * 0.02225,

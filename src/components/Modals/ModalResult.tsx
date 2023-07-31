@@ -1,30 +1,45 @@
-import { useContext } from "react";
-import { View, Text, StyleSheet, Pressable, Keyboard } from "react-native";
-import colors from "../themes/colors";
-import { ThemeContext } from "../contexts/ThemeContext";
+import { useContext, useState } from "react";
+import { View, Text, StyleSheet, Button } from "react-native";
+import Modal from "react-native-modal";
+import colors from "../../themes/colors";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
-import MiniBoard from "../components/MiniBoard";
-import MiniResultBoard from "../components/MiniResultBoard";
-import { SearchResultGridContext } from "../contexts/SearchResultGridContext";
+import MiniBoard from "../MiniBoard";
+import MiniResultBoard from "../MiniResultBoard";
+import { SearchResultGridContext } from "../../contexts/SearchResultGridContext";
 
-export default function ResultScreen() {
-  //Contexts
-  const { theme, toggleTheme } = useContext(ThemeContext);
+type ModalResultProps = {
+  isModalVisible: boolean;
+  toggleModal: () => void;
+};
+
+export default function ModalResult({
+  isModalVisible,
+  toggleModal,
+}: ModalResultProps) {
+  //context
+  const { theme } = useContext(ThemeContext);
+  const { searchResultsGrid_9 } = useContext(SearchResultGridContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
-  const { searchResultsGrid_9 } = useContext(SearchResultGridContext);
 
   return (
-    <Pressable onPress={() => Keyboard.dismiss()} style={{ flex: 1 }}>
-      <LinearGradient
-        colors={["black", "transparent"]}
-        start={[0, 0]}
-        end={[1, 0]}
-        locations={[0, 0.005]}
-        style={{
-          flex: 1,
-          backgroundColor: colors[themeT].background,
-        }}
+    <LinearGradient
+      colors={["black", "transparent"]}
+      start={[0, 0]}
+      end={[1, 0]}
+      locations={[0, 0.005]}
+      style={{
+        flex: 1,
+        backgroundColor: colors[themeT].background,
+        position: "absolute",
+      }}
+    >
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={toggleModal}
+        backdropTransitionOutTiming={0}
+        style={[styles.modal, { backgroundColor: colors[themeT].background }]}
       >
         <View style={styles.boardCont}>
           <View style={styles.boardInnerCont}>
@@ -55,8 +70,8 @@ export default function ResultScreen() {
             <MiniBoard style={styles.miniBoard} />
           </View>
         </View>
-      </LinearGradient>
-    </Pressable>
+      </Modal>
+    </LinearGradient>
   );
 }
 
@@ -65,29 +80,36 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
   },
+  modal: {
+    flex: 1,
+    alignSelf: "center",
+    width: "73%",
+    height: "100%",
+    borderRadius: 20,
+  },
   boardInnerCont: {
     flex: 1,
     width: "100%",
     height: "100%",
     alignItems: "center",
     flexDirection: "column",
-    // borderWidth: 2,
-    // borderColor: "yellow",
   },
   miniResultBoard: {
     position: "absolute",
     top: "24.5%",
-    height: "56.5%",
-    width: "80%",
+    height: "72%",
+    width: "91%",
     // borderWidth: 2,
     // borderColor: "red",
   },
   miniBoard: {
     position: "absolute",
-    top: "24.5%",
+    top: "23%",
     resizeMode: "contain",
-    height: "56.5%",
-    width: "80%",
+    height: "72%",
+    width: "91%",
+    // borderWidth: 2,
+    // borderColor: "blue",
   },
   roadTitle: {
     marginVertical: "15.05%",

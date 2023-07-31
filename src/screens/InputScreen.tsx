@@ -7,20 +7,30 @@ import {
   Keyboard,
   Pressable,
   PixelRatio,
-  Button,
-  Modal,
 } from "react-native";
 import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
-import { DimensionsContext } from "../contexts/DimensionsContext";
 import { LinearGradient } from "expo-linear-gradient";
 import SmallBoard from "../components/SmallBoard";
 import PlayButton from "../components/PlayButton";
 import SearchOptionButtons from "../components/SearchOptionButtons";
 import InputBoard from "../components/InputBoard";
 import NumberTextView from "../components/NumberTextView";
+import { DimensionsContext } from "../contexts/DimensionsContext";
+import { SearchResultGridContext } from "../contexts/SearchResultGridContext";
+import ModalResult from "../components/Modals/ModalResult";
 
-export default function InputScreen({ route, navigation }: any) {
+export default function InputScreen({ navigation }: any) {
+  //data
+  const mainString_A =
+    "BPBPBPBPBPBPBPBPBPBBBBBBBBBBBBBBBBBBBBBBBBBBBBPPPPPPPPPPPPPPPPPP";
+
+  //contexts
+  const { theme } = useContext(ThemeContext);
+  const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
+  const { setSearchResultGridHandler } = useContext(SearchResultGridContext);
+
+  //variables
   const emptyGrid = [
     ["", "", "", "", "", ""],
     ["", "", "", "", "", ""],
@@ -51,21 +61,35 @@ export default function InputScreen({ route, navigation }: any) {
     ["", "", "", "", "", ""],
     ["", "", "", "", "", ""], //28 rows
   ];
-  const { theme, toggleTheme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
   const fontScale = PixelRatio.getFontScale();
-  //props
-  // const { handleSearch } = route.params;
 
-  //States
+  //states
   const [input, setInput] = useState("");
   const [inputHistory, setInputHistory] = useState([""]);
   const [inputGrid, setInputGrid] = useState(emptyGrid);
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  //Contexts
-  const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
+  //handlers
+  function toggleModal() {
+    setModalVisible(!isModalVisible);
+  }
 
+  function handleSearch(searchString: string) {
+    const matchString = findResultString(mainString_A, searchString);
+    if (matchString.length > 0) {
+      console.log("found match!");
+      const resultGrid = convertToNestedResultObjects(
+        matchString,
+        searchString.length
+      );
+      setSearchResultGridHandler(resultGrid);
+      toggleModal();
+    } else {
+      console.log("no match!");
+    }
+  }
   //Functions
   const gridHistoryHandler = () => {
     if (input !== inputHistory[inputHistory.length - 1]) {
@@ -100,8 +124,42 @@ export default function InputScreen({ route, navigation }: any) {
     }
   };
   const searchButtonHandler = () => {
-    // handleSearch(input);
+    if (input !== "") {
+      handleSearch(input);
+    }
   };
+  //Helper Functions
+  function findResultString(mainString: string, searchString: string) {
+    const index = mainString.indexOf(searchString);
+    if (index === -1) {
+      return "";
+    }
+    const maxLength = mainString.length - index;
+    const desiredLength = Math.min(searchString.length + 18, maxLength);
+    return mainString.slice(index, index + desiredLength);
+  }
+  function convertToNestedResultObjects(
+    searchString: string,
+    numMatches: number,
+    totalLen: number = 72
+  ) {
+    const nestedLists = [];
+    let columnList = [];
+    for (let i = 1; i <= totalLen; i++) {
+      const item = {
+        key: i,
+        value: searchString[i - 1] ? searchString[i - 1] : "",
+        match: i <= numMatches ? "yes" : "no",
+      };
+      columnList.push(item);
+
+      if (i % 9 == 0) {
+        nestedLists.push(columnList);
+        columnList = [];
+      }
+    }
+    return nestedLists;
+  }
   const clearButtonHandler = () => {
     setInput("");
   };
@@ -149,6 +207,7 @@ export default function InputScreen({ route, navigation }: any) {
     }
     return grid;
   }
+  //Effects
   useEffect(() => {
     gridHistoryHandler();
     setInputGrid(createGrid(input));
@@ -165,6 +224,10 @@ export default function InputScreen({ route, navigation }: any) {
           { backgroundColor: colors[themeT].background },
         ]}
       >
+        <ModalResult
+          isModalVisible={isModalVisible}
+          toggleModal={toggleModal}
+        />
         <View style={styles.innerCont}>
           <NumberTextView />
           <View
@@ -256,11 +319,7 @@ export default function InputScreen({ route, navigation }: any) {
             </View>
 
             <View style={styles.searchOptionsCont}>
-              {/* <SearchOptionButtons /> */}
-              <Button
-                onPress={() => navigation.navigate("MyModal")}
-                title="Open Modal"
-              />
+              <SearchOptionButtons />
               <PlayButton
                 title={"Search"}
                 height="40%"

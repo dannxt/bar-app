@@ -1,30 +1,30 @@
-import { useContext, useState, useEffect, useMemo } from "react";
+import { useEffect, useContext, useState } from "react";
 import {
-  View,
+  Keyboard,
+  PixelRatio,
+  Pressable,
+  StyleSheet,
   Text,
   TextInput,
-  StyleSheet,
-  Keyboard,
-  Pressable,
-  PixelRatio,
+  View,
 } from "react-native";
-import colors from "../themes/colors";
-import { ThemeContext } from "../contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
-import SmallBoard from "../components/SmallBoard";
-import PlayButton from "../components/PlayButton";
-import SearchOptionButtons from "../components/SearchOptionButtons";
-import InputBoard from "../components/InputBoard";
-import NumberTextView from "../components/NumberTextView";
 import { DimensionsContext } from "../contexts/DimensionsContext";
 import { SearchResultGridContext } from "../contexts/SearchResultGridContext";
+import { ThemeContext } from "../contexts/ThemeContext";
+import { routeDataList } from "../../App";
+import colors from "../themes/colors";
+import InputBoard from "../components/InputBoard";
 import ModalResult from "../components/Modals/ModalResult";
+import NumberTextView from "../components/NumberTextView";
+import PlayButton from "../components/PlayButton";
+import SearchOptionButtons from "../components/SearchOptionButtons";
+import SmallBoard from "../components/SmallBoard";
+import Toast from "react-native-toast-message";
+
+type routeDataList = string[];
 
 export default function InputScreen({ navigation }: any) {
-  //data
-  const mainString_A =
-    "BPBPBPBPBPBPBPBPBPBBBBBBBBBBBBBBBBBBBBBBBBBBBBPPPPPPPPPPPPPPPPPP";
-
   //contexts
   const { theme } = useContext(ThemeContext);
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
@@ -72,25 +72,35 @@ export default function InputScreen({ navigation }: any) {
   const [isModalVisible, setModalVisible] = useState(false);
 
   //handlers
-  function toggleModal() {
+  const toggleModal = () => {
     setModalVisible(!isModalVisible);
-  }
+  };
 
   function handleSearch(searchString: string) {
-    const matchString = findResultString(mainString_A, searchString);
-    if (matchString.length > 0) {
-      console.log("found match!");
-      const resultGrid = convertToNestedResultObjects(
-        matchString,
-        searchString.length
-      );
-      setSearchResultGridHandler(resultGrid);
-      toggleModal();
-    } else {
-      console.log("no match!");
+    const start = performance.now();
+    for (const [index, routeData] of routeDataList.entries()) {
+      let matchString = findResultString(routeData, searchString);
+      const matchFound = matchString.length > 0;
+      if (matchFound) {
+        console.log(`Found match in routeDataList${index + 1} !`);
+        const resultGrid = convertToNestedResultObjects(
+          matchString,
+          searchString.length
+        );
+        setSearchResultGridHandler(resultGrid);
+        toggleModal();
+        break; // Exit the loop when a match is found
+      } else {
+        console.log(`Finish searching routeDataList${index + 1} !`);
+      }
+      const end = performance.now();
+      console.log(`Searching took ${(end - start) / 1000} seconds to run`);
+      if (!matchFound) {
+        noMatchToastHandler();
+      }
     }
   }
-  //Functions
+  //functions
   const gridHistoryHandler = () => {
     if (input !== inputHistory[inputHistory.length - 1]) {
       if (inputHistory.length < 6) {
@@ -128,7 +138,7 @@ export default function InputScreen({ navigation }: any) {
       handleSearch(input);
     }
   };
-  //Helper Functions
+  //helper Functions
   function findResultString(mainString: string, searchString: string) {
     const index = mainString.indexOf(searchString);
     if (index === -1) {
@@ -207,11 +217,23 @@ export default function InputScreen({ navigation }: any) {
     }
     return grid;
   }
-  //Effects
+  //effects
   useEffect(() => {
     gridHistoryHandler();
     setInputGrid(createGrid(input));
   }, [input]);
+
+  //notifications and toasts
+  const noMatchToastHandler = () => {
+    Toast.show({
+      type: "info",
+      position: "top",
+      text1: "No Match!",
+      visibilityTime: 2000,
+      autoHide: true,
+    });
+  };
+
   return (
     <Pressable onPressIn={() => Keyboard.dismiss()} style={styles.container}>
       <LinearGradient
@@ -319,7 +341,7 @@ export default function InputScreen({ navigation }: any) {
             </View>
 
             <View style={styles.searchOptionsCont}>
-              <SearchOptionButtons />
+              {/* <SearchOptionButtons /> */}
               <PlayButton
                 title={"Search"}
                 height="40%"

@@ -303,8 +303,10 @@ export default function InputScreen({ navigation }: any) {
               onChangeText={(text) => setInput(text)}
               autoCapitalize="characters"
               autoComplete="off"
+              spellCheck={false}
               autoCorrect={false}
               maxLength={28}
+              selectTextOnFocus={false}
               keyboardAppearance={theme === "light" ? "light" : "dark"}
             />
             <Text

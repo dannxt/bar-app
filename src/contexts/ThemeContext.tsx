@@ -33,7 +33,7 @@ export default function ThemeContextProvider({ children }: ThemeProviderProps) {
         themeHandler(storedTheme);
       }
       if (storedTheme === null) {
-        themeHandler("dark");
+        themeHandler("light");
       }
     } catch (error) {
       console.error("Error loading user preferences:", error);

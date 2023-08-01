@@ -39,6 +39,7 @@ export default function ModalResult({
         isVisible={isModalVisible}
         onBackdropPress={toggleModal}
         backdropTransitionOutTiming={0}
+        statusBarTranslucent={true}
         style={[styles.modal, { backgroundColor: colors[themeT].background }]}
       >
         <View style={styles.boardCont}>

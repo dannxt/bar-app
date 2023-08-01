@@ -9,7 +9,7 @@
     "splash": {
       "image": "./src/assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#424549"
+      "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
       "assets/data/*"
@@ -22,7 +22,10 @@
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
-        "backgroundColor": "#424549"
+        "backgroundColor": "#ffffff"
+      },
+      "androidStatusBar": {
+        "hidden": "true"
       }
     },
     "web": {

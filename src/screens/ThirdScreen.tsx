@@ -4,9 +4,10 @@ import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function ThirdScreen() {
+export default function ThirdScreen({ route }: any) {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
+  const { dataLength } = route.params;
   return (
     <LinearGradient
       colors={["black", "transparent"]}
@@ -16,7 +17,7 @@ export default function ThirdScreen() {
       style={[styles.container, { backgroundColor: colors[themeT].background }]}
     >
       <Text style={[styles.text, { color: colors[themeT].text }]}>
-        Third Screen
+        Total Data Size: {dataLength}
       </Text>
     </LinearGradient>
   );

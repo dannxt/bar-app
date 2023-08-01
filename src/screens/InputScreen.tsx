@@ -26,7 +26,7 @@ type routeDataList = string[];
 
 export default function InputScreen({ navigation }: any) {
   //contexts
-  const { theme } = useContext(ThemeContext);
+  const { theme }: any = useContext(ThemeContext);
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
   const { setSearchResultGridHandler } = useContext(SearchResultGridContext);
 
@@ -64,24 +64,29 @@ export default function InputScreen({ navigation }: any) {
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
   const fontScale = PixelRatio.getFontScale();
+  const searchingColor = colors[themeT].searching;
+  const searchColor = colors[themeT].search;
 
   //states
   const [input, setInput] = useState("");
   const [inputHistory, setInputHistory] = useState([""]);
   const [inputGrid, setInputGrid] = useState(emptyGrid);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isCurrentlySearching, setIsCurrentlySearching] = useState(false);
+  const [searchTitle, setSearchTitle] = useState("Search");
 
   //handlers
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  function handleSearch(searchString: string) {
+  function attemptSearch(searchString: string) {
+    let matchFound = false;
     const start = performance.now();
     for (const [index, routeData] of routeDataList.entries()) {
       let matchString = findResultString(routeData, searchString);
-      const matchFound = matchString.length > 0;
-      if (matchFound) {
+      if (matchString.length > 0) {
+        matchFound = true;
         console.log(`Found match in routeDataList${index + 1} !`);
         const resultGrid = convertToNestedResultObjects(
           matchString,
@@ -95,9 +100,9 @@ export default function InputScreen({ navigation }: any) {
       }
       const end = performance.now();
       console.log(`Searching took ${(end - start) / 1000} seconds to run`);
-      if (!matchFound) {
-        noMatchToastHandler();
-      }
+    }
+    if (!matchFound) {
+      noMatchToastHandler();
     }
   }
   //functions
@@ -135,10 +140,16 @@ export default function InputScreen({ navigation }: any) {
   };
   const searchButtonHandler = () => {
     if (input !== "") {
-      handleSearch(input);
+      setIsCurrentlySearching(true);
+      setSearchTitle("Searching...");
+      setTimeout(() => {
+        setIsCurrentlySearching(false);
+        setSearchTitle("Search");
+        attemptSearch(input);
+      }, 0);
     }
   };
-  //helper Functions
+  // helper Functions
   function findResultString(mainString: string, searchString: string) {
     const index = mainString.indexOf(searchString);
     if (index === -1) {
@@ -217,7 +228,19 @@ export default function InputScreen({ navigation }: any) {
     }
     return grid;
   }
-  //effects
+  /* Test Codes */
+  /*   const searchButtonHandler = () => {
+    if (input !== "") {
+      setIsCurrentlySearching(true);
+    }
+  };
+  useEffect(() => {
+    if (isCurrentlySearching) {
+      attemptSearch(input);
+    }
+  }, [isCurrentlySearching]); */
+
+  // effects
   useEffect(() => {
     gridHistoryHandler();
     setInputGrid(createGrid(input));
@@ -226,10 +249,10 @@ export default function InputScreen({ navigation }: any) {
   //notifications and toasts
   const noMatchToastHandler = () => {
     Toast.show({
-      type: "info",
+      type: "success",
       position: "top",
       text1: "No Match!",
-      visibilityTime: 2000,
+      visibilityTime: 1500,
       autoHide: true,
     });
   };
@@ -315,8 +338,8 @@ export default function InputScreen({ navigation }: any) {
                 contentStyle={{ marginLeft: 16 }}
                 height="35%"
                 width="37%"
-                onPressIn={undoButtonHandler}
                 buttonColor={colors[themeT].undo}
+                onPressIn={undoButtonHandler}
               />
               <View style={styles.leftRightContBottom}>
                 <PlayButton
@@ -343,11 +366,13 @@ export default function InputScreen({ navigation }: any) {
             <View style={styles.searchOptionsCont}>
               {/* <SearchOptionButtons /> */}
               <PlayButton
-                title={"Search"}
-                height="40%"
+                title={searchTitle}
+                height="50%"
                 fontSize={15}
                 onPressIn={searchButtonHandler}
-                buttonColor={colors[themeT].search}
+                buttonColor={
+                  isCurrentlySearching ? searchingColor : searchColor
+                }
               />
             </View>
             <View style={styles.leftRightContOuter}>

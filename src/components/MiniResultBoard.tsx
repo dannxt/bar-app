@@ -15,8 +15,8 @@ const MiniResultBoard = ({
   inputGrid,
   numColumns,
 }: miniResultBoardProps) => {
-  const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { deviceWidth } = useContext(DimensionsContext);
+  const { theme }: any = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
 
   interface ColorMapping {

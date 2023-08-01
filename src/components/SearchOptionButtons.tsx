@@ -5,7 +5,7 @@ import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 
 const SearchOptionButtons = () => {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme, toggleTheme }: any = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const [value, setValue] = useState("nineData");
 

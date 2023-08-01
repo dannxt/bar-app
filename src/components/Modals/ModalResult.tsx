@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { useContext, useState, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import colors from "../../themes/colors";
 import { ThemeContext } from "../../contexts/ThemeContext";
@@ -18,7 +18,7 @@ export default function ModalResult({
   toggleModal,
 }: ModalResultProps) {
   //context
-  const { theme } = useContext(ThemeContext);
+  const { theme, themeHandler, toggleTheme }: any = useContext(ThemeContext);
   const { searchResultsGrid_9 } = useContext(SearchResultGridContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };

@@ -13,17 +13,16 @@ import * as Haptics from "expo-haptics";
 import InputScreen from "../screens/InputScreen";
 
 type AppNavigatorProps = {
-  data: string[];
+  dataLength: number;
 };
 
-export default function AppNavigator(data: AppNavigatorProps) {
+export default function AppNavigator(props: AppNavigatorProps) {
   //variables
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme }: any = useContext(ThemeContext);
   const Tab = createBottomTabNavigator();
   const insets = useSafeAreaInsets();
   const themeT = theme as keyof typeof colors;
-  const fontScale = PixelRatio.getFontScale();
   const triggerHaptic = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
@@ -97,6 +96,7 @@ export default function AppNavigator(data: AppNavigatorProps) {
             })}
             name="ThirdScreen"
             component={ThirdScreen}
+            initialParams={{ dataLength: props.dataLength }}
             options={{
               tabBarIcon: ({ focused }) => (
                 <Ionicons

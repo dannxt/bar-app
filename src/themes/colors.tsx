@@ -17,6 +17,7 @@ const colors = {
     banker: "#e03154",
     player: "#5a7fb8",
     search: "#5a7837",
+    searching: "#c78f26",
   },
 
   light: {
@@ -37,6 +38,7 @@ const colors = {
     banker: "#e03154",
     player: "#5a7fb8",
     search: "#5a7837",
+    searching: "#c78f26",
   },
 };
 

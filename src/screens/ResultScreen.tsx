@@ -9,7 +9,7 @@ import { SearchResultGridContext } from "../contexts/SearchResultGridContext";
 
 export default function ResultScreen() {
   //Contexts
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme, toggleTheme }: any = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
   const { searchResultsGrid_9 } = useContext(SearchResultGridContext);

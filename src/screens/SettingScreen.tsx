@@ -1,17 +1,30 @@
-import { useState, useContext } from "react";
-import { View, Text, StyleSheet, Switch } from "react-native";
+import { useState, useContext, useEffect } from "react";
+import { Text, StyleSheet, Switch } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../themes/colors";
 
 export default function SettingScreen() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
-  const [isEnabled, setIsEnabled] = useState(true);
+  const { theme, toggleTheme }: any = useContext(ThemeContext);
   const toggleSwitch = () => {
-    setIsEnabled((previousState: boolean) => !previousState);
     toggleTheme();
   };
   const themeT = theme as keyof typeof colors;
+
+  // Function to save user preferences to local storage
+  const saveUserPreferences = async () => {
+    try {
+      await AsyncStorage.setItem("theme", theme);
+      console.log("User preferences saved: theme = ", theme);
+    } catch (error) {
+      console.error("Error saving user preferences:", error);
+    }
+  };
+  // Save user preferences whenever darkMode state changes
+  useEffect(() => {
+    saveUserPreferences();
+  }, [theme]);
 
   return (
     <LinearGradient
@@ -28,9 +41,9 @@ export default function SettingScreen() {
         trackColor={{
           true: colors[themeT].trackColorFalse,
         }}
-        ios_backgroundColor="#3e3e3e"
+        ios_backgroundColor="#b3b1b1"
         onValueChange={toggleSwitch}
-        value={isEnabled}
+        value={theme === "dark" ? true : false}
       />
     </LinearGradient>
   );

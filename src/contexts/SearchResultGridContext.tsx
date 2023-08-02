@@ -185,29 +185,28 @@ const emptyResultGrid = [
 ];
 
 export const SearchResultGridContext = createContext<{
-  searchResultsGrid_9: typeof emptyResultGrid;
+  searchResultsGrid9: typeof emptyResultGrid;
   setSearchResultGridHandler: (resultGrid: typeof emptyResultGrid) => void;
 }>({
-  searchResultsGrid_9: emptyResultGrid,
+  searchResultsGrid9: emptyResultGrid,
   setSearchResultGridHandler: () => {},
 });
 
 export default function SearchResultsGridContextProvider({
   children,
 }: SearchResultGridProps) {
-  const [searchResultsGrid_9, setSearchResultsGrid_9] =
-    useState(emptyResultGrid);
+  const [searchResultsGrid9, setSearchResultsGrid9] = useState(emptyResultGrid);
 
   const setSearchResultGridHandler = (
     resultGrid: { key: number; value: string; match: string }[][]
   ) => {
-    setSearchResultsGrid_9(resultGrid);
+    setSearchResultsGrid9(resultGrid);
   };
 
   return (
     <SearchResultGridContext.Provider
       value={{
-        searchResultsGrid_9: searchResultsGrid_9,
+        searchResultsGrid9: searchResultsGrid9,
         setSearchResultGridHandler: setSearchResultGridHandler,
       }}
     >

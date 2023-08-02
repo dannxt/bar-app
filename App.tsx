@@ -22,11 +22,11 @@ SplashScreen.preventAutoHideAsync();
 export const routeDataList: string[] = [];
 
 export default function App() {
-  const [dataLength, setDataLength] = useState(0);
   const [fontsLoaded] = useFonts({
     "UbuntuMono-Regular": require("./src/assets/fonts/UbuntuMono-Regular.ttf"),
     "UbuntuMono-Bold": require("./src/assets/fonts/UbuntuMono-Bold.ttf"),
   });
+  const [dataLength, setDataLength] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const onLayoutRootView = useCallback(async () => {
@@ -42,7 +42,7 @@ export default function App() {
     if (dataLoaded && fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [dataLoaded]);
+  }, [dataLoaded, fontsLoaded]);
 
   async function loadData() {
     console.log("loading data...");

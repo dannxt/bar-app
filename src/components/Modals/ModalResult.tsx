@@ -19,7 +19,7 @@ export default function ModalResult({
 }: ModalResultProps) {
   //context
   const { theme, themeHandler, toggleTheme }: any = useContext(ThemeContext);
-  const { searchResultsGrid_9 } = useContext(SearchResultGridContext);
+  const { searchResultsGrid9 } = useContext(SearchResultGridContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
 
@@ -47,7 +47,7 @@ export default function ModalResult({
             <Text style={[textColor, styles.roadTitle]}>3 路</Text>
             {/* <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_9}
+              inputGrid={searchResultsGrid9}
               numColumns={8}
             /> */}
             <MiniBoard style={styles.miniBoard} />
@@ -56,7 +56,7 @@ export default function ModalResult({
             <Text style={[textColor, styles.roadTitle]}>9 路</Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_9}
+              inputGrid={searchResultsGrid9}
               numColumns={8}
             />
             <MiniBoard style={styles.miniBoard} />
@@ -65,7 +65,7 @@ export default function ModalResult({
             <Text style={[textColor, styles.roadTitle]}>4 路</Text>
             {/* <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_9}
+              inputGrid={searchResultsGrid9}
               numColumns={8}
             /> */}
             <MiniBoard style={styles.miniBoard} />

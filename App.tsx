@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigator from "./src/navigation/AppNavigator";
@@ -9,7 +9,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import Toast from "react-native-toast-message";
 import { toastConfig } from "./src/components/Modals/ToastConfigs";
-import { LogBox, Text, View } from "react-native";
+import { LogBox } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
 // Ignore log notification by message
@@ -32,10 +32,15 @@ export default function App() {
   const onLayoutRootView = useCallback(async () => {
     try {
       await loadData();
-      SplashScreen.hideAsync();
       setDataLoaded(true);
     } catch (error) {
       console.error("Error loading data:", error);
+    }
+  }, [dataLoaded]);
+
+  useEffect(() => {
+    if (dataLoaded && fontsLoaded) {
+      SplashScreen.hideAsync();
     }
   }, [dataLoaded]);
 
@@ -45,13 +50,13 @@ export default function App() {
 
     const start = performance.now();
     routeDataList.push(require("./src/data/routeData1.tsx"));
-    // routeDataList.push(require("./src/data/routeData2.tsx"));
-    // routeDataList.push(require("./src/data/routeData3.tsx"));
-    // routeDataList.push(require("./src/data/routeData4.tsx"));
-    // routeDataList.push(require("./src/data/routeData5.tsx"));
-    // routeDataList.push(require("./src/data/routeData6.tsx"));
-    // routeDataList.push(require("./src/data/routeData7.tsx"));
-    // routeDataList.push(require("./src/data/routeData8.tsx"));
+    routeDataList.push(require("./src/data/routeData2.tsx"));
+    routeDataList.push(require("./src/data/routeData3.tsx"));
+    routeDataList.push(require("./src/data/routeData4.tsx"));
+    routeDataList.push(require("./src/data/routeData5.tsx"));
+    routeDataList.push(require("./src/data/routeData6.tsx"));
+    routeDataList.push(require("./src/data/routeData7.tsx"));
+    routeDataList.push(require("./src/data/routeData8.tsx"));
     const end = performance.now();
     console.log(end - start);
     routeDataList.forEach((routeData, index) => {

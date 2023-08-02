@@ -52,9 +52,7 @@ export default function AppNavigator(props: AppNavigatorProps) {
         >
           <Tab.Screen
             listeners={() => ({
-              tabPress: () => {
-                triggerHaptic();
-              },
+              tabPress: () => {},
             })}
             name="InputScreen"
             component={InputScreen}
@@ -71,9 +69,7 @@ export default function AppNavigator(props: AppNavigatorProps) {
           />
           <Tab.Screen
             listeners={() => ({
-              tabPress: () => {
-                triggerHaptic();
-              },
+              tabPress: () => {},
             })}
             name="ResultScreen"
             component={ResultScreen}
@@ -90,9 +86,7 @@ export default function AppNavigator(props: AppNavigatorProps) {
           />
           <Tab.Screen
             listeners={() => ({
-              tabPress: () => {
-                triggerHaptic();
-              },
+              tabPress: () => {},
             })}
             name="ThirdScreen"
             component={ThirdScreen}
@@ -110,9 +104,7 @@ export default function AppNavigator(props: AppNavigatorProps) {
           />
           <Tab.Screen
             listeners={() => ({
-              tabPress: () => {
-                triggerHaptic();
-              },
+              tabPress: () => {},
             })}
             name="SettingScreen"
             component={SettingScreen}

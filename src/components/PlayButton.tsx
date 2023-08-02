@@ -35,8 +35,9 @@ const PlayButton = ({
       shadowColor: "black",
       fontWeight: "bold",
     }}
-    mode="contained"
+    mode="elevated"
     buttonColor={buttonColor}
+    textColor="white"
     style={{
       height: height,
       width: width,
@@ -47,6 +48,7 @@ const PlayButton = ({
       marginHorizontal: 5,
       marginBottom: 15,
       padding: 0,
+      elevation: 125,
     }}
     onPressIn={onPressIn}
   >

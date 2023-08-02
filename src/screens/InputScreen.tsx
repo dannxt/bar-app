@@ -1,12 +1,12 @@
 import { useEffect, useContext, useState } from "react";
 import {
   Keyboard,
-  PixelRatio,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
   View,
+  Platform,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { DimensionsContext } from "../contexts/DimensionsContext";
@@ -19,8 +19,9 @@ import ModalResult from "../components/Modals/ModalResult";
 import NumberTextView from "../components/NumberTextView";
 import PlayButton from "../components/PlayButton";
 import SearchOptionButtons from "../components/SearchOptionButtons";
-import SmallBoard from "../components/SmallBoard";
+import SmallBoardImage from "../components/SmallBoardImage";
 import Toast from "react-native-toast-message";
+import * as Haptics from "expo-haptics";
 
 type routeDataList = string[];
 
@@ -63,7 +64,6 @@ export default function InputScreen({ navigation }: any) {
   ];
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
-  const fontScale = PixelRatio.getFontScale();
   const searchingColor = colors[themeT].searching;
   const searchColor = colors[themeT].search;
 
@@ -76,8 +76,14 @@ export default function InputScreen({ navigation }: any) {
   const [searchTitle, setSearchTitle] = useState("Search");
 
   //handlers
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+  };
+  //haptics
+
+  const triggerHaptic = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   function attemptSearch(searchString: string) {
@@ -105,6 +111,7 @@ export default function InputScreen({ navigation }: any) {
       noMatchToastHandler();
     }
   }
+
   //functions
   const gridHistoryHandler = () => {
     if (input !== inputHistory[inputHistory.length - 1]) {
@@ -129,11 +136,17 @@ export default function InputScreen({ navigation }: any) {
     setInput((input) => input.slice(0, -1));
   };
   const bankerButtonHandler = () => {
+    if (Platform.OS === "ios") {
+      triggerHaptic();
+    }
     if (input.length < 28) {
       setInput((input) => input + "B");
     }
   };
   const playerButtonHandler = () => {
+    if (Platform.OS === "ios") {
+      triggerHaptic();
+    }
     if (input.length < 28) {
       setInput((input) => input + "P");
     }
@@ -149,6 +162,7 @@ export default function InputScreen({ navigation }: any) {
       }, 0);
     }
   };
+
   // helper Functions
   function findResultString(mainString: string, searchString: string) {
     const index = mainString.indexOf(searchString);
@@ -228,17 +242,6 @@ export default function InputScreen({ navigation }: any) {
     }
     return grid;
   }
-  /* Test Codes */
-  /*   const searchButtonHandler = () => {
-    if (input !== "") {
-      setIsCurrentlySearching(true);
-    }
-  };
-  useEffect(() => {
-    if (isCurrentlySearching) {
-      attemptSearch(input);
-    }
-  }, [isCurrentlySearching]); */
 
   // effects
   useEffect(() => {
@@ -288,11 +291,10 @@ export default function InputScreen({ navigation }: any) {
                 {
                   backgroundColor: colors[themeT].textInput,
                   flex: 1,
-                  fontSize: fontScale * 25,
+                  fontSize: deviceWidth * 0.0365,
                   fontFamily: "UbuntuMono-Bold",
                   textAlign: "justify",
-                  justifyContent: "space-evenly",
-                  paddingLeft: deviceWidth * 0.025,
+                  paddingLeft: deviceWidth * 0.028,
                   paddingRight: deviceWidth * 0.02,
                   paddingTop: deviceHeight * 0.02,
                   marginHorizontal: 0,
@@ -314,7 +316,7 @@ export default function InputScreen({ navigation }: any) {
                 textColor,
                 {
                   position: "absolute",
-                  fontSize: fontScale * 9,
+                  fontSize: deviceWidth * 0.013,
                   fontWeight: "bold",
                   fontStyle: "italic",
                   textDecorationLine: "underline",
@@ -325,18 +327,21 @@ export default function InputScreen({ navigation }: any) {
             </Text>
           </View>
           <View style={styles.boardCont}>
-            <SmallBoard style={styles.smallBoard} />
+            <SmallBoardImage style={styles.smallBoardImage} />
             <InputBoard
-              style={styles.inputBoard}
+              style={{
+                board: styles.inputBoard,
+                circle: styles.inputBoardCircle,
+              }}
               inputGrid={inputGrid}
-              numColumns={30}
+              numColumns={28}
             />
           </View>
           <View style={styles.buttonMainCont}>
             <View style={styles.leftRightContOuter}>
               <PlayButton
                 icon={"undo"}
-                fontSize={fontScale * 40}
+                fontSize={deviceWidth * 0.05}
                 contentStyle={{ marginLeft: 16 }}
                 height="35%"
                 width="37%"
@@ -346,7 +351,7 @@ export default function InputScreen({ navigation }: any) {
               <View style={styles.leftRightContBottom}>
                 <PlayButton
                   icon={"arrow-right-thick"}
-                  fontSize={fontScale * 40}
+                  fontSize={deviceWidth * 0.045}
                   contentStyle={{ marginLeft: 16 }}
                   height="45%"
                   width="30%"
@@ -355,7 +360,7 @@ export default function InputScreen({ navigation }: any) {
                 />
                 <PlayButton
                   icon={"arrow-left-thick"}
-                  fontSize={fontScale * 40}
+                  fontSize={deviceWidth * 0.045}
                   contentStyle={{ marginLeft: 16 }}
                   height="45%"
                   width="30%"
@@ -370,7 +375,7 @@ export default function InputScreen({ navigation }: any) {
               <PlayButton
                 title={searchTitle}
                 height="50%"
-                fontSize={15}
+                fontSize={deviceWidth * 0.016}
                 onPressIn={searchButtonHandler}
                 buttonColor={
                   isCurrentlySearching ? searchingColor : searchColor
@@ -380,7 +385,7 @@ export default function InputScreen({ navigation }: any) {
             <View style={styles.leftRightContOuter}>
               <PlayButton
                 icon={"eraser"}
-                fontSize={fontScale * 30}
+                fontSize={deviceWidth * 0.035}
                 contentStyle={{ marginLeft: 16 }}
                 height="35%"
                 width="37%"
@@ -390,7 +395,7 @@ export default function InputScreen({ navigation }: any) {
               <View style={styles.leftRightContBottom}>
                 <PlayButton
                   title="P"
-                  fontSize={fontScale * 14}
+                  fontSize={deviceWidth * 0.02}
                   height="45%"
                   width="30%"
                   onPressIn={playerButtonHandler}
@@ -398,7 +403,7 @@ export default function InputScreen({ navigation }: any) {
                 />
                 <PlayButton
                   title="B"
-                  fontSize={fontScale * 14}
+                  fontSize={deviceWidth * 0.02}
                   height="45%"
                   width="30%"
                   onPressIn={bankerButtonHandler}
@@ -431,17 +436,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  smallBoardImage: {
+    flex: 0.815,
+  },
   inputBoard: {
     flex: 1,
     position: "absolute",
     height: "81.5%",
     width: "90%",
   },
-  smallBoard: {
-    height: "82%",
-    width: "90%",
-    resizeMode: "contain",
-  },
+  inputBoardCircle: {},
   buttonMainCont: {
     flex: 0.4,
     flexDirection: "row",

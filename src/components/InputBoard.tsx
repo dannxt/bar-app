@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { View, FlatList, StyleSheet, Text } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import { DimensionsContext } from "../contexts/DimensionsContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import colors from "../themes/colors";
 
 type inputBoardProps = {
-  style: object;
+  style: { board: object; circle: object };
   inputGrid: Array<string[]>;
   numColumns: number;
 };
@@ -35,13 +35,16 @@ const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
         {item.map((char, index) => (
           <View
             key={index}
-            style={{
-              width: deviceWidth / 46,
-              height: deviceWidth / 46,
-              margin: 2.29,
-              borderRadius: 15,
-              backgroundColor: colorMap[char],
-            }}
+            style={[
+              style.circle,
+              {
+                margin: 0.00247 * deviceWidth,
+                borderRadius: 15,
+                width: deviceWidth / 46,
+                height: deviceWidth / 46,
+                backgroundColor: colorMap[char],
+              },
+            ]}
           >
             <Text
               style={{
@@ -61,7 +64,7 @@ const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
 
   return (
     <FlatList
-      style={style}
+      style={style.board}
       data={inputGrid}
       renderItem={renderItem}
       keyExtractor={(index) => index.toString()}

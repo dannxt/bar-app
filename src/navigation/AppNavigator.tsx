@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@tarikfp/react-native-tabs-sidebar";
 import { useContext } from "react";
-import { StyleSheet, View, PixelRatio } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import ResultScreen from "../screens/ResultScreen";

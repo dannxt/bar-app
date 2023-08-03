@@ -49,14 +49,14 @@ export default function App() {
     let len = 0;
 
     const start = performance.now();
-    routeDataList.push(require("./src/data/routeData0.tsx"));
-    // routeDataList.push(require("./src/data/routeData2.tsx"));
-    // routeDataList.push(require("./src/data/routeData3.tsx"));
-    // routeDataList.push(require("./src/data/routeData4.tsx"));
-    // routeDataList.push(require("./src/data/routeData5.tsx"));
-    // routeDataList.push(require("./src/data/routeData6.tsx"));
-    // routeDataList.push(require("./src/data/routeData7.tsx"));
-    // routeDataList.push(require("./src/data/routeData8.tsx"));
+    routeDataList.push(require("./src/data/routeData1.tsx"));
+    routeDataList.push(require("./src/data/routeData2.tsx"));
+    routeDataList.push(require("./src/data/routeData3.tsx"));
+    routeDataList.push(require("./src/data/routeData4.tsx"));
+    routeDataList.push(require("./src/data/routeData5.tsx"));
+    routeDataList.push(require("./src/data/routeData6.tsx"));
+    routeDataList.push(require("./src/data/routeData7.tsx"));
+    routeDataList.push(require("./src/data/routeData8.tsx"));
     const end = performance.now();
     console.log(end - start);
     routeDataList.forEach((routeData, index) => {

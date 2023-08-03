@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import { useWindowDimensions } from "react-native";
 
 export const DimensionsContext = createContext({

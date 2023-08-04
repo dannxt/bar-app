@@ -27,8 +27,6 @@ export default function ThemeContextProvider({ children }: ThemeProviderProps) {
   const loadUserPreferences = async () => {
     try {
       const storedTheme = await AsyncStorage.getItem("theme");
-      console.log("Stored theme:", storedTheme);
-      console.log("Current theme:", theme);
       if (storedTheme !== theme && storedTheme !== null) {
         themeHandler(storedTheme);
       }

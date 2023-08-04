@@ -11,10 +11,11 @@ type inputBoardProps = {
 };
 
 const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
-  const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
+  const { deviceWidth } = useContext(DimensionsContext);
   const { theme, toggleTheme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
-
+  const circleMargin = 0.00245 * deviceWidth;
+  const circleDimension = deviceWidth / 46;
   interface ColorMapping {
     [key: string]: string;
   }
@@ -38,10 +39,10 @@ const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
             style={[
               style.circle,
               {
-                margin: 0.00245 * deviceWidth,
+                margin: circleMargin,
                 borderRadius: 15,
-                width: deviceWidth / 46,
-                height: deviceWidth / 46,
+                width: circleDimension,
+                height: circleDimension,
                 backgroundColor: colorMap[char],
               },
             ]}

@@ -18,10 +18,9 @@ import InputBoard from "../components/InputBoard";
 import ModalResult from "../components/Modals/ModalResult";
 import NumberTextView from "../components/NumberTextView";
 import PlayButton from "../components/PlayButton";
-import SearchOptionButtons from "../components/SearchOptionButtons";
 import SmallBoardImage from "../components/SmallBoardImage";
 import Toast from "react-native-toast-message";
-import * as Haptics from "expo-haptics";
+// import * as Haptics from "expo-haptics";
 
 type routeDataList = string[];
 
@@ -82,18 +81,16 @@ export default function InputScreen({ navigation }: any) {
   };
   //haptics
 
-  const triggerHaptic = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  };
+  // const triggerHaptic = () => {
+  //   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  // };
 
   function attemptSearch(searchString: string) {
     let matchFound = false;
-    const start = performance.now();
     for (const [index, routeData] of routeDataList.entries()) {
       let matchString = findResultString(routeData, searchString);
       if (matchString.length > 0) {
         matchFound = true;
-        // console.log(`Found match in routeDataList${index + 1} !`);
         const resultGrid = convertToNestedResultObjects(
           matchString,
           searchString.length
@@ -101,11 +98,7 @@ export default function InputScreen({ navigation }: any) {
         setSearchResultGridHandler(resultGrid);
         toggleModal();
         break; // Exit the loop when a match is found
-      } else {
-        // console.log(`Finish searching routeDataList${index + 1} !`);
       }
-      const end = performance.now();
-      console.log(`Searching took ${(end - start) / 1000} seconds to run`);
     }
     if (!matchFound) {
       noMatchToastHandler();
@@ -137,7 +130,7 @@ export default function InputScreen({ navigation }: any) {
   };
   const bankerButtonHandler = () => {
     if (Platform.OS === "ios") {
-      triggerHaptic();
+      // triggerHaptic();
     }
     if (input.length < 28) {
       setInput((input) => input + "B");
@@ -145,7 +138,7 @@ export default function InputScreen({ navigation }: any) {
   };
   const playerButtonHandler = () => {
     if (Platform.OS === "ios") {
-      triggerHaptic();
+      // triggerHaptic();
     }
     if (input.length < 28) {
       setInput((input) => input + "P");

@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   miniBoard: {
     position: "absolute",
     top: "23%",
-    resizeMode: "contain",
+    contentFit: "contain",
     height: "72%",
     width: "91%",
     // borderWidth: 2,

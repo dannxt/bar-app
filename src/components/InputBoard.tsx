@@ -12,7 +12,7 @@ type inputBoardProps = {
 
 const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
   const { deviceWidth } = useContext(DimensionsContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const circleMargin = 0.00245 * deviceWidth;
   const circleDimension = deviceWidth / 46;

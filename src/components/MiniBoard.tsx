@@ -8,6 +8,7 @@ export default function MiniBoard({ style }: { style: object }) {
   const themeT = theme as keyof typeof colors;
   return (
     <Image
+      cachePolicy={"disk"}
       source={require("../assets/miniboard.png")}
       style={[
         style,

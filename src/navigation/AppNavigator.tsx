@@ -51,9 +51,6 @@ export default function AppNavigator(props: AppNavigatorProps) {
           })}
         >
           <Tab.Screen
-            listeners={() => ({
-              tabPress: () => {},
-            })}
             name="InputScreen"
             component={InputScreen}
             options={{
@@ -68,9 +65,6 @@ export default function AppNavigator(props: AppNavigatorProps) {
             }}
           />
           <Tab.Screen
-            listeners={() => ({
-              tabPress: () => {},
-            })}
             name="ResultScreen"
             component={ResultScreen}
             options={{
@@ -85,9 +79,6 @@ export default function AppNavigator(props: AppNavigatorProps) {
             }}
           />
           <Tab.Screen
-            listeners={() => ({
-              tabPress: () => {},
-            })}
             name="ThirdScreen"
             component={ThirdScreen}
             initialParams={{ dataLength: props.dataLength }}
@@ -103,9 +94,6 @@ export default function AppNavigator(props: AppNavigatorProps) {
             }}
           />
           <Tab.Screen
-            listeners={() => ({
-              tabPress: () => {},
-            })}
             name="SettingScreen"
             component={SettingScreen}
             options={{

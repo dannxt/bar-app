@@ -9,6 +9,7 @@ export default function SmallBoardImage({ style }: { style: object }) {
 
   return (
     <Image
+      cachePolicy={"none"}
       source={require("../assets/smallboard.png")}
       style={[
         style,

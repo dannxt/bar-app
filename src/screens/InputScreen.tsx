@@ -20,7 +20,7 @@ import NumberTextView from "../components/NumberTextView";
 import PlayButton from "../components/PlayButton";
 import SmallBoardImage from "../components/SmallBoardImage";
 import Toast from "react-native-toast-message";
-// import * as Haptics from "expo-haptics";
+import * as Haptics from "expo-haptics";
 
 type routeDataList = string[];
 
@@ -81,9 +81,9 @@ export default function InputScreen({ navigation }: any) {
   };
   //haptics
 
-  // const triggerHaptic = () => {
-  //   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  // };
+  const triggerHaptic = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  };
 
   function attemptSearch(searchString: string) {
     let matchFound = false;
@@ -130,7 +130,7 @@ export default function InputScreen({ navigation }: any) {
   };
   const bankerButtonHandler = () => {
     if (Platform.OS === "ios") {
-      // triggerHaptic();
+      triggerHaptic();
     }
     if (input.length < 28) {
       setInput((input) => input + "B");
@@ -138,7 +138,7 @@ export default function InputScreen({ navigation }: any) {
   };
   const playerButtonHandler = () => {
     if (Platform.OS === "ios") {
-      // triggerHaptic();
+      triggerHaptic();
     }
     if (input.length < 28) {
       setInput((input) => input + "P");
@@ -148,11 +148,11 @@ export default function InputScreen({ navigation }: any) {
     if (input !== "") {
       setIsCurrentlySearching(true);
       setSearchTitle("Searching...");
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         setIsCurrentlySearching(false);
         setSearchTitle("Search");
         attemptSearch(input);
-      }, 0);
+      });
     }
   };
 

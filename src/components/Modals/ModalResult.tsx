@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import colors from "../../themes/colors";

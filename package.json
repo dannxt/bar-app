@@ -16,8 +16,7 @@
     "@react-navigation/native-stack": "^6.9.13",
     "@react-navigation/stack": "^6.3.17",
     "@tarikfp/react-native-tabs-sidebar": "^0.0.2",
-    "expo": "^48.0.0",
-    "expo-app-loading": "^2.1.1",
+    "expo": "^48.0.20",
     "expo-file-system": "~15.2.2",
     "expo-font": "~11.1.1",
     "expo-haptics": "~12.2.1",
@@ -36,7 +35,6 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.0.27",
-    "@types/react-native": "~0.64.12",
     "typescript": "^4.9.4"
   },
   "private": true

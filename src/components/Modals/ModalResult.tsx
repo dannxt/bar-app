@@ -45,11 +45,6 @@ export default function ModalResult({
         <View style={styles.boardCont}>
           <View style={styles.boardInnerCont}>
             <Text style={[textColor, styles.roadTitle]}>3 路</Text>
-            {/* <MiniResultBoard
-              style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid9}
-              numColumns={8}
-            /> */}
             <MiniBoard style={styles.miniBoard} />
           </View>
           <View style={styles.boardInnerCont}>
@@ -63,11 +58,6 @@ export default function ModalResult({
           </View>
           <View style={styles.boardInnerCont}>
             <Text style={[textColor, styles.roadTitle]}>4 路</Text>
-            {/* <MiniResultBoard
-              style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid9}
-              numColumns={8}
-            /> */}
             <MiniBoard style={styles.miniBoard} />
           </View>
         </View>

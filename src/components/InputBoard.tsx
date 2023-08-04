@@ -38,7 +38,7 @@ const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
             style={[
               style.circle,
               {
-                margin: 0.00247 * deviceWidth,
+                margin: 0.00245 * deviceWidth,
                 borderRadius: 15,
                 width: deviceWidth / 46,
                 height: deviceWidth / 46,

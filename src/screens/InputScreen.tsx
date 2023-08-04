@@ -93,7 +93,7 @@ export default function InputScreen({ navigation }: any) {
       let matchString = findResultString(routeData, searchString);
       if (matchString.length > 0) {
         matchFound = true;
-        console.log(`Found match in routeDataList${index + 1} !`);
+        // console.log(`Found match in routeDataList${index + 1} !`);
         const resultGrid = convertToNestedResultObjects(
           matchString,
           searchString.length
@@ -102,7 +102,7 @@ export default function InputScreen({ navigation }: any) {
         toggleModal();
         break; // Exit the loop when a match is found
       } else {
-        console.log(`Finish searching routeDataList${index + 1} !`);
+        // console.log(`Finish searching routeDataList${index + 1} !`);
       }
       const end = performance.now();
       console.log(`Searching took ${(end - start) / 1000} seconds to run`);
@@ -438,6 +438,9 @@ const styles = StyleSheet.create({
   },
   smallBoardImage: {
     flex: 0.815,
+    height: "81.5%",
+    width: "90%",
+    contentFit: "contain",
   },
   inputBoard: {
     flex: 1,

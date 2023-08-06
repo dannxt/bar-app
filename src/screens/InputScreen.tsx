@@ -21,6 +21,11 @@ import PlayButton from "../components/PlayButton";
 import SmallBoardImage from "../components/SmallBoardImage";
 import Toast from "react-native-toast-message";
 import * as Haptics from "expo-haptics";
+import * as Device from "expo-device";
+
+// aws testing and imports
+
+import { invoke } from "../aws-lambda/invoke";
 
 type routeDataList = string[];
 
@@ -75,12 +80,10 @@ export default function InputScreen({ navigation }: any) {
   const [searchTitle, setSearchTitle] = useState("Search");
 
   //handlers
-
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
   //haptics
-
   const triggerHaptic = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
@@ -255,6 +258,19 @@ export default function InputScreen({ navigation }: any) {
     });
   };
 
+  // UI/IX misc
+  // Get the device model and adjust the circle margin accordingly
+  let inputFontSize = deviceWidth * 0.0365;
+  switch (Device.modelName) {
+    case "iPhone 12":
+      inputFontSize = 0.03575 * deviceWidth;
+      break;
+
+    case "iPhone 14 Plus":
+      inputFontSize = 0.0365 * deviceWidth;
+      break;
+  }
+
   return (
     <Pressable onPressIn={() => Keyboard.dismiss()} style={styles.container}>
       <LinearGradient
@@ -286,10 +302,10 @@ export default function InputScreen({ navigation }: any) {
                 {
                   backgroundColor: colors[themeT].textInput,
                   flex: 1,
-                  fontSize: deviceWidth * 0.0365,
+                  fontSize: inputFontSize,
                   fontFamily: "UbuntuMono-Bold",
                   textAlign: "justify",
-                  paddingLeft: deviceWidth * 0.028,
+                  paddingLeft: deviceWidth * 0.025,
                   paddingRight: deviceWidth * 0.02,
                   paddingTop: deviceHeight * 0.02,
                   marginHorizontal: 0,
@@ -306,21 +322,27 @@ export default function InputScreen({ navigation }: any) {
               selectTextOnFocus={false}
               keyboardAppearance={theme === "light" ? "light" : "dark"}
             />
-            <Text
-              style={[
-                textColor,
-                {
-                  position: "absolute",
-                  fontSize: deviceWidth * 0.013,
-                  fontWeight: "bold",
-                  fontStyle: "italic",
-                  textDecorationLine: "underline",
-                },
-              ]}
-            >
-              {input.length}
-            </Text>
           </View>
+
+          <Text
+            style={[
+              textColor,
+              {
+                position: "absolute",
+                top: 0,
+                right: 0,
+                paddingRight: deviceWidth * 0.006,
+                marginTop: deviceHeight * 0.08,
+                fontSize: deviceWidth * 0.017,
+                fontWeight: "bold",
+                fontStyle: "italic",
+                textDecorationLine: "underline",
+                textAlign: "center",
+              },
+            ]}
+          >
+            {input.length}
+          </Text>
           <View style={styles.boardCont}>
             <SmallBoardImage style={styles.smallBoardImage} />
             <InputBoard

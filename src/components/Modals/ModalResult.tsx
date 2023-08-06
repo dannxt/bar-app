@@ -18,7 +18,7 @@ export default function ModalResult({
   toggleModal,
 }: ModalResultProps) {
   //context
-  const { theme, themeHandler, toggleTheme }: any = useContext(ThemeContext);
+  const { theme }: any = useContext(ThemeContext);
   const { searchResultsGrid9 } = useContext(SearchResultGridContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };

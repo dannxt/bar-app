@@ -5,7 +5,7 @@ import { DimensionsContext } from "../contexts/DimensionsContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import colors from "../themes/colors";
 
-const NumberTextView = () => {
+const NumberTextView = ({ inputLength }: any) => {
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
   const fontScale = PixelRatio.getFontScale();
   const numbersArray = useMemo(
@@ -14,7 +14,6 @@ const NumberTextView = () => {
   );
   const { theme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
-  const textColor = { color: colors[themeT].text };
 
   return (
     <View
@@ -24,7 +23,7 @@ const NumberTextView = () => {
         top: deviceHeight * 0.025,
         justifyContent: "space-evenly",
         position: "absolute",
-        paddingLeft: deviceWidth * 0.025,
+        paddingLeft: deviceWidth * 0.023,
         paddingRight: deviceWidth * 0.025,
         zIndex: 5,
       }}
@@ -32,17 +31,18 @@ const NumberTextView = () => {
       {numbersArray.map((number) => (
         <Text
           key={number}
-          style={[
-            textColor,
-            {
-              fontFamily: "UbuntuMono-Bold",
-              textAlign: "center",
-              fontSize: fontScale * 10,
-              fontWeight: "bold",
-              paddingVertical: 5,
-              width: deviceWidth * 0.02225,
-            },
-          ]}
+          style={{
+            color:
+              number === inputLength
+                ? colors[themeT].highlighText
+                : colors[themeT].text,
+            textDecorationLine: number === inputLength ? "underline" : "none",
+            fontFamily: "UbuntuMono-Bold",
+            textAlign: "center",
+            fontSize: fontScale * 10,
+            paddingVertical: number === inputLength ? 1.5 : 5,
+            width: deviceWidth * 0.02225,
+          }}
         >
           {number}
         </Text>
@@ -51,4 +51,4 @@ const NumberTextView = () => {
   );
 };
 
-export default React.memo(NumberTextView);
+export default NumberTextView;

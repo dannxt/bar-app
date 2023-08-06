@@ -12,7 +12,8 @@ export default function ResultScreen() {
   const { theme, toggleTheme }: any = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
-  const { searchResultsGrid9 } = useContext(SearchResultGridContext);
+  const { searchResultsGrid9, searchResultsGrid3, searchResultsGrid4 } =
+    useContext(SearchResultGridContext);
 
   return (
     <Pressable onPress={() => Keyboard.dismiss()} style={{ flex: 1 }}>
@@ -28,10 +29,6 @@ export default function ResultScreen() {
       >
         <View style={styles.boardCont}>
           <View style={styles.boardInnerCont}>
-            <Text style={[textColor, styles.roadTitle]}>3 路</Text>
-            <MiniBoard style={styles.miniBoard} />
-          </View>
-          <View style={styles.boardInnerCont}>
             <Text style={[textColor, styles.roadTitle]}>9 路</Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
@@ -41,8 +38,22 @@ export default function ResultScreen() {
             />
           </View>
           <View style={styles.boardInnerCont}>
+            <Text style={[textColor, styles.roadTitle]}>3 路</Text>
+            <MiniBoard style={styles.miniBoard} />
+            <MiniResultBoard
+              style={styles.miniResultBoard}
+              inputGrid={searchResultsGrid3}
+              numColumns={8}
+            />
+          </View>
+          <View style={styles.boardInnerCont}>
             <Text style={[textColor, styles.roadTitle]}>4 路</Text>
             <MiniBoard style={styles.miniBoard} />
+            <MiniResultBoard
+              style={styles.miniResultBoard}
+              inputGrid={searchResultsGrid4}
+              numColumns={8}
+            />
           </View>
         </View>
       </LinearGradient>
@@ -61,16 +72,12 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     flexDirection: "column",
-    // borderWidth: 2,
-    // borderColor: "yellow",
   },
   miniResultBoard: {
     position: "absolute",
     top: "24.5%",
     height: "56.5%",
     width: "80%",
-    // borderWidth: 2,
-    // borderColor: "red",
   },
   miniBoard: {
     position: "absolute",

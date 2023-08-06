@@ -184,29 +184,46 @@ const emptyResultGrid = [
   ],
 ];
 
-export const SearchResultGridContext = createContext<{
-  searchResultsGrid9: typeof emptyResultGrid;
-  setSearchResultGridHandler: (resultGrid: typeof emptyResultGrid) => void;
-}>({
+export const SearchResultGridContext = createContext({
   searchResultsGrid9: emptyResultGrid,
-  setSearchResultGridHandler: () => {},
+  searchResultsGrid3: emptyResultGrid,
+  searchResultsGrid4: emptyResultGrid,
+  setSearchResultGridHandler: (
+    resultGrid: { key: number; value: string; match: string }[][],
+    gridNum: number
+  ) => {},
 });
 
 export default function SearchResultsGridContextProvider({
   children,
 }: SearchResultGridProps) {
   const [searchResultsGrid9, setSearchResultsGrid9] = useState(emptyResultGrid);
+  const [searchResultsGrid3, setSearchResultsGrid3] = useState(emptyResultGrid);
+  const [searchResultsGrid4, setSearchResultsGrid4] = useState(emptyResultGrid);
 
   const setSearchResultGridHandler = (
-    resultGrid: { key: number; value: string; match: string }[][]
+    resultGrid: { key: number; value: string; match: string }[][],
+    gridNum: number
   ) => {
-    setSearchResultsGrid9(resultGrid);
+    switch (gridNum) {
+      case 9:
+        setSearchResultsGrid9(resultGrid);
+        break;
+      case 3:
+        setSearchResultsGrid3(resultGrid);
+        break;
+      case 4:
+        setSearchResultsGrid4(resultGrid);
+        break;
+    }
   };
 
   return (
     <SearchResultGridContext.Provider
       value={{
         searchResultsGrid9: searchResultsGrid9,
+        searchResultsGrid3: searchResultsGrid3,
+        searchResultsGrid4: searchResultsGrid4,
         setSearchResultGridHandler: setSearchResultGridHandler,
       }}
     >

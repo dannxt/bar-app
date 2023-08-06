@@ -3,7 +3,6 @@ import {
   Keyboard,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   View,
   Platform,
@@ -12,7 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { DimensionsContext } from "../contexts/DimensionsContext";
 import { SearchResultGridContext } from "../contexts/SearchResultGridContext";
 import { ThemeContext } from "../contexts/ThemeContext";
-import { routeDataList } from "../../App";
+import { routeDataList9, routeDataList3, routeDataList4 } from "../../App";
 import colors from "../themes/colors";
 import InputBoard from "../components/InputBoard";
 import ModalResult from "../components/Modals/ModalResult";
@@ -24,10 +23,7 @@ import * as Haptics from "expo-haptics";
 import * as Device from "expo-device";
 
 // aws testing and imports
-
 import { invoke } from "../aws-lambda/invoke";
-
-type routeDataList = string[];
 
 export default function InputScreen({ navigation }: any) {
   //contexts
@@ -88,26 +84,27 @@ export default function InputScreen({ navigation }: any) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
-  function attemptSearch(searchString: string) {
+  function attemptSearch(
+    searchString: string,
+    routeDataList: string[],
+    routeNumber: number
+  ) {
     let matchFound = false;
     for (const [index, routeData] of routeDataList.entries()) {
-      console.log(`searching routeData${index}...`);
+      console.log(`searching routeData${index} of route ${routeNumber}...`);
       let matchString = findResultString(routeData, searchString);
       if (matchString.length > 0) {
-        console.log(`match found!`);
+        console.log(`match found! for route ${routeNumber}`);
         matchFound = true;
         const resultGrid = convertToNestedResultObjects(
           matchString,
           searchString.length
         );
-        setSearchResultGridHandler(resultGrid);
-        toggleModal();
+        setSearchResultGridHandler(resultGrid, routeNumber);
         break; // Exit the loop when a match is found
       }
     }
-    if (!matchFound) {
-      noMatchToastHandler();
-    }
+    return matchFound;
   }
 
   //functions
@@ -150,13 +147,23 @@ export default function InputScreen({ navigation }: any) {
     }
   };
   const searchButtonHandler = () => {
-    if (input !== "") {
+    // const invokeParams = {
+    //   FunctionName: "handler",
+    //   Payload: "test",
+    // };
+    // invoke(invokeParams);
+    // if (input !== "") {
       setIsCurrentlySearching(true);
       setSearchTitle("Searching...");
       requestAnimationFrame(() => {
+        let matchFound;
+        matchFound = attemptSearch(input, routeDataList9, 9) || matchFound;
+        matchFound = attemptSearch(input, routeDataList3, 3) || matchFound;
+        matchFound = attemptSearch(input, routeDataList4, 4) || matchFound;
+        console.log(`matchFound: ${matchFound}`);
         setIsCurrentlySearching(false);
         setSearchTitle("Search");
-        attemptSearch(input);
+        matchFound ? toggleModal() : noMatchToastHandler();
       });
     }
   };
@@ -288,7 +295,7 @@ export default function InputScreen({ navigation }: any) {
           toggleModal={toggleModal}
         />
         <View style={styles.innerCont}>
-          <NumberTextView />
+          <NumberTextView inputLength={input.length} />
           <View
             style={{
               flex: 0.16,
@@ -307,7 +314,7 @@ export default function InputScreen({ navigation }: any) {
                   textAlign: "justify",
                   paddingLeft: deviceWidth * 0.025,
                   paddingRight: deviceWidth * 0.02,
-                  paddingTop: deviceHeight * 0.02,
+                  paddingTop: deviceHeight * 0.035,
                   marginHorizontal: 0,
                   borderRadius: 3,
                 },
@@ -323,8 +330,7 @@ export default function InputScreen({ navigation }: any) {
               keyboardAppearance={theme === "light" ? "light" : "dark"}
             />
           </View>
-
-          <Text
+          {/* <Text
             style={[
               textColor,
               {
@@ -342,7 +348,7 @@ export default function InputScreen({ navigation }: any) {
             ]}
           >
             {input.length}
-          </Text>
+          </Text> */}
           <View style={styles.boardCont}>
             <SmallBoardImage style={styles.smallBoardImage} />
             <InputBoard
@@ -360,7 +366,7 @@ export default function InputScreen({ navigation }: any) {
                 icon={"undo"}
                 fontSize={deviceWidth * 0.05}
                 contentStyle={{ marginLeft: 16 }}
-                height="35%"
+                height="32%"
                 width="37%"
                 buttonColor={colors[themeT].undo}
                 onPressIn={undoButtonHandler}
@@ -388,7 +394,6 @@ export default function InputScreen({ navigation }: any) {
             </View>
 
             <View style={styles.searchOptionsCont}>
-              {/* <SearchOptionButtons /> */}
               <PlayButton
                 title={searchTitle}
                 height="50%"
@@ -404,7 +409,7 @@ export default function InputScreen({ navigation }: any) {
                 icon={"eraser"}
                 fontSize={deviceWidth * 0.035}
                 contentStyle={{ marginLeft: 16 }}
-                height="35%"
+                height="32%"
                 width="37%"
                 onPressIn={clearButtonHandler}
                 buttonColor={colors[themeT].clear}
@@ -414,17 +419,19 @@ export default function InputScreen({ navigation }: any) {
                   title="P"
                   fontSize={deviceWidth * 0.02}
                   height="45%"
-                  width="30%"
+                  width="25%"
                   onPressIn={playerButtonHandler}
                   buttonColor={colors[themeT].player}
+                  borderRadius={60}
                 />
                 <PlayButton
                   title="B"
                   fontSize={deviceWidth * 0.02}
                   height="45%"
-                  width="30%"
+                  width="25%"
                   onPressIn={bankerButtonHandler}
                   buttonColor={colors[themeT].banker}
+                  borderRadius={60}
                 />
               </View>
             </View>
@@ -441,8 +448,8 @@ const styles = StyleSheet.create({
   },
   innerCont: {
     flex: 1,
-    paddingTop: "2%",
-    paddingBottom: "0.5%",
+    paddingTop: "1.6%",
+    paddingBottom: "0.8%",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -482,6 +489,7 @@ const styles = StyleSheet.create({
   },
   searchOptionsCont: {
     flex: 0.3,
+    marginLeft: "1.2%",
     width: "30%",
     justifyContent: "space-evenly",
   },

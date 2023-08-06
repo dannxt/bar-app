@@ -1,3 +1,5 @@
+import "react-native-url-polyfill/auto";
+import "react-native-get-random-values";
 import { useCallback, useState, useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
@@ -19,7 +21,9 @@ LogBox.ignoreLogs([
 ]);
 // Prevent native splash screen from autohiding before App component declaration
 SplashScreen.preventAutoHideAsync();
-export const routeDataList: string[] = [];
+export const routeDataList9: string[] = [];
+export const routeDataList3: string[] = [];
+export const routeDataList4: string[] = [];
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -48,7 +52,9 @@ export default function App() {
     console.log("loading initial data...");
     let len = 0;
 
-    routeDataList.push("BPBPBPBPBPBPBPBPBPBPPPPPP");
+    routeDataList9.push("BBPPPPPBPBPBPBPBPBBPPPPBBBBPBPPPPPPBBPBPBPPPP");
+    routeDataList3.push("BBBPBPBPBPBPBPBPBBBBBBBBBBPBPPPPPPBBPBPBPPPPB");
+    routeDataList4.push("BBBBBPBPBPBPBPBPBBBPBBBPBBPBPPPPPPBBPBPBPPPPB");
     // routeDataList.push(require("./src/data/routeData1.tsx"));
     // routeDataList.push(require("./src/data/routeData2.tsx"));
     // routeDataList.push(require("./src/data/routeData3.tsx"));
@@ -56,7 +62,13 @@ export default function App() {
     // routeDataList.push(require("./src/data/routeData5.tsx"));
     // routeDataList.push(require("./src/data/routeData6.tsx"));
     // routeDataList.push(require("./src/data/routeData7.tsx"));
-    routeDataList.forEach((routeData, index) => {
+    routeDataList9.forEach((routeData, index) => {
+      len += routeData.length;
+    });
+    routeDataList3.forEach((routeData, index) => {
+      len += routeData.length;
+    });
+    routeDataList4.forEach((routeData, index) => {
       len += routeData.length;
     });
     setDataLength(len);

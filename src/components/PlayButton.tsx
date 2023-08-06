@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Button } from "react-native-paper";
 
 type PlayButtonProps = {
@@ -10,6 +9,7 @@ type PlayButtonProps = {
   width?: string;
   height?: string;
   contentStyle?: object;
+  borderRadius?: number;
 };
 const PlayButton = ({
   onPressIn,
@@ -20,6 +20,7 @@ const PlayButton = ({
   width,
   height,
   contentStyle,
+  borderRadius,
 }: PlayButtonProps) => (
   <Button
     icon={icon}
@@ -38,13 +39,14 @@ const PlayButton = ({
     buttonColor={buttonColor}
     textColor="white"
     style={{
+      borderRadius: borderRadius ? borderRadius : 15,
       height: height,
       width: width,
       justifyContent: "center",
       shadowOffset: { width: 2, height: 2 },
       shadowOpacity: 0.5,
       shadowRadius: 1,
-      marginHorizontal: 5,
+      marginHorizontal: 8,
       marginBottom: 15,
       padding: 0,
       elevation: 125,

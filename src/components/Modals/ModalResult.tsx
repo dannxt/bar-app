@@ -19,7 +19,8 @@ export default function ModalResult({
 }: ModalResultProps) {
   //context
   const { theme }: any = useContext(ThemeContext);
-  const { searchResultsGrid9 } = useContext(SearchResultGridContext);
+  const { searchResultsGrid9, searchResultsGrid3, searchResultsGrid4 } =
+    useContext(SearchResultGridContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
 
@@ -44,10 +45,6 @@ export default function ModalResult({
       >
         <View style={styles.boardCont}>
           <View style={styles.boardInnerCont}>
-            <Text style={[textColor, styles.roadTitle]}>3 路</Text>
-            <MiniBoard style={styles.miniBoard} />
-          </View>
-          <View style={styles.boardInnerCont}>
             <Text style={[textColor, styles.roadTitle]}>9 路</Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
@@ -57,7 +54,21 @@ export default function ModalResult({
             <MiniBoard style={styles.miniBoard} />
           </View>
           <View style={styles.boardInnerCont}>
+            <Text style={[textColor, styles.roadTitle]}>3 路</Text>
+            <MiniResultBoard
+              style={styles.miniResultBoard}
+              inputGrid={searchResultsGrid3}
+              numColumns={8}
+            />
+            <MiniBoard style={styles.miniBoard} />
+          </View>
+          <View style={styles.boardInnerCont}>
             <Text style={[textColor, styles.roadTitle]}>4 路</Text>
+            <MiniResultBoard
+              style={styles.miniResultBoard}
+              inputGrid={searchResultsGrid4}
+              numColumns={8}
+            />
             <MiniBoard style={styles.miniBoard} />
           </View>
         </View>
@@ -90,8 +101,6 @@ const styles = StyleSheet.create({
     top: "24.5%",
     height: "72%",
     width: "91%",
-    // borderWidth: 2,
-    // borderColor: "red",
   },
   miniBoard: {
     position: "absolute",
@@ -99,8 +108,6 @@ const styles = StyleSheet.create({
     contentFit: "contain",
     height: "72%",
     width: "91%",
-    // borderWidth: 2,
-    // borderColor: "blue",
   },
   roadTitle: {
     marginVertical: "15.05%",

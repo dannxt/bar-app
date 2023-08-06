@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@aws-sdk/client-lambda": "^3.385.0",
     "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/material-bottom-tabs": "^6.2.16",
@@ -17,6 +18,7 @@
     "@react-navigation/stack": "^6.3.17",
     "@tarikfp/react-native-tabs-sidebar": "^0.0.2",
     "expo": "^48.0.20",
+    "expo-device": "~5.2.1",
     "expo-file-system": "~15.2.2",
     "expo-font": "~11.1.1",
     "expo-haptics": "~12.2.1",
@@ -26,14 +28,15 @@
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-native": "0.71.8",
+    "react-native-get-random-values": "~1.8.0",
     "react-native-linear-gradient": "^2.7.3",
     "react-native-modal": "^13.0.1",
     "react-native-paper": "^5.9.1",
     "react-native-safe-area-context": "4.5.0",
     "react-native-screens": "~3.20.0",
     "react-native-toast-message": "^2.1.6",
-    "react-native-vector-icons": "^10.0.0",
-    "expo-device": "~5.2.1"
+    "react-native-url-polyfill": "^2.0.0",
+    "react-native-vector-icons": "^10.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

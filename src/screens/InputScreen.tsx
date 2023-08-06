@@ -88,8 +88,10 @@ export default function InputScreen({ navigation }: any) {
   function attemptSearch(searchString: string) {
     let matchFound = false;
     for (const [index, routeData] of routeDataList.entries()) {
+      console.log(`searching routeData${index}...`);
       let matchString = findResultString(routeData, searchString);
       if (matchString.length > 0) {
+        console.log(`match found!`);
         matchFound = true;
         const resultGrid = convertToNestedResultObjects(
           matchString,

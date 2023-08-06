@@ -2,7 +2,7 @@ import random
 import time
 
 roadNumber = 9
-length = 10
+length = 57621883
 
 def generateDataString(roadNumber, length):
     resultString = ""
@@ -20,13 +20,13 @@ def generateDataString(roadNumber, length):
 
     return resultString
 
-for i in range(1):
+for i in range(8):
     start_time = time.time()
     myString = generateDataString(roadNumber, length)
     end_time = time.time()
     elapsed_time = end_time - start_time
     try:
-        with open(f'../src/data/routeData{0}.tsx', 'w') as file:
+        with open(f'../src/data/routeData{i + 1}.tsx', 'w') as file:
             file.write(f"module.exports = {repr(myString)};")
             print(f"Time taken: {elapsed_time} seconds")
 

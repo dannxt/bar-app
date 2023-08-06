@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { View, Text, StyleSheet, PixelRatio } from "react-native";
 import { DimensionsContext } from "../contexts/DimensionsContext";
 
@@ -51,4 +51,4 @@ const NumberTextView = () => {
   );
 };
 
-export default NumberTextView;
+export default React.memo(NumberTextView);

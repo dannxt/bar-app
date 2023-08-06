@@ -11,7 +11,6 @@ type PlayButtonProps = {
   height?: string;
   contentStyle?: object;
 };
-
 const PlayButton = ({
   onPressIn,
   icon,

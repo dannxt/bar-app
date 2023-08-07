@@ -1,23 +1,16 @@
-/**
- * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0
- */
-import {
+const {
   InvokeCommand,
   LambdaClient,
   LogType,
-  fromRole,
-} from "@aws-sdk/client-lambda";
+} = require("@aws-sdk/client-lambda");
 
 const REGION = "ap-southeast-1";
 const ROLE_ARN = "arn:aws:iam::123456789012:role/lambda-role";
 
 /** snippet-start:[javascript.v3.lambda.actions.Invoke] */
 const invoke = async (funcName, invocationType, payload) => {
-  const roleCredentials = fromRole(ROLE_ARN);
   const client = new LambdaClient({
     region: REGION,
-    credentials: roleCredentials,
   });
   const command = new InvokeCommand({
     FunctionName: funcName,
@@ -31,6 +24,10 @@ const invoke = async (funcName, invocationType, payload) => {
   const logs = Buffer.from(LogResult, "base64").toString();
   return { logs, result };
 };
-/** snippet-end:[javascript.v3.lambda.actions.Invoke] */
 
-export { invoke };
+const input = "BPBPBPBPBPBBBPBPBPBPPBPB";
+
+async function callSearchRouteData() {
+  console.log(await invoke("searchRouteData", "RequestResponse", input));
+}
+callSearchRouteData();

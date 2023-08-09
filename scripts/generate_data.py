@@ -3,7 +3,7 @@ import math
 import random
 
 numOfParts = 4
-DEFAULT_DATA_LENGTH = (22 * 2 ** 22) / numOfParts
+DEFAULT_DATA_LENGTH = (23 * 2 ** 23) / numOfParts
 dataLength = DEFAULT_DATA_LENGTH
 listOfRouteNames = [9, 3, 4]
 
@@ -29,7 +29,7 @@ for routeNumber in listOfRouteNames:
         start_time = os.times()[4]
         myString = generateDataString(routeNumber, dataLength)
         try:
-            with open(f'../src/data/testData/routeData{routeNumber}-{j}.js', 'w') as f:
+            with open(f'../src/testData/routeData{routeNumber}-{j}.js', 'w') as f:
                 f.write(f"module.exports = {repr(myString)};")
             end_time = os.times()[4]
             elapsed_time = end_time - start_time

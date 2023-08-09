@@ -1,34 +1,38 @@
+import os
+import math
 import random
-import time
 
-roadNumber = 9
-length = 57621883
+numOfParts = 4
+DEFAULT_DATA_LENGTH = (22 * 2 ** 22) / numOfParts
+dataLength = DEFAULT_DATA_LENGTH
+listOfRouteNames = [9, 3, 4]
 
-def generateDataString(roadNumber, length):
+
+
+def generateDataString(routeNumber, dataLength):
     resultString = ""
-    maxNumber = 2 ** roadNumber
+    maxNumber = 2 ** routeNumber
 
-
-    iterations = (length + roadNumber - 1) // roadNumber
+    iterations = math.ceil(dataLength / routeNumber)
 
     for i in range(iterations):
         randomNumber = random.randint(0, maxNumber - 1)
-        binaryString = format(randomNumber, f'0{roadNumber}b')
+        binaryString = format(randomNumber, f'0{routeNumber}b')
         translationTable = str.maketrans('01', 'BP')
         binaryPattern = binaryString.translate(translationTable)
         resultString += binaryPattern
-
     return resultString
 
-for i in range(8):
-    start_time = time.time()
-    myString = generateDataString(roadNumber, length)
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    try:
-        with open(f'../src/data/routeData{i + 1}.tsx', 'w') as file:
-            file.write(f"module.exports = {repr(myString)};")
-            print(f"Time taken: {elapsed_time} seconds")
 
-    except Exception as err:
-        print(f"Error: {err}")
+for routeNumber in listOfRouteNames:
+    for j in range(1, numOfParts + 1):
+        start_time = os.times()[4]
+        myString = generateDataString(routeNumber, dataLength)
+        try:
+            with open(f'../src/data/testData/routeData{routeNumber}-{j}.js', 'w') as f:
+                f.write(f"module.exports = {repr(myString)};")
+            end_time = os.times()[4]
+            elapsed_time = end_time - start_time
+            print(f'Time taken: {elapsed_time} seconds')
+        except Exception as err:
+            print(f'Error: {err}')

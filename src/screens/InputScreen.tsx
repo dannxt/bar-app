@@ -153,19 +153,18 @@ export default function InputScreen({ navigation }: any) {
     // };
     // invoke(invokeParams);
     // if (input !== "") {
-      setIsCurrentlySearching(true);
-      setSearchTitle("Searching...");
-      requestAnimationFrame(() => {
-        let matchFound;
-        matchFound = attemptSearch(input, routeDataList9, 9) || matchFound;
-        matchFound = attemptSearch(input, routeDataList3, 3) || matchFound;
-        matchFound = attemptSearch(input, routeDataList4, 4) || matchFound;
-        console.log(`matchFound: ${matchFound}`);
-        setIsCurrentlySearching(false);
-        setSearchTitle("Search");
-        matchFound ? toggleModal() : noMatchToastHandler();
-      });
-    }
+    setIsCurrentlySearching(true);
+    setSearchTitle("Searching...");
+    requestAnimationFrame(() => {
+      let matchFound;
+      matchFound = attemptSearch(input, routeDataList9, 9) || matchFound;
+      matchFound = attemptSearch(input, routeDataList3, 3) || matchFound;
+      matchFound = attemptSearch(input, routeDataList4, 4) || matchFound;
+      console.log(`matchFound: ${matchFound}`);
+      setIsCurrentlySearching(false);
+      setSearchTitle("Search");
+      matchFound ? toggleModal() : noMatchToastHandler();
+    });
   };
 
   // helper Functions
@@ -200,6 +199,7 @@ export default function InputScreen({ navigation }: any) {
     }
     return nestedLists;
   }
+
   const clearButtonHandler = () => {
     setInput("");
   };

@@ -52,16 +52,22 @@ export default function App() {
     console.log("loading initial data...");
     let len = 0;
 
-    routeDataList9.push("BBPPPPPBPBPBPBPBPBBPPPPBBBBPBPPPPPPBBPBPBPPPP");
-    routeDataList3.push("BBBPBPBPBPBPBPBPBBBBBBBBBBPBPPPPPPBBPBPBPPPPB");
-    routeDataList4.push("BBBBBPBPBPBPBPBPBBBPBBBPBBPBPPPPPPBBPBPBPPPPB");
-    // routeDataList.push(require("./src/data/routeData1.tsx"));
-    // routeDataList.push(require("./src/data/routeData2.tsx"));
-    // routeDataList.push(require("./src/data/routeData3.tsx"));
-    // routeDataList.push(require("./src/data/routeData4.tsx"));
-    // routeDataList.push(require("./src/data/routeData5.tsx"));
-    // routeDataList.push(require("./src/data/routeData6.tsx"));
-    // routeDataList.push(require("./src/data/routeData7.tsx"));
+    // routeDataList9.push("BBPPPPPBPBPBPBPBPBBPPPPBBBBPBPPPPPPBBPBPBPPPP");
+    // routeDataList3.push("BBBPBPBPBPBPBPBPBBBBBBBBBBPBPPPPPPBBPBPBPPPPB");
+    // routeDataList4.push("BBBBBPBPBPBPBPBPBBBPBBBPBBPBPPPPPPBBPBPBPPPPB");
+    routeDataList9.push(require("./src/data/testData/routeData9-1.js"));
+    routeDataList9.push(require("./src/data/testData/routeData9-2.js"));
+    routeDataList9.push(require("./src/data/testData/routeData9-3.js"));
+    routeDataList9.push(require("./src/data/testData/routeData9-4.js"));
+    routeDataList3.push(require("./src/data/testData/routeData3-1.js"));
+    routeDataList3.push(require("./src/data/testData/routeData3-2.js"));
+    routeDataList3.push(require("./src/data/testData/routeData3-3.js"));
+    routeDataList3.push(require("./src/data/testData/routeData3-4.js"));
+    routeDataList4.push(require("./src/data/testData/routeData4-1.js"));
+    routeDataList4.push(require("./src/data/testData/routeData4-2.js"));
+    routeDataList4.push(require("./src/data/testData/routeData4-3.js"));
+    routeDataList4.push(require("./src/data/testData/routeData4-4.js"));
+
     routeDataList9.forEach((routeData, index) => {
       len += routeData.length;
     });

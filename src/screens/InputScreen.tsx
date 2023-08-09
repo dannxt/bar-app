@@ -62,6 +62,96 @@ export default function InputScreen({ navigation }: any) {
     ["", "", "", "", "", ""],
     ["", "", "", "", "", ""], //28 rows
   ];
+  const emptyResultGrid = [
+    [
+      { key: 1, value: "", match: "no", mark: "no" },
+      { key: 2, value: "", match: "no", mark: "no" },
+      { key: 3, value: "", match: "no", mark: "no" },
+      { key: 4, value: "", match: "no", mark: "no" },
+      { key: 5, value: "", match: "no", mark: "no" },
+      { key: 6, value: "", match: "no", mark: "no" },
+      { key: 7, value: "", match: "no", mark: "no" },
+      { key: 8, value: "", match: "no", mark: "no" },
+      { key: 9, value: "", match: "no", mark: "no" },
+    ],
+    [
+      { key: 10, value: "", match: "no", mark: "no" },
+      { key: 11, value: "", match: "no", mark: "no" },
+      { key: 12, value: "", match: "no", mark: "no" },
+      { key: 13, value: "", match: "no", mark: "no" },
+      { key: 14, value: "", match: "no", mark: "no" },
+      { key: 15, value: "", match: "no", mark: "no" },
+      { key: 16, value: "", match: "no", mark: "no" },
+      { key: 17, value: "", match: "no", mark: "no" },
+      { key: 18, value: "", match: "no", mark: "no" },
+    ],
+    [
+      { key: 19, value: "", match: "no", mark: "no" },
+      { key: 20, value: "", match: "no", mark: "no" },
+      { key: 21, value: "", match: "no", mark: "no" },
+      { key: 22, value: "", match: "no", mark: "no" },
+      { key: 23, value: "", match: "no", mark: "no" },
+      { key: 24, value: "", match: "no", mark: "no" },
+      { key: 25, value: "", match: "no", mark: "no" },
+      { key: 26, value: "", match: "no", mark: "no" },
+      { key: 27, value: "", match: "no", mark: "no" },
+    ],
+    [
+      { key: 28, value: "", match: "no", mark: "no" },
+      { key: 29, value: "", match: "no", mark: "no" },
+      { key: 30, value: "", match: "no", mark: "no" },
+      { key: 31, value: "", match: "no", mark: "no" },
+      { key: 32, value: "", match: "no", mark: "no" },
+      { key: 33, value: "", match: "no", mark: "no" },
+      { key: 34, value: "", match: "no", mark: "no" },
+      { key: 35, value: "", match: "no", mark: "no" },
+      { key: 36, value: "", match: "no", mark: "no" },
+    ],
+    [
+      { key: 37, value: "", match: "no", mark: "no" },
+      { key: 38, value: "", match: "no", mark: "no" },
+      { key: 39, value: "", match: "no", mark: "no" },
+      { key: 40, value: "", match: "no", mark: "no" },
+      { key: 41, value: "", match: "no", mark: "no" },
+      { key: 42, value: "", match: "no", mark: "no" },
+      { key: 43, value: "", match: "no", mark: "no" },
+      { key: 44, value: "", match: "no", mark: "no" },
+      { key: 45, value: "", match: "no", mark: "no" },
+    ],
+    [
+      { key: 46, value: "", match: "no", mark: "no" },
+      { key: 47, value: "", match: "no", mark: "no" },
+      { key: 48, value: "", match: "no", mark: "no" },
+      { key: 49, value: "", match: "no", mark: "no" },
+      { key: 50, value: "", match: "no", mark: "no" },
+      { key: 51, value: "", match: "no", mark: "no" },
+      { key: 52, value: "", match: "no", mark: "no" },
+      { key: 53, value: "", match: "no", mark: "no" },
+      { key: 54, value: "", match: "no", mark: "no" },
+    ],
+    [
+      { key: 55, value: "", match: "no", mark: "no" },
+      { key: 56, value: "", match: "no", mark: "no" },
+      { key: 57, value: "", match: "no", mark: "no" },
+      { key: 58, value: "", match: "no", mark: "no" },
+      { key: 59, value: "", match: "no", mark: "no" },
+      { key: 60, value: "", match: "no", mark: "no" },
+      { key: 61, value: "", match: "no", mark: "no" },
+      { key: 62, value: "", match: "no", mark: "no" },
+      { key: 63, value: "", match: "no", mark: "no" },
+    ],
+    [
+      { key: 64, value: "", match: "no", mark: "no" },
+      { key: 65, value: "", match: "no", mark: "no" },
+      { key: 66, value: "", match: "no", mark: "no" },
+      { key: 67, value: "", match: "no", mark: "no" },
+      { key: 68, value: "", match: "no", mark: "no" },
+      { key: 69, value: "", match: "no", mark: "no" },
+      { key: 70, value: "", match: "no", mark: "no" },
+      { key: 71, value: "", match: "no", mark: "no" },
+      { key: 72, value: "", match: "no", mark: "no" },
+    ],
+  ];
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
   const searchingColor = colors[themeT].searching;
@@ -102,7 +192,7 @@ export default function InputScreen({ navigation }: any) {
         break; // Exit the loop when a match is found
       }
     }
-    return matchFound;
+    return { routeNumber, matchFound };
   }
 
   //functions
@@ -145,25 +235,29 @@ export default function InputScreen({ navigation }: any) {
     }
   };
   const searchButtonHandler = () => {
-    // const invokeParams = {
-    //   FunctionName: "handler",
-    //   Payload: "test",
-    // };
-    // invoke(invokeParams);
-    // if (input !== "") {
     setIsCurrentlySearching(true);
     setSearchTitle("Searching...");
     requestAnimationFrame(() => {
-      let matchFound;
-      matchFound = attemptSearch(input, routeDataList9, 9) || matchFound;
-      matchFound = attemptSearch(input, routeDataList3, 3) || matchFound;
-      matchFound = attemptSearch(input, routeDataList4, 4) || matchFound;
+      let matchResults = [];
+      let hasOneMatch = false;
+      matchResults.push(attemptSearch(input, routeDataList9, 9));
+      matchResults.push(attemptSearch(input, routeDataList3, 3));
+      matchResults.push(attemptSearch(input, routeDataList4, 4));
       setIsCurrentlySearching(false);
       setSearchTitle("Search");
-      matchFound ? toggleModal() : noMatchToastHandler();
+      matchResults.forEach((result) => {
+        if (!result.matchFound) {
+          setSearchResultGridHandler(emptyResultGrid, result.routeNumber);
+        } else {
+          hasOneMatch = true;
+        }
+      });
+      hasOneMatch ? toggleModal() : noMatchToastHandler();
     });
   };
-
+  const clearButtonHandler = () => {
+    setInput("");
+  };
   // helper Functions
   function findResultString(mainString: string, searchString: string) {
     const index = mainString.indexOf(searchString);
@@ -186,6 +280,7 @@ export default function InputScreen({ navigation }: any) {
         key: i,
         value: searchString[i - 1] ? searchString[i - 1] : "",
         match: i <= numMatches ? "yes" : "no",
+        mark: "no",
       };
       columnList.push(item);
 
@@ -196,10 +291,6 @@ export default function InputScreen({ navigation }: any) {
     }
     return nestedLists;
   }
-
-  const clearButtonHandler = () => {
-    setInput("");
-  };
   function createGrid(input: string) {
     let currentColumn = 0;
     let currentRow = 0;
@@ -327,25 +418,6 @@ export default function InputScreen({ navigation }: any) {
               keyboardAppearance={theme === "light" ? "light" : "dark"}
             />
           </View>
-          {/* <Text
-            style={[
-              textColor,
-              {
-                position: "absolute",
-                top: 0,
-                right: 0,
-                paddingRight: deviceWidth * 0.006,
-                marginTop: deviceHeight * 0.08,
-                fontSize: deviceWidth * 0.017,
-                fontWeight: "bold",
-                fontStyle: "italic",
-                textDecorationLine: "underline",
-                textAlign: "center",
-              },
-            ]}
-          >
-            {input.length}
-          </Text> */}
           <View style={styles.boardCont}>
             <SmallBoardImage style={styles.smallBoardImage} />
             <InputBoard

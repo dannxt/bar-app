@@ -52,9 +52,6 @@ export default function App() {
     console.log("loading initial data...");
     let len = 0;
 
-    // routeDataList9.push("BBPPPPPBPBPBPBPBPBBPPPPBBBBPBPPPPPPBBPBPBPPPP");
-    // routeDataList3.push("BBBPBPBPBPBPBPBPBBBBBBBBBBPBPPPPPPBBPBPBPPPPB");
-    // routeDataList4.push("BBBBBPBPBPBPBPBPBBBPBBBPBBPBPPPPPPBBPBPBPPPPB");
     routeDataList9.push(require("./src/testData/routeData9-1.js"));
     routeDataList9.push(require("./src/testData/routeData9-2.js"));
     routeDataList9.push(require("./src/testData/routeData9-3.js"));

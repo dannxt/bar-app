@@ -91,10 +91,8 @@ export default function InputScreen({ navigation }: any) {
   ) {
     let matchFound = false;
     for (const [index, routeData] of routeDataList.entries()) {
-      console.log(`searching routeData${index} of route ${routeNumber}...`);
       let matchString = findResultString(routeData, searchString);
       if (matchString.length > 0) {
-        console.log(`match found! for route ${routeNumber}`);
         matchFound = true;
         const resultGrid = convertToNestedResultObjects(
           matchString,
@@ -160,7 +158,6 @@ export default function InputScreen({ navigation }: any) {
       matchFound = attemptSearch(input, routeDataList9, 9) || matchFound;
       matchFound = attemptSearch(input, routeDataList3, 3) || matchFound;
       matchFound = attemptSearch(input, routeDataList4, 4) || matchFound;
-      console.log(`matchFound: ${matchFound}`);
       setIsCurrentlySearching(false);
       setSearchTitle("Search");
       matchFound ? toggleModal() : noMatchToastHandler();

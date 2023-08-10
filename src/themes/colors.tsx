@@ -19,6 +19,8 @@ const colors = {
     player: "#5a7fb8",
     search: "#5a7837",
     searching: "#c78f26",
+    highlight: "#9c12ff",
+    special: "#27002b",
   },
 
   light: {
@@ -41,6 +43,8 @@ const colors = {
     player: "#5a7fb8",
     search: "#5a7837",
     searching: "#c78f26",
+    highlight: "#9c12ff",
+    special: "#27002b",
   },
 };
 

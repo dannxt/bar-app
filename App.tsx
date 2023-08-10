@@ -29,6 +29,7 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     "UbuntuMono-Regular": require("./src/assets/fonts/UbuntuMono-Regular.ttf"),
     "UbuntuMono-Bold": require("./src/assets/fonts/UbuntuMono-Bold.ttf"),
+    "UbuntuMono-Italic": require("./src/assets/fonts/UbuntuMono-Italic.ttf"),
   });
   const [dataLength, setDataLength] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -51,17 +52,19 @@ export default function App() {
   async function loadData() {
     console.log("loading initial data...");
     let len = 0;
+    routeDataList9.push(require("./src/len-22-data/routeData9-1.js"));
+    routeDataList9.push(require("./src/len-22-data/routeData9-2.js"));
+    routeDataList9.push(require("./src/len-22-data/routeData9-3.js"));
+    routeDataList9.push(require("./src/len-22-data/routeData9-4.js"));
+    routeDataList3.push(require("./src/len-22-data/routeData3-1.js"));
+    routeDataList3.push(require("./src/len-22-data/routeData3-2.js"));
+    routeDataList3.push(require("./src/len-22-data/routeData3-3.js"));
+    routeDataList3.push(require("./src/len-22-data/routeData3-4.js"));
+    routeDataList4.push(require("./src/len-22-data/routeData4-1.js"));
+    routeDataList4.push(require("./src/len-22-data/routeData4-2.js"));
+    routeDataList4.push(require("./src/len-22-data/routeData4-3.js"));
+    routeDataList4.push(require("./src/len-22-data/routeData4-4.js"));
 
-    routeDataList9.push("BBPPPPPBPBPBPBPBPBBPPPPBBBBPBPPPPPPBBPBPBPPPP");
-    routeDataList3.push("BBBPBPBPBPBPBPBPBBBBBBBBBBPBPPPPPPBBPBPBPPPPB");
-    routeDataList4.push("BBBBBPBPBPBPBPBPBBBPBBBPBBPBPPPPPPBBPBPBPPPPB");
-    // routeDataList.push(require("./src/data/routeData1.tsx"));
-    // routeDataList.push(require("./src/data/routeData2.tsx"));
-    // routeDataList.push(require("./src/data/routeData3.tsx"));
-    // routeDataList.push(require("./src/data/routeData4.tsx"));
-    // routeDataList.push(require("./src/data/routeData5.tsx"));
-    // routeDataList.push(require("./src/data/routeData6.tsx"));
-    // routeDataList.push(require("./src/data/routeData7.tsx"));
     routeDataList9.forEach((routeData, index) => {
       len += routeData.length;
     });
@@ -83,10 +86,11 @@ export default function App() {
               <StatusBar hidden={true} />
               <AppNavigator dataLength={dataLength} />
             </NavigationContainer>
+
+            <Toast config={toastConfig} />
           </DimensionsContextProvider>
         </ThemeContextProvider>
       </SearchResultGridContextProvider>
-      <Toast config={toastConfig} />
     </SafeAreaProvider>
   );
 }

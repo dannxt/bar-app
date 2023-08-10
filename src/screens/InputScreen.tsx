@@ -22,10 +22,18 @@ import Toast from "react-native-toast-message";
 import * as Haptics from "expo-haptics";
 import * as Device from "expo-device";
 
-// aws testing and imports
-import { invoke } from "../aws-lambda/invoke";
-
 export default function InputScreen({ navigation }: any) {
+  // datas
+  const routeDataMaps: {
+    route9: string[];
+    route3: string[];
+    route4: string[];
+  } = {
+    route9: routeDataList9,
+    route3: routeDataList3,
+    route4: routeDataList4,
+  };
+
   //contexts
   const { theme }: any = useContext(ThemeContext);
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
@@ -62,6 +70,96 @@ export default function InputScreen({ navigation }: any) {
     ["", "", "", "", "", ""],
     ["", "", "", "", "", ""], //28 rows
   ];
+  const emptyResultGrid = [
+    [
+      { key: 1, value: "", match: "no", secondMatch: "no" },
+      { key: 2, value: "", match: "no", secondMatch: "no" },
+      { key: 3, value: "", match: "no", secondMatch: "no" },
+      { key: 4, value: "", match: "no", secondMatch: "no" },
+      { key: 5, value: "", match: "no", secondMatch: "no" },
+      { key: 6, value: "", match: "no", secondMatch: "no" },
+      { key: 7, value: "", match: "no", secondMatch: "no" },
+      { key: 8, value: "", match: "no", secondMatch: "no" },
+      { key: 9, value: "", match: "no", secondMatch: "no" },
+    ],
+    [
+      { key: 10, value: "", match: "no", secondMatch: "no" },
+      { key: 11, value: "", match: "no", secondMatch: "no" },
+      { key: 12, value: "", match: "no", secondMatch: "no" },
+      { key: 13, value: "", match: "no", secondMatch: "no" },
+      { key: 14, value: "", match: "no", secondMatch: "no" },
+      { key: 15, value: "", match: "no", secondMatch: "no" },
+      { key: 16, value: "", match: "no", secondMatch: "no" },
+      { key: 17, value: "", match: "no", secondMatch: "no" },
+      { key: 18, value: "", match: "no", secondMatch: "no" },
+    ],
+    [
+      { key: 19, value: "", match: "no", secondMatch: "no" },
+      { key: 20, value: "", match: "no", secondMatch: "no" },
+      { key: 21, value: "", match: "no", secondMatch: "no" },
+      { key: 22, value: "", match: "no", secondMatch: "no" },
+      { key: 23, value: "", match: "no", secondMatch: "no" },
+      { key: 24, value: "", match: "no", secondMatch: "no" },
+      { key: 25, value: "", match: "no", secondMatch: "no" },
+      { key: 26, value: "", match: "no", secondMatch: "no" },
+      { key: 27, value: "", match: "no", secondMatch: "no" },
+    ],
+    [
+      { key: 28, value: "", match: "no", secondMatch: "no" },
+      { key: 29, value: "", match: "no", secondMatch: "no" },
+      { key: 30, value: "", match: "no", secondMatch: "no" },
+      { key: 31, value: "", match: "no", secondMatch: "no" },
+      { key: 32, value: "", match: "no", secondMatch: "no" },
+      { key: 33, value: "", match: "no", secondMatch: "no" },
+      { key: 34, value: "", match: "no", secondMatch: "no" },
+      { key: 35, value: "", match: "no", secondMatch: "no" },
+      { key: 36, value: "", match: "no", secondMatch: "no" },
+    ],
+    [
+      { key: 37, value: "", match: "no", secondMatch: "no" },
+      { key: 38, value: "", match: "no", secondMatch: "no" },
+      { key: 39, value: "", match: "no", secondMatch: "no" },
+      { key: 40, value: "", match: "no", secondMatch: "no" },
+      { key: 41, value: "", match: "no", secondMatch: "no" },
+      { key: 42, value: "", match: "no", secondMatch: "no" },
+      { key: 43, value: "", match: "no", secondMatch: "no" },
+      { key: 44, value: "", match: "no", secondMatch: "no" },
+      { key: 45, value: "", match: "no", secondMatch: "no" },
+    ],
+    [
+      { key: 46, value: "", match: "no", secondMatch: "no" },
+      { key: 47, value: "", match: "no", secondMatch: "no" },
+      { key: 48, value: "", match: "no", secondMatch: "no" },
+      { key: 49, value: "", match: "no", secondMatch: "no" },
+      { key: 50, value: "", match: "no", secondMatch: "no" },
+      { key: 51, value: "", match: "no", secondMatch: "no" },
+      { key: 52, value: "", match: "no", secondMatch: "no" },
+      { key: 53, value: "", match: "no", secondMatch: "no" },
+      { key: 54, value: "", match: "no", secondMatch: "no" },
+    ],
+    [
+      { key: 55, value: "", match: "no", secondMatch: "no" },
+      { key: 56, value: "", match: "no", secondMatch: "no" },
+      { key: 57, value: "", match: "no", secondMatch: "no" },
+      { key: 58, value: "", match: "no", secondMatch: "no" },
+      { key: 59, value: "", match: "no", secondMatch: "no" },
+      { key: 60, value: "", match: "no", secondMatch: "no" },
+      { key: 61, value: "", match: "no", secondMatch: "no" },
+      { key: 62, value: "", match: "no", secondMatch: "no" },
+      { key: 63, value: "", match: "no", secondMatch: "no" },
+    ],
+    [
+      { key: 64, value: "", match: "no", secondMatch: "no" },
+      { key: 65, value: "", match: "no", secondMatch: "no" },
+      { key: 66, value: "", match: "no", secondMatch: "no" },
+      { key: 67, value: "", match: "no", secondMatch: "no" },
+      { key: 68, value: "", match: "no", secondMatch: "no" },
+      { key: 69, value: "", match: "no", secondMatch: "no" },
+      { key: 70, value: "", match: "no", secondMatch: "no" },
+      { key: 71, value: "", match: "no", secondMatch: "no" },
+      { key: 72, value: "", match: "no", secondMatch: "no" },
+    ],
+  ];
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
   const searchingColor = colors[themeT].searching;
@@ -74,6 +172,7 @@ export default function InputScreen({ navigation }: any) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isCurrentlySearching, setIsCurrentlySearching] = useState(false);
   const [searchTitle, setSearchTitle] = useState("Search");
+  const [modalBackground, setModalBackground] = useState("black");
 
   //handlers
   const toggleModal = () => {
@@ -83,28 +182,246 @@ export default function InputScreen({ navigation }: any) {
   const triggerHaptic = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
+  function attemptSearch(searchString: string, routeDataMaps: object) {
+    const TRAILING_LEN = 18;
+    const MAX_SECONDARY_MATCHES = 6;
+    const MAX_BASE_SEARCH_MATCHES = 4;
+    let resultsWithTrailing3: any;
+    let resultsWithTrailing4: any;
+    let resultsWithTrailing9: any;
+    let hasExtraMatches = false;
+    let finalResultObj: {
+      route9: string;
+      route3: string;
+      route4: string;
+      diff: number;
+      noResult: boolean;
+      isSpecial: boolean;
+    } = {
+      route9: "",
+      route3: "",
+      route4: "",
+      diff: 0,
+      noResult: false,
+      isSpecial: true,
+    };
 
-  function attemptSearch(
-    searchString: string,
-    routeDataList: string[],
-    routeNumber: number
-  ) {
-    let matchFound = false;
-    for (const [index, routeData] of routeDataList.entries()) {
-      console.log(`searching routeData${index} of route ${routeNumber}...`);
-      let matchString = findResultString(routeData, searchString);
-      if (matchString.length > 0) {
-        console.log(`match found! for route ${routeNumber}`);
-        matchFound = true;
-        const resultGrid = convertToNestedResultObjects(
-          matchString,
-          searchString.length
+    function getTrailingLenStringResults(
+      mainString: string,
+      searchString: string,
+      trailingLength: number,
+      numResultsMax = MAX_BASE_SEARCH_MATCHES
+    ) {
+      // returns [matchedString + trailingLen]
+      let results: string[] = [];
+      let position = 0;
+      let index = mainString.indexOf(searchString, position);
+      while (results.length < numResultsMax && index !== -1) {
+        if (index + searchString.length + trailingLength < mainString.length) {
+          results.push(
+            mainString.slice(
+              index,
+              index + searchString.length + trailingLength
+            )
+          );
+        }
+        position = index + 1;
+        index = mainString.indexOf(searchString, position);
+      }
+      return results;
+    }
+
+    function findMatchStringInList(
+      searchString: string,
+      routeList: string[],
+      diff: number
+    ) {
+      let result = "";
+      routeList.forEach((mainString: string) => {
+        const idx = mainString.indexOf(searchString);
+        if (idx != -1) {
+          result = mainString.slice(idx, idx + searchString.length - diff + 18);
+        }
+      });
+      return result;
+    }
+    // Conduct first level search across all routes and return a list of trailingLen matchStrings (basic search)
+    Object.keys(routeDataMaps).forEach((routeNumber) => {
+      const routeData = routeDataMaps[routeNumber];
+      routeData.forEach((mainString: string) => {
+        const resultStringList = getTrailingLenStringResults(
+          mainString,
+          searchString,
+          TRAILING_LEN
         );
-        setSearchResultGridHandler(resultGrid, routeNumber);
-        break; // Exit the loop when a match is found
+        switch (routeNumber) {
+          case "route9":
+            resultsWithTrailing9 = new Set(resultStringList);
+            break;
+          case "route3":
+            resultsWithTrailing3 = new Set(resultStringList);
+            break;
+          case "route4":
+            resultsWithTrailing4 = new Set(resultStringList);
+            break;
+        }
+      });
+    });
+    // returns result in order of priority:
+    // check for triple matches
+    if (
+      resultsWithTrailing9.size > 0 &&
+      resultsWithTrailing3.size > 0 &&
+      resultsWithTrailing4.size > 0
+    ) {
+      console.log("checking 9-3-4");
+      let foundMatch = false;
+      let diff = MAX_SECONDARY_MATCHES;
+      while (diff > 2 && !hasExtraMatches) {
+        for (const string9 of resultsWithTrailing9) {
+          const searchString = string9.slice(
+            0,
+            string9.length - TRAILING_LEN + diff
+          );
+          const string9in3 = findMatchStringInList(
+            searchString,
+            routeDataMaps.route3,
+            diff
+          );
+
+          const string9in4 = findMatchStringInList(
+            searchString,
+            routeDataMaps.route4,
+            diff
+          );
+
+          if (string9in3 !== "" && string9in4 !== "") {
+            finalResultObj.route9 = string9;
+            finalResultObj.route3 = string9in3;
+            finalResultObj.route4 = string9in4;
+            finalResultObj.diff = diff;
+            hasExtraMatches = true;
+            break;
+          }
+        }
+        diff--;
       }
     }
-    return matchFound;
+    // check for 9-3 matches
+    if (
+      !hasExtraMatches &&
+      resultsWithTrailing9.size > 0 &&
+      resultsWithTrailing3.size > 0
+    ) {
+      console.log("checking 9-3");
+      let diff = MAX_SECONDARY_MATCHES;
+      while (diff > 2 && !hasExtraMatches) {
+        for (const string9 of resultsWithTrailing9) {
+          const searchString = string9.slice(
+            0,
+            string9.length - TRAILING_LEN + diff
+          );
+          const string9in3 = findMatchStringInList(
+            searchString,
+            routeDataMaps.route3,
+            diff
+          );
+          if (string9in3 !== "") {
+            finalResultObj.route9 = string9;
+            finalResultObj.route3 = string9in3;
+            finalResultObj.diff = diff;
+            hasExtraMatches = true;
+            break;
+          }
+        }
+
+        diff--;
+      }
+    }
+    // check for 9-4 matches
+    if (
+      !hasExtraMatches &&
+      resultsWithTrailing9.size > 0 &&
+      resultsWithTrailing4.size > 0
+    ) {
+      console.log("checking 9-4");
+      let diff = MAX_SECONDARY_MATCHES;
+      while (diff > 2 && !hasExtraMatches) {
+        for (const string9 of resultsWithTrailing9) {
+          const searchString = string9.slice(
+            0,
+            string9.length - TRAILING_LEN + diff
+          );
+          const string9in4 = findMatchStringInList(
+            searchString,
+            routeDataMaps.route4,
+            diff
+          );
+          if (string9in4 !== "") {
+            finalResultObj.route9 = string9;
+            finalResultObj.route4 = string9in4;
+            finalResultObj.diff = diff;
+            hasExtraMatches = true;
+            break;
+          }
+        }
+        diff--;
+      }
+    }
+    // check for 3-4 matches
+    if (
+      !hasExtraMatches &&
+      resultsWithTrailing3.size > 0 &&
+      resultsWithTrailing4.size > 0
+    ) {
+      console.log("checking 3-4");
+      let diff = MAX_SECONDARY_MATCHES;
+      while (diff > 2 && !hasExtraMatches) {
+        for (const string3 of resultsWithTrailing3) {
+          const searchString = string3.slice(
+            0,
+            string3.length - TRAILING_LEN + diff
+          );
+          const string3in4 = findMatchStringInList(
+            searchString,
+            routeDataMaps.route4,
+            diff
+          );
+          if (string3in4 !== "") {
+            finalResultObj.route3 = string3;
+            finalResultObj.route4 = string3in4;
+            finalResultObj.diff = diff;
+            hasExtraMatches = true;
+            break;
+          }
+        }
+        diff--;
+      }
+    }
+    // if no matches, get first item of matchStringList for each route (basic search result)
+    if (!hasExtraMatches) {
+      console.log("checking basic matches");
+      finalResultObj.isSpecial = false;
+      const temp = [
+        [...resultsWithTrailing9],
+        [...resultsWithTrailing3],
+        [...resultsWithTrailing4],
+      ].map((resultList) => {
+        if (resultList.length > 0) {
+          return resultList[0];
+        } else {
+          return "";
+        }
+      });
+      finalResultObj.route9 = temp[0];
+      finalResultObj.route3 = temp[1];
+      finalResultObj.route4 = temp[2];
+      finalResultObj.diff = 0;
+      if (temp[0] === "" && temp[1] === "" && temp[2] === "") {
+        finalResultObj.noResult = true;
+      }
+    }
+    return finalResultObj;
   }
 
   //functions
@@ -147,49 +464,87 @@ export default function InputScreen({ navigation }: any) {
     }
   };
   const searchButtonHandler = () => {
-    // const invokeParams = {
-    //   FunctionName: "handler",
-    //   Payload: "test",
-    // };
-    // invoke(invokeParams);
-    // if (input !== "") {
+    if (input != "") {
       setIsCurrentlySearching(true);
       setSearchTitle("Searching...");
       requestAnimationFrame(() => {
-        let matchFound;
-        matchFound = attemptSearch(input, routeDataList9, 9) || matchFound;
-        matchFound = attemptSearch(input, routeDataList3, 3) || matchFound;
-        matchFound = attemptSearch(input, routeDataList4, 4) || matchFound;
-        console.log(`matchFound: ${matchFound}`);
+        const searchResultObj = attemptSearch(input, routeDataMaps);
+        if (!searchResultObj.noResult) {
+          setSearchResultGridHandler(
+            convertToNestedResultObj(
+              searchResultObj.route9,
+              input.length,
+              72,
+              searchResultObj.diff
+            ),
+            9
+          );
+          setSearchResultGridHandler(
+            convertToNestedResultObj(
+              searchResultObj.route3,
+              input.length,
+              72,
+              searchResultObj.diff
+            ),
+            3
+          );
+          setSearchResultGridHandler(
+            convertToNestedResultObj(
+              searchResultObj.route4,
+              input.length,
+              72,
+              searchResultObj.diff
+            ),
+            4
+          );
+          requestAnimationFrame(() => {
+            if (searchResultObj.isSpecial) {
+              specialMatchHandler();
+            }
+            setModalVisible(true);
+          });
+        } else {
+          // if no match found, painttheboard, call noMatchToastHandler();
+          noMatchToastHandler();
+        }
         setIsCurrentlySearching(false);
         setSearchTitle("Search");
-        matchFound ? toggleModal() : noMatchToastHandler();
+        setModalBackground("black");
       });
     }
   };
-
+  const clearButtonHandler = () => {
+    setInput("");
+  };
   // helper Functions
-  function findResultString(mainString: string, searchString: string) {
-    const index = mainString.indexOf(searchString);
-    if (index === -1) {
-      return "";
+
+  function findAllMatchingIndices(mainString: string, searchString: string) {
+    const sLen = searchString.length;
+    const mLen = mainString.length;
+    const trailingLength = 18;
+    const indices = [];
+    let index = mainString.indexOf(searchString);
+    while (index !== -1 && index + sLen + trailingLength <= mLen) {
+      indices.push(index);
+      index = mainString.indexOf(searchString, index + 1);
     }
-    const maxLength = mainString.length - index;
-    const desiredLength = Math.min(searchString.length + 18, maxLength);
-    return mainString.slice(index, index + desiredLength);
+    return indices;
   }
-  function convertToNestedResultObjects(
-    searchString: string,
+  function convertToNestedResultObj(
+    extendedResultString: string,
     numMatches: number,
-    totalLen: number = 72
+    totalLen: number = 72,
+    numSecondMatches: number = 0
   ) {
     const nestedLists = [];
     let columnList = [];
     for (let i = 1; i <= totalLen; i++) {
       const item = {
         key: i,
-        value: searchString[i - 1] ? searchString[i - 1] : "",
+        value: extendedResultString[i - 1] ? extendedResultString[i - 1] : "",
         match: i <= numMatches ? "yes" : "no",
+        secondMatch:
+          numMatches < i && i <= numSecondMatches + numMatches ? "yes" : "no",
       };
       columnList.push(item);
 
@@ -200,9 +555,6 @@ export default function InputScreen({ navigation }: any) {
     }
     return nestedLists;
   }
-  const clearButtonHandler = () => {
-    setInput("");
-  };
   function createGrid(input: string) {
     let currentColumn = 0;
     let currentRow = 0;
@@ -255,11 +607,22 @@ export default function InputScreen({ navigation }: any) {
   }, [input]);
 
   //notifications and toasts
+  const specialMatchHandler = () => {
+    setModalBackground("special");
+    // Toast.show({
+    //   type: "special",
+    //   position: "top",
+    //   text1: "Special Match!",
+    //   visibilityTime: 3000,
+    //   autoHide: true,
+    // });
+  };
+
   const noMatchToastHandler = () => {
     Toast.show({
-      type: "success",
+      type: "notFound",
       position: "top",
-      text1: "No Match!",
+      text1: "No Match Found",
       visibilityTime: 1500,
       autoHide: true,
     });
@@ -293,6 +656,7 @@ export default function InputScreen({ navigation }: any) {
         <ModalResult
           isModalVisible={isModalVisible}
           toggleModal={toggleModal}
+          modalBackground={modalBackground}
         />
         <View style={styles.innerCont}>
           <NumberTextView inputLength={input.length} />
@@ -330,25 +694,6 @@ export default function InputScreen({ navigation }: any) {
               keyboardAppearance={theme === "light" ? "light" : "dark"}
             />
           </View>
-          {/* <Text
-            style={[
-              textColor,
-              {
-                position: "absolute",
-                top: 0,
-                right: 0,
-                paddingRight: deviceWidth * 0.006,
-                marginTop: deviceHeight * 0.08,
-                fontSize: deviceWidth * 0.017,
-                fontWeight: "bold",
-                fontStyle: "italic",
-                textDecorationLine: "underline",
-                textAlign: "center",
-              },
-            ]}
-          >
-            {input.length}
-          </Text> */}
           <View style={styles.boardCont}>
             <SmallBoardImage style={styles.smallBoardImage} />
             <InputBoard

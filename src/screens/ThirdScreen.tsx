@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { LinearGradient } from "expo-linear-gradient";
@@ -8,6 +8,7 @@ export default function ThirdScreen({ route }: any) {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const { dataLength } = route.params;
+
   return (
     <LinearGradient
       colors={["black", "transparent"]}
@@ -16,9 +17,14 @@ export default function ThirdScreen({ route }: any) {
       locations={[0, 0.005]}
       style={[styles.container, { backgroundColor: colors[themeT].background }]}
     >
-      <Text style={[styles.text, { color: colors[themeT].text }]}>
-        Total Data Size: {dataLength}
-      </Text>
+      <View style={{ alignItems: "center" }}>
+        <Text style={[styles.text, { color: colors[themeT].text }]}>
+          Total Data:
+        </Text>
+        <Text style={[styles.text, { color: colors[themeT].text }]}>
+          (3 x 22 x 2^22) x 1.9 = {dataLength}
+        </Text>
+      </View>
     </LinearGradient>
   );
 }

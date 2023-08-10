@@ -29,6 +29,7 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     "UbuntuMono-Regular": require("./src/assets/fonts/UbuntuMono-Regular.ttf"),
     "UbuntuMono-Bold": require("./src/assets/fonts/UbuntuMono-Bold.ttf"),
+    "UbuntuMono-Italic": require("./src/assets/fonts/UbuntuMono-Italic.ttf"),
   });
   const [dataLength, setDataLength] = useState(0);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -51,19 +52,18 @@ export default function App() {
   async function loadData() {
     console.log("loading initial data...");
     let len = 0;
-
-    routeDataList9.push(require("./src/testData/routeData9-1.js"));
-    routeDataList9.push(require("./src/testData/routeData9-2.js"));
-    routeDataList9.push(require("./src/testData/routeData9-3.js"));
-    routeDataList9.push(require("./src/testData/routeData9-4.js"));
-    routeDataList3.push(require("./src/testData/routeData3-1.js"));
-    routeDataList3.push(require("./src/testData/routeData3-2.js"));
-    routeDataList3.push(require("./src/testData/routeData3-3.js"));
-    routeDataList3.push(require("./src/testData/routeData3-4.js"));
-    routeDataList4.push(require("./src/testData/routeData4-1.js"));
-    routeDataList4.push(require("./src/testData/routeData4-2.js"));
-    routeDataList4.push(require("./src/testData/routeData4-3.js"));
-    routeDataList4.push(require("./src/testData/routeData4-4.js"));
+    routeDataList9.push(require("./src/len-22-data/routeData9-1.js"));
+    routeDataList9.push(require("./src/len-22-data/routeData9-2.js"));
+    routeDataList9.push(require("./src/len-22-data/routeData9-3.js"));
+    routeDataList9.push(require("./src/len-22-data/routeData9-4.js"));
+    routeDataList3.push(require("./src/len-22-data/routeData3-1.js"));
+    routeDataList3.push(require("./src/len-22-data/routeData3-2.js"));
+    routeDataList3.push(require("./src/len-22-data/routeData3-3.js"));
+    routeDataList3.push(require("./src/len-22-data/routeData3-4.js"));
+    routeDataList4.push(require("./src/len-22-data/routeData4-1.js"));
+    routeDataList4.push(require("./src/len-22-data/routeData4-2.js"));
+    routeDataList4.push(require("./src/len-22-data/routeData4-3.js"));
+    routeDataList4.push(require("./src/len-22-data/routeData4-4.js"));
 
     routeDataList9.forEach((routeData, index) => {
       len += routeData.length;
@@ -86,10 +86,11 @@ export default function App() {
               <StatusBar hidden={true} />
               <AppNavigator dataLength={dataLength} />
             </NavigationContainer>
+
+            <Toast config={toastConfig} />
           </DimensionsContextProvider>
         </ThemeContextProvider>
       </SearchResultGridContextProvider>
-      <Toast config={toastConfig} />
     </SafeAreaProvider>
   );
 }

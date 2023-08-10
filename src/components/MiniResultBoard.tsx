@@ -42,7 +42,7 @@ const MiniResultBoard = ({
       break;
 
     case "iPhone 14 Plus":
-      circleMargin = 0.00245 * deviceWidth;
+      circleMargin = 0.00263 * deviceWidth;
       break;
   }
 
@@ -53,20 +53,30 @@ const MiniResultBoard = ({
           <View
             key={key}
             style={{
-              width: deviceWidth / 44.1,
-              height: deviceWidth / 44.1,
+              width: deviceWidth / 44.5,
+              height: deviceWidth / 44.5,
               margin: circleMargin,
               borderRadius: obj.match === "yes" ? 0 : 15,
               backgroundColor: colorMap[obj.value],
               alignContent: "center",
+              // special case for the second match
+              borderColor:
+                obj.secondMatch === "yes" && obj.value !== ""
+                  ? colors[themeT].highlight
+                  : "transparent",
+              borderWidth: obj.secondMatch === "yes" ? 1.5 : 0,
             }}
           >
             <Text
               style={{
-                fontFamily: "UbuntuMono-Regular",
+                fontFamily:
+                  obj.secondMatch === "yes"
+                    ? "UbuntuMono-Italic"
+                    : "UbuntuMono-Regular",
                 textAlign: "center",
                 alignItems: "center",
-                color: colors[themeT].text,
+                color:
+                  obj.secondMatch === "yes" ? "white" : colors[themeT].text,
               }}
             >
               {obj.value}

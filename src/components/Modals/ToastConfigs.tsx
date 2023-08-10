@@ -1,9 +1,7 @@
-// App.jsx
 import { BaseToast, ErrorToast } from "react-native-toast-message";
 import { View, Text, PixelRatio, useWindowDimensions } from "react-native";
 
 const fontScale = PixelRatio.getFontScale();
-
 /*
   1. Create the config
 */
@@ -12,17 +10,42 @@ export const toastConfig = {
     Overwrite 'success' type,
     by modifying the existing `BaseToast` component
   */
-  success: (props: any) => (
+  special: (props: any) => (
+    <BaseToast
+      {...props}
+      style={{
+        width: useWindowDimensions().width * 0.25,
+        marginLeft: useWindowDimensions().width * 0.06,
+        borderLeftWidth: 2,
+        borderColor: "#46507a",
+        borderLeftColor: "#46507a",
+        borderWidth: 2,
+        elevation: 50,
+      }}
+      contentContainerStyle={{
+        width: "90%",
+        borderRadius: 5,
+        backgroundColor: "#afb9e3",
+      }}
+      text1Style={{
+        fontSize: fontScale * 12,
+        fontFamily: "UbuntuMono-Bold",
+        textAlign: "center",
+      }}
+    />
+  ),
+
+  notFound: (props: any) => (
     <BaseToast
       {...props}
       style={{
         width: useWindowDimensions().width * 0.25,
         marginLeft: useWindowDimensions().width * 0.06,
         borderRadius: 5,
-        borderLeftColor: "red",
+        borderLeftWidth: 0,
       }}
       contentContainerStyle={{
-        width: "100%",
+        width: "90%",
         borderRadius: 5,
         backgroundColor: "#ffd4d4",
       }}

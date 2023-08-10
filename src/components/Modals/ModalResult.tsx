@@ -11,11 +11,13 @@ import { SearchResultGridContext } from "../../contexts/SearchResultGridContext"
 type ModalResultProps = {
   isModalVisible: boolean;
   toggleModal: () => void;
+  modalBackground: string;
 };
 
 export default function ModalResult({
   isModalVisible,
   toggleModal,
+  modalBackground,
 }: ModalResultProps) {
   //context
   const { theme }: any = useContext(ThemeContext);
@@ -41,6 +43,10 @@ export default function ModalResult({
         onBackdropPress={toggleModal}
         backdropTransitionOutTiming={0}
         statusBarTranslucent={true}
+        backdropColor={
+          modalBackground === "special" ? colors[themeT].special : "black"
+        }
+        backdropOpacity={0.9}
         style={[styles.modal, { backgroundColor: colors[themeT].background }]}
       >
         <View style={styles.boardCont}>

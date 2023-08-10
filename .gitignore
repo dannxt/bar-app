@@ -8,7 +8,8 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.orig.*
-src/data/*
+*/data/*
+*/len-22-data/*
 web-build/
 
 # macOS

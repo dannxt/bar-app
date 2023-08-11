@@ -22,6 +22,7 @@ import SmallBoardImage from "../components/SmallBoardImage";
 import Toast from "react-native-toast-message";
 import * as Haptics from "expo-haptics";
 import * as Device from "expo-device";
+import SearchOptionButtons from "../components/SearchOptionButtons";
 
 export default function InputScreen({ navigation }: any) {
   // datas
@@ -173,19 +174,270 @@ export default function InputScreen({ navigation }: any) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isCurrentlySearching, setIsCurrentlySearching] = useState(false);
   const [searchTitle, setSearchTitle] = useState("Search");
+  const [searchType, setSearchType] = useState("basic");
 
-  //handlers
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
   //haptics
   const triggerHaptic = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
-  function attemptSearch(searchString: string, routeDataMaps: object) {
-    const TRAILING_LEN = 18;
-    const MAX_SECONDARY_MATCHES = 6;
-    const MAX_BASE_SEARCH_MATCHES = 1;
+
+  // handlers and toggles
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+  const gridHistoryHandler = () => {
+    if (input !== inputHistory[inputHistory.length - 1]) {
+      if (inputHistory.length < 6) {
+        setInputHistory((prevHistory) => [...prevHistory, input]);
+      } else {
+        setInputHistory((prevHistory) => [...prevHistory.slice(1), input]);
+      }
+    }
+  };
+  const searchTypeHandler = (searchType: string) => {
+    if (searchType === "basic") {
+      setSearchType("basic");
+    } else {
+      setSearchType("advanced");
+    }
+  };
+  const undoButtonHandler = () => {
+    if (inputHistory.length > 1) {
+      const previousInputs = inputHistory.slice(0, -1);
+      setInput(previousInputs[previousInputs.length - 1]);
+      setInputHistory(previousInputs);
+    }
+  };
+  const leftButtonHandler = () => {
+    setInput((input) => input.slice(1));
+  };
+  const rightButtonHandler = () => {
+    setInput((input) => input.slice(0, -1));
+  };
+  const bankerButtonHandler = () => {
+    if (Platform.OS === "ios") {
+      triggerHaptic();
+    }
+    if (input.length < 28) {
+      setInput((input) => input + "B");
+    }
+  };
+  const playerButtonHandler = () => {
+    if (Platform.OS === "ios") {
+      triggerHaptic();
+    }
+    if (input.length < 28) {
+      setInput((input) => input + "P");
+    }
+  };
+  const searchButtonHandler = () => {
+    if (input != "") {
+      setIsCurrentlySearching(true);
+      setSearchTitle("Searching...");
+      requestAnimationFrame(() => {
+        let searchResultObj;
+        searchType === "basic"
+          ? (searchResultObj = basicSearch(input, routeDataMaps))
+          : (searchResultObj = advanceSearch(input, routeDataMaps));
+        if (searchResultObj.hasResult) {
+          setSearchResultGridHandler(
+            convertToNestedResultObj(
+              searchResultObj.route9,
+              input.length,
+              72,
+              searchResultObj.diff
+            ),
+            9
+          );
+          setSearchResultGridHandler(
+            convertToNestedResultObj(
+              searchResultObj.route3,
+              input.length,
+              72,
+              searchResultObj.diff
+            ),
+            3
+          );
+          setSearchResultGridHandler(
+            convertToNestedResultObj(
+              searchResultObj.route4,
+              input.length,
+              72,
+              searchResultObj.diff
+            ),
+            4
+          );
+          requestAnimationFrame(() => {
+            setModalVisible(true);
+          });
+        } else {
+          // if no match found, painttheboard, call noMatchToastHandler();
+          noMatchToastHandler();
+        }
+        setIsCurrentlySearching(false);
+        setSearchTitle("Search");
+      });
+    }
+  };
+  const clearButtonHandler = () => {
+    setInput("");
+  };
+
+  // CONSTANTS
+  const TRAILING_LEN = 18;
+  const MAX_SECONDARY_MATCHES = 6;
+  const MAX_BASE_SEARCH_MATCHES = 1;
+
+  //functions
+  function findAllMatchingIndices(mainString: string, searchString: string) {
+    const sLen = searchString.length;
+    const mLen = mainString.length;
+    const trailingLength = 18;
+    const indices = [];
+    let index = mainString.indexOf(searchString);
+    while (index !== -1 && index + sLen + trailingLength <= mLen) {
+      indices.push(index);
+      index = mainString.indexOf(searchString, index + 1);
+    }
+    return indices;
+  }
+  function convertToNestedResultObj(
+    extendedResultString: string,
+    numMatches: number,
+    totalLen: number = 72,
+    numSecondMatches: number = 0
+  ) {
+    const nestedLists = [];
+    let columnList = [];
+    for (let i = 1; i <= totalLen; i++) {
+      const item = {
+        key: i,
+        value: extendedResultString[i - 1] ? extendedResultString[i - 1] : "",
+        match: i <= numMatches ? "yes" : "no",
+        secondMatch:
+          numMatches < i && i <= numSecondMatches + numMatches ? "yes" : "no",
+      };
+      columnList.push(item);
+
+      if (i % 9 == 0) {
+        nestedLists.push(columnList);
+        columnList = [];
+      }
+    }
+    return nestedLists;
+  }
+  function createGrid(input: string) {
+    let currentColumn = 0;
+    let currentRow = 0;
+    let maxRow = 5;
+    let topColumnPointer = 0;
+    let grid = emptyGrid;
+
+    function getCurrentPosition() {
+      return [currentRow, currentColumn];
+    }
+
+    function setGridAtPosition(position: number[], char: string) {
+      grid[position[1]][position[0]] = char;
+    }
+
+    let prevInput = "";
+
+    for (const currInput of input) {
+      if (prevInput === "" || prevInput === currInput) {
+        if (
+          currentRow === maxRow ||
+          grid[currentColumn][currentRow + 1] !== "" ||
+          (currentColumn >= 1 &&
+            grid[currentColumn - 1][currentRow + 1] === currInput) ||
+          (currentRow + 2 <= maxRow &&
+            grid[currentColumn][currentRow + 2] === currInput)
+        ) {
+          setGridAtPosition(getCurrentPosition(), currInput);
+          currentColumn++;
+        } else {
+          setGridAtPosition(getCurrentPosition(), currInput);
+          currentRow++;
+        }
+      } else if (prevInput !== currInput) {
+        topColumnPointer++;
+        currentColumn = topColumnPointer;
+        currentRow = 0;
+        setGridAtPosition(getCurrentPosition(), currInput);
+        currentRow = 1;
+      }
+      prevInput = currInput;
+    }
+    return grid;
+  }
+  function getTrailingLenStringResults(
+    mainString: string,
+    searchString: string,
+    trailingLength: number,
+    numResultsMax = MAX_BASE_SEARCH_MATCHES
+  ) {
+    // returns [matchedString + trailingLen]
+    let results: string[] = [];
+    let position = 0;
+    let index = mainString.indexOf(searchString, position);
+    while (results.length < numResultsMax && index !== -1) {
+      if (index + searchString.length + trailingLength < mainString.length) {
+        results.push(
+          mainString.slice(index, index + searchString.length + trailingLength)
+        );
+      }
+      position = index + 1;
+      index = mainString.indexOf(searchString, position);
+    }
+    return results;
+  }
+  function basicSearch(searchString: string, routeDataMaps: object) {
+    let finalResultObj: {
+      route9: string;
+      route3: string;
+      route4: string;
+      diff: number;
+      hasResult: boolean;
+    } = {
+      route9: "",
+      route3: "",
+      route4: "",
+      diff: 0,
+      hasResult: false,
+    };
+    Object.entries(routeDataMaps).forEach(([routeNumber, routeData]) => {
+      routeData.forEach((mainString: string) => {
+        const resultStringList = getTrailingLenStringResults(
+          mainString,
+          searchString,
+          TRAILING_LEN,
+          MAX_BASE_SEARCH_MATCHES
+        );
+        switch (routeNumber) {
+          case "route9":
+            resultStringList.length > 0
+              ? (finalResultObj.route9 = resultStringList[0])
+              : (finalResultObj.route9 = "");
+            finalResultObj.hasResult = true;
+            break;
+          case "route3":
+            resultStringList.length > 0
+              ? (finalResultObj.route3 = resultStringList[0])
+              : (finalResultObj.route3 = "");
+
+            break;
+          case "route4":
+            resultStringList.length > 0
+              ? (finalResultObj.route4 = resultStringList[0])
+              : (finalResultObj.route4 = "");
+            finalResultObj.hasResult = true;
+            break;
+        }
+      });
+    });
+    return finalResultObj;
+  }
+  function advanceSearch(searchString: string, routeDataMaps: object) {
     let resultsWithTrailing3: any;
     let resultsWithTrailing4: any;
     let resultsWithTrailing9: any;
@@ -203,32 +455,6 @@ export default function InputScreen({ navigation }: any) {
       diff: 0,
       hasResult: false,
     };
-
-    function getTrailingLenStringResults(
-      mainString: string,
-      searchString: string,
-      trailingLength: number,
-      numResultsMax = MAX_BASE_SEARCH_MATCHES
-    ) {
-      // returns [matchedString + trailingLen]
-      let results: string[] = [];
-      let position = 0;
-      let index = mainString.indexOf(searchString, position);
-      while (results.length < numResultsMax && index !== -1) {
-        if (index + searchString.length + trailingLength < mainString.length) {
-          results.push(
-            mainString.slice(
-              index,
-              index + searchString.length + trailingLength
-            )
-          );
-        }
-        position = index + 1;
-        index = mainString.indexOf(searchString, position);
-      }
-      return results;
-    }
-
     function findMatchStringInList(
       searchString: string,
       routeList: string[],
@@ -396,203 +622,6 @@ export default function InputScreen({ navigation }: any) {
     }
     return finalResultObj;
   }
-  // if no matches, get first item of matchStringList for each route (basic search result)
-  // if (!hasExtraMatches) {
-  //   console.log("Checking Others");
-  //   finalResultObj.isSpecial = false;
-  //   const temp = [
-  //     [...resultsWithTrailing9],
-  //     [...resultsWithTrailing3],
-  //     [...resultsWithTrailing4],
-  //   ].map((resultList) => {
-  //     if (resultList.length > 0) {
-  //       return resultList[0];
-  //     } else {
-  //       return "";
-  //     }
-  //   });
-  //   finalResultObj.route9 = temp[0];
-  //   finalResultObj.route3 = temp[1];
-  //   finalResultObj.route4 = temp[2];
-  //   finalResultObj.diff = 0;
-  //   if (temp[0] === "" && temp[1] === "" && temp[2] === "") {
-  //     finalResultObj.hasResult = false;
-  //   }
-  // }
-  // return finalResultObj;
-
-  //functions
-  const gridHistoryHandler = () => {
-    if (input !== inputHistory[inputHistory.length - 1]) {
-      if (inputHistory.length < 6) {
-        setInputHistory((prevHistory) => [...prevHistory, input]);
-      } else {
-        setInputHistory((prevHistory) => [...prevHistory.slice(1), input]);
-      }
-    }
-  };
-  const undoButtonHandler = () => {
-    if (inputHistory.length > 1) {
-      const previousInputs = inputHistory.slice(0, -1);
-      setInput(previousInputs[previousInputs.length - 1]);
-      setInputHistory(previousInputs);
-    }
-  };
-  const leftButtonHandler = () => {
-    setInput((input) => input.slice(1));
-  };
-  const rightButtonHandler = () => {
-    setInput((input) => input.slice(0, -1));
-  };
-  const bankerButtonHandler = () => {
-    if (Platform.OS === "ios") {
-      triggerHaptic();
-    }
-    if (input.length < 28) {
-      setInput((input) => input + "B");
-    }
-  };
-  const playerButtonHandler = () => {
-    if (Platform.OS === "ios") {
-      triggerHaptic();
-    }
-    if (input.length < 28) {
-      setInput((input) => input + "P");
-    }
-  };
-  const searchButtonHandler = () => {
-    if (input != "") {
-      setIsCurrentlySearching(true);
-      setSearchTitle("Searching...");
-      requestAnimationFrame(() => {
-        const searchResultObj = attemptSearch(input, routeDataMaps);
-        if (searchResultObj.hasResult) {
-          setSearchResultGridHandler(
-            convertToNestedResultObj(
-              searchResultObj.route9,
-              input.length,
-              72,
-              searchResultObj.diff
-            ),
-            9
-          );
-          setSearchResultGridHandler(
-            convertToNestedResultObj(
-              searchResultObj.route3,
-              input.length,
-              72,
-              searchResultObj.diff
-            ),
-            3
-          );
-          setSearchResultGridHandler(
-            convertToNestedResultObj(
-              searchResultObj.route4,
-              input.length,
-              72,
-              searchResultObj.diff
-            ),
-            4
-          );
-          requestAnimationFrame(() => {
-            setModalVisible(true);
-          });
-        } else {
-          // if no match found, painttheboard, call noMatchToastHandler();
-          noMatchToastHandler();
-        }
-        setIsCurrentlySearching(false);
-        setSearchTitle("Search");
-      });
-    }
-  };
-  const clearButtonHandler = () => {
-    setInput("");
-  };
-  // helper Functions
-
-  function findAllMatchingIndices(mainString: string, searchString: string) {
-    const sLen = searchString.length;
-    const mLen = mainString.length;
-    const trailingLength = 18;
-    const indices = [];
-    let index = mainString.indexOf(searchString);
-    while (index !== -1 && index + sLen + trailingLength <= mLen) {
-      indices.push(index);
-      index = mainString.indexOf(searchString, index + 1);
-    }
-    return indices;
-  }
-  function convertToNestedResultObj(
-    extendedResultString: string,
-    numMatches: number,
-    totalLen: number = 72,
-    numSecondMatches: number = 0
-  ) {
-    const nestedLists = [];
-    let columnList = [];
-    for (let i = 1; i <= totalLen; i++) {
-      const item = {
-        key: i,
-        value: extendedResultString[i - 1] ? extendedResultString[i - 1] : "",
-        match: i <= numMatches ? "yes" : "no",
-        secondMatch:
-          numMatches < i && i <= numSecondMatches + numMatches ? "yes" : "no",
-      };
-      columnList.push(item);
-
-      if (i % 9 == 0) {
-        nestedLists.push(columnList);
-        columnList = [];
-      }
-    }
-    return nestedLists;
-  }
-  function createGrid(input: string) {
-    let currentColumn = 0;
-    let currentRow = 0;
-    let maxRow = 5;
-    let topColumnPointer = 0;
-    let grid = emptyGrid;
-
-    function getCurrentPosition() {
-      return [currentRow, currentColumn];
-    }
-
-    function setGridAtPosition(position: number[], char: string) {
-      grid[position[1]][position[0]] = char;
-    }
-
-    let prevInput = "";
-
-    for (const currInput of input) {
-      if (prevInput === "" || prevInput === currInput) {
-        if (
-          currentRow === maxRow ||
-          grid[currentColumn][currentRow + 1] !== "" ||
-          (currentColumn >= 1 &&
-            grid[currentColumn - 1][currentRow + 1] === currInput) ||
-          (currentRow + 2 <= maxRow &&
-            grid[currentColumn][currentRow + 2] === currInput)
-        ) {
-          setGridAtPosition(getCurrentPosition(), currInput);
-          currentColumn++;
-        } else {
-          setGridAtPosition(getCurrentPosition(), currInput);
-          currentRow++;
-        }
-      } else if (prevInput !== currInput) {
-        topColumnPointer++;
-        currentColumn = topColumnPointer;
-        currentRow = 0;
-        setGridAtPosition(getCurrentPosition(), currInput);
-        currentRow = 1;
-      }
-      prevInput = currInput;
-    }
-    return grid;
-  }
-
   // effects
   useEffect(() => {
     gridHistoryHandler();
@@ -648,7 +677,7 @@ export default function InputScreen({ navigation }: any) {
             }}
           >
             <TextInput
-              letterSpacing={6.5}
+              letterSpacing={deviceWidth * 0.0071}
               style={[
                 textColor,
                 {
@@ -720,15 +749,10 @@ export default function InputScreen({ navigation }: any) {
             </View>
 
             <View style={styles.searchOptionsCont}>
-              {/* <Text
-                style={{
-                  textAlign: "center",
-                  marginBottom: "8%",
-                  marginLeft: "1%",
-                }}
-              >
-                {showSearchStatus}
-              </Text> */}
+              <SearchOptionButtons
+                searchTypeHandler={searchTypeHandler}
+                searchType={searchType}
+              />
               <PlayButton
                 title={searchTitle}
                 height="50%"

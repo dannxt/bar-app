@@ -1,52 +1,49 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { SegmentedButtons } from "react-native-paper";
 import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 
-const SearchOptionButtons = () => {
+type searchOptionButtonsProps = {
+  searchTypeHandler: (value: string) => void;
+  searchType: string;
+};
+
+const SearchOptionButtons = ({
+  searchTypeHandler,
+}: searchOptionButtonsProps) => {
   const { theme, toggleTheme }: any = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
-  const [value, setValue] = useState("nineData");
+  const [value, setValue] = useState("basic");
 
+  useEffect(() => {
+    searchTypeHandler(value);
+  }, [value]);
   return (
     <SafeAreaView style={styles.container}>
       <SegmentedButtons
         value={value}
         onValueChange={setValue}
-        theme={{ colors: { primary: "green" } }}
         buttons={[
           {
-            value: "threeData",
-            label: "3路",
-            checkedColor: colors[themeT].banker,
+            value: "basic",
+            label: "普搜",
+            checkedColor: "black",
             style: {
               backgroundColor:
-                value === "threeData"
+                value === "basic"
                   ? colors[themeT].textInput
                   : colors[themeT].background,
             },
             uncheckedColor: colors[themeT].text,
           },
           {
-            value: "nineData",
-            label: "9路",
-            checkedColor: colors[themeT].banker,
+            value: "advanced",
+            label: "高搜",
+            checkedColor: "black",
             style: {
               backgroundColor:
-                value === "nineData"
-                  ? colors[themeT].textInput
-                  : colors[themeT].background,
-            },
-            uncheckedColor: colors[themeT].text,
-          },
-          {
-            value: "fourData",
-            label: "4路",
-            checkedColor: colors[themeT].banker,
-            style: {
-              backgroundColor:
-                value === "fourData"
+                value === "advanced"
                   ? colors[themeT].textInput
                   : colors[themeT].background,
             },

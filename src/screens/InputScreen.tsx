@@ -173,7 +173,6 @@ export default function InputScreen({ navigation }: any) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isCurrentlySearching, setIsCurrentlySearching] = useState(false);
   const [searchTitle, setSearchTitle] = useState("Search");
-  const [modalBackground, setModalBackground] = useState("black");
 
   //handlers
   const toggleModal = () => {
@@ -196,15 +195,13 @@ export default function InputScreen({ navigation }: any) {
       route3: string;
       route4: string;
       diff: number;
-      noResult: boolean;
-      isSpecial: boolean;
+      hasResult: boolean;
     } = {
       route9: "",
       route3: "",
       route4: "",
       diff: 0,
-      noResult: false,
-      isSpecial: true,
+      hasResult: false,
     };
 
     function getTrailingLenStringResults(
@@ -277,7 +274,6 @@ export default function InputScreen({ navigation }: any) {
       if (lenOfTrailing3 > 0) {
         if (lenOfTrailing4 > 0) {
           console.log("checking 9+3+4");
-          let foundMatch = false;
           let diff = MAX_SECONDARY_MATCHES;
           while (diff > 2 && !hasExtraMatches) {
             for (const string9 of resultsWithTrailing9) {
@@ -302,6 +298,7 @@ export default function InputScreen({ navigation }: any) {
                 finalResultObj.route3 = string9in3;
                 finalResultObj.route4 = string9in4;
                 finalResultObj.diff = diff;
+                finalResultObj.hasResult = true;
                 hasExtraMatches = true;
                 break;
               }
@@ -328,6 +325,7 @@ export default function InputScreen({ navigation }: any) {
                 finalResultObj.route9 = string9;
                 finalResultObj.route3 = string9in3;
                 finalResultObj.diff = diff;
+                finalResultObj.hasResult = true;
                 hasExtraMatches = true;
                 break;
               }
@@ -356,6 +354,7 @@ export default function InputScreen({ navigation }: any) {
               finalResultObj.route9 = string9;
               finalResultObj.route4 = string9in4;
               finalResultObj.diff = diff;
+              finalResultObj.hasResult = true;
               hasExtraMatches = true;
               break;
             }
@@ -387,6 +386,7 @@ export default function InputScreen({ navigation }: any) {
             finalResultObj.route3 = string3;
             finalResultObj.route4 = string3in4;
             finalResultObj.diff = diff;
+            finalResultObj.hasResult = true;
             hasExtraMatches = true;
             break;
           }
@@ -394,32 +394,32 @@ export default function InputScreen({ navigation }: any) {
         diff--;
       }
     }
-    // if no matches, get first item of matchStringList for each route (basic search result)
-
-    if (!hasExtraMatches) {
-      console.log("Checking Others");
-      finalResultObj.isSpecial = false;
-      const temp = [
-        [...resultsWithTrailing9],
-        [...resultsWithTrailing3],
-        [...resultsWithTrailing4],
-      ].map((resultList) => {
-        if (resultList.length > 0) {
-          return resultList[0];
-        } else {
-          return "";
-        }
-      });
-      finalResultObj.route9 = temp[0];
-      finalResultObj.route3 = temp[1];
-      finalResultObj.route4 = temp[2];
-      finalResultObj.diff = 0;
-      if (temp[0] === "" && temp[1] === "" && temp[2] === "") {
-        finalResultObj.noResult = true;
-      }
-    }
     return finalResultObj;
   }
+  // if no matches, get first item of matchStringList for each route (basic search result)
+  // if (!hasExtraMatches) {
+  //   console.log("Checking Others");
+  //   finalResultObj.isSpecial = false;
+  //   const temp = [
+  //     [...resultsWithTrailing9],
+  //     [...resultsWithTrailing3],
+  //     [...resultsWithTrailing4],
+  //   ].map((resultList) => {
+  //     if (resultList.length > 0) {
+  //       return resultList[0];
+  //     } else {
+  //       return "";
+  //     }
+  //   });
+  //   finalResultObj.route9 = temp[0];
+  //   finalResultObj.route3 = temp[1];
+  //   finalResultObj.route4 = temp[2];
+  //   finalResultObj.diff = 0;
+  //   if (temp[0] === "" && temp[1] === "" && temp[2] === "") {
+  //     finalResultObj.hasResult = false;
+  //   }
+  // }
+  // return finalResultObj;
 
   //functions
   const gridHistoryHandler = () => {
@@ -466,7 +466,7 @@ export default function InputScreen({ navigation }: any) {
       setSearchTitle("Searching...");
       requestAnimationFrame(() => {
         const searchResultObj = attemptSearch(input, routeDataMaps);
-        if (!searchResultObj.noResult) {
+        if (searchResultObj.hasResult) {
           setSearchResultGridHandler(
             convertToNestedResultObj(
               searchResultObj.route9,
@@ -495,9 +495,6 @@ export default function InputScreen({ navigation }: any) {
             4
           );
           requestAnimationFrame(() => {
-            if (searchResultObj.isSpecial) {
-              specialMatchHandler();
-            }
             setModalVisible(true);
           });
         } else {
@@ -506,7 +503,6 @@ export default function InputScreen({ navigation }: any) {
         }
         setIsCurrentlySearching(false);
         setSearchTitle("Search");
-        setModalBackground("black");
       });
     }
   };
@@ -603,17 +599,12 @@ export default function InputScreen({ navigation }: any) {
     setInputGrid(createGrid(input));
   }, [input]);
 
-  //notifications and toasts
-  const specialMatchHandler = () => {
-    setModalBackground("special");
-  };
-
   const noMatchToastHandler = () => {
     Toast.show({
       type: "notFound",
       position: "top",
       text1: "No Match Found",
-      visibilityTime: 1500,
+      visibilityTime: 2000,
       autoHide: true,
     });
   };
@@ -627,7 +618,7 @@ export default function InputScreen({ navigation }: any) {
       break;
 
     case "iPhone 14 Plus":
-      inputFontSize = 0.0365 * deviceWidth;
+      inputFontSize = 0.0265 * deviceWidth;
       break;
   }
 
@@ -646,7 +637,6 @@ export default function InputScreen({ navigation }: any) {
         <ModalResult
           isModalVisible={isModalVisible}
           toggleModal={toggleModal}
-          modalBackground={modalBackground}
         />
         <View style={styles.innerCont}>
           <NumberTextView inputLength={input.length} />
@@ -658,6 +648,7 @@ export default function InputScreen({ navigation }: any) {
             }}
           >
             <TextInput
+              letterSpacing={6.5}
               style={[
                 textColor,
                 {
@@ -666,7 +657,7 @@ export default function InputScreen({ navigation }: any) {
                   fontSize: inputFontSize,
                   fontFamily: "UbuntuMono-Bold",
                   textAlign: "justify",
-                  paddingLeft: deviceWidth * 0.025,
+                  paddingLeft: deviceWidth * 0.027,
                   paddingRight: deviceWidth * 0.02,
                   paddingTop: deviceHeight * 0.035,
                   marginHorizontal: 0,

@@ -23,7 +23,7 @@ const NumberTextView = ({ inputLength }: any) => {
         top: deviceHeight * 0.025,
         justifyContent: "space-evenly",
         position: "absolute",
-        paddingLeft: deviceWidth * 0.023,
+        paddingLeft: deviceWidth * 0.022,
         paddingRight: deviceWidth * 0.025,
         zIndex: 5,
       }}

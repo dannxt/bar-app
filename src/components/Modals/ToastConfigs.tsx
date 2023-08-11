@@ -41,13 +41,16 @@ export const toastConfig = {
       style={{
         width: useWindowDimensions().width * 0.25,
         marginLeft: useWindowDimensions().width * 0.06,
-        borderRadius: 5,
-        borderLeftWidth: 0,
+        borderLeftWidth: 2,
+        borderColor: "#f21642",
+        borderLeftColor: "#f21642",
+        borderWidth: 2,
+        elevation: 50,
       }}
       contentContainerStyle={{
         width: "90%",
         borderRadius: 5,
-        backgroundColor: "#ffd4d4",
+        backgroundColor: "#ffa3b6",
       }}
       text1Style={{
         fontSize: fontScale * 12,

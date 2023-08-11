@@ -12,13 +12,11 @@ import { SearchResultGridContext } from "../../contexts/SearchResultGridContext"
 type ModalResultProps = {
   isModalVisible: boolean;
   toggleModal: () => void;
-  modalBackground: string;
 };
 
 export default function ModalResult({
   isModalVisible,
   toggleModal,
-  modalBackground,
 }: ModalResultProps) {
   //context
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
@@ -45,10 +43,7 @@ export default function ModalResult({
         onBackdropPress={toggleModal}
         backdropTransitionOutTiming={0}
         statusBarTranslucent={true}
-        backdropColor={
-          modalBackground === "special" ? colors[themeT].special : "black"
-        }
-        backdropOpacity={0.9}
+        backdropOpacity={0.8}
         style={[styles.modal, { backgroundColor: colors[themeT].background }]}
       >
         <View style={styles.boardCont}>
@@ -126,6 +121,7 @@ const styles = StyleSheet.create({
     width: "73%",
     height: "100%",
     borderRadius: 20,
+    marginLeft: "11.5%",
   },
   boardInnerCont: {
     flex: 1,

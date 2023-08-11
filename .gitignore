@@ -9,7 +9,6 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 */data/*
-*/len-22-data/*
 web-build/
 
 # macOS

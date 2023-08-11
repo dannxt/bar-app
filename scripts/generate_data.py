@@ -28,7 +28,7 @@ for routeNumber in listOfRouteNames:
         start_time = os.times()[4]
         myString = generateDataString(routeNumber, dataLength)
         try:
-            with open(f'../src/data/testData/routeData{routeNumber}-{j}.js', 'w') as f:
+            with open(f'../src/len-22-data/routeData{routeNumber}-{j}.js', 'w') as f:
                 f.write(f"module.exports = {repr(myString)};")
             end_time = os.times()[4]
             elapsed_time = end_time - start_time

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { View, Text, StyleSheet, Pressable, Keyboard } from "react-native";
 import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
+import { DimensionsContext } from "../contexts/DimensionsContext";
 import { LinearGradient } from "expo-linear-gradient";
 import MiniBoard from "../components/MiniBoard";
 import MiniResultBoard from "../components/MiniResultBoard";
@@ -9,7 +10,8 @@ import { SearchResultGridContext } from "../contexts/SearchResultGridContext";
 
 export default function ResultScreen() {
   //Contexts
-  const { theme, toggleTheme }: any = useContext(ThemeContext);
+  const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
+  const { theme }: any = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
   const { searchResultsGrid9, searchResultsGrid3, searchResultsGrid4 } =
@@ -29,7 +31,17 @@ export default function ResultScreen() {
       >
         <View style={styles.boardCont}>
           <View style={styles.boardInnerCont}>
-            <Text style={[textColor, styles.roadTitle]}>9 路</Text>
+            <Text
+              style={[
+                textColor,
+                styles.roadTitle,
+                {
+                  fontSize: 0.02 * deviceWidth,
+                },
+              ]}
+            >
+              Type A
+            </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
               style={styles.miniResultBoard}
@@ -38,7 +50,17 @@ export default function ResultScreen() {
             />
           </View>
           <View style={styles.boardInnerCont}>
-            <Text style={[textColor, styles.roadTitle]}>3 路</Text>
+            <Text
+              style={[
+                textColor,
+                styles.roadTitle,
+                {
+                  fontSize: 0.02 * deviceWidth,
+                },
+              ]}
+            >
+              Type B
+            </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
               style={styles.miniResultBoard}
@@ -47,7 +69,17 @@ export default function ResultScreen() {
             />
           </View>
           <View style={styles.boardInnerCont}>
-            <Text style={[textColor, styles.roadTitle]}>4 路</Text>
+            <Text
+              style={[
+                textColor,
+                styles.roadTitle,
+                {
+                  fontSize: 0.02 * deviceWidth,
+                },
+              ]}
+            >
+              Type C
+            </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
               style={styles.miniResultBoard}
@@ -88,5 +120,6 @@ const styles = StyleSheet.create({
   },
   roadTitle: {
     marginVertical: "15.05%",
+    fontFamily: "UbuntuMono-Bold",
   },
 });

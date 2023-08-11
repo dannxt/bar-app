@@ -64,7 +64,7 @@ const MiniResultBoard = ({
                 obj.secondMatch === "yes" && obj.value !== ""
                   ? colors[themeT].highlight
                   : "transparent",
-              borderWidth: obj.secondMatch === "yes" ? 1.5 : 0,
+              borderWidth: obj.secondMatch === "yes" ? 1.3 : 0,
             }}
           >
             <Text
@@ -79,7 +79,7 @@ const MiniResultBoard = ({
                   obj.secondMatch === "yes" ? "white" : colors[themeT].text,
               }}
             >
-              {obj.value}
+              {obj.secondMatch === "yes" ? obj.value : ""}
             </Text>
           </View>
         ))}

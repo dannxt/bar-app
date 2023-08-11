@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import colors from "../../themes/colors";
 import { ThemeContext } from "../../contexts/ThemeContext";
+import { DimensionsContext } from "../../contexts/DimensionsContext";
 import { LinearGradient } from "expo-linear-gradient";
 import MiniBoard from "../MiniBoard";
 import MiniResultBoard from "../MiniResultBoard";
@@ -20,6 +21,7 @@ export default function ModalResult({
   modalBackground,
 }: ModalResultProps) {
   //context
+  const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
   const { theme }: any = useContext(ThemeContext);
   const { searchResultsGrid9, searchResultsGrid3, searchResultsGrid4 } =
     useContext(SearchResultGridContext);
@@ -51,7 +53,17 @@ export default function ModalResult({
       >
         <View style={styles.boardCont}>
           <View style={styles.boardInnerCont}>
-            <Text style={[textColor, styles.roadTitle]}>9 路</Text>
+            <Text
+              style={[
+                textColor,
+                styles.roadTitle,
+                {
+                  fontSize: 0.02 * deviceWidth,
+                },
+              ]}
+            >
+              Type A
+            </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
               inputGrid={searchResultsGrid9}
@@ -60,7 +72,17 @@ export default function ModalResult({
             <MiniBoard style={styles.miniBoard} />
           </View>
           <View style={styles.boardInnerCont}>
-            <Text style={[textColor, styles.roadTitle]}>3 路</Text>
+            <Text
+              style={[
+                textColor,
+                styles.roadTitle,
+                {
+                  fontSize: 0.02 * deviceWidth,
+                },
+              ]}
+            >
+              Type B
+            </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
               inputGrid={searchResultsGrid3}
@@ -69,7 +91,17 @@ export default function ModalResult({
             <MiniBoard style={styles.miniBoard} />
           </View>
           <View style={styles.boardInnerCont}>
-            <Text style={[textColor, styles.roadTitle]}>4 路</Text>
+            <Text
+              style={[
+                textColor,
+                styles.roadTitle,
+                {
+                  fontSize: 0.02 * deviceWidth,
+                },
+              ]}
+            >
+              Type C
+            </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
               inputGrid={searchResultsGrid4}
@@ -117,5 +149,6 @@ const styles = StyleSheet.create({
   },
   roadTitle: {
     marginVertical: "15.05%",
+    fontFamily: "UbuntuMono-Bold",
   },
 });

@@ -22,7 +22,7 @@ export default function ThirdScreen({ route }: any) {
           Total Data:
         </Text>
         <Text style={[styles.text, { color: colors[themeT].text }]}>
-          (3 x 22 x 2^22) x 1.9 = {dataLength}
+          {dataLength}
         </Text>
       </View>
     </LinearGradient>

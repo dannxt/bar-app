@@ -65,7 +65,7 @@ const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
                 color: colors[themeT].text,
               }}
             >
-              {char}
+              {/* {char} */}
             </Text>
           </View>
         ))}
@@ -76,6 +76,7 @@ const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
   return (
     <FlatList
       style={style.board}
+      scrollEnabled={false}
       data={inputGrid}
       renderItem={renderItem}
       keyExtractor={(index) => index.toString()}

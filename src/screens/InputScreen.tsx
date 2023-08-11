@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   Platform,
+  Text,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { DimensionsContext } from "../contexts/DimensionsContext";
@@ -185,7 +186,7 @@ export default function InputScreen({ navigation }: any) {
   function attemptSearch(searchString: string, routeDataMaps: object) {
     const TRAILING_LEN = 18;
     const MAX_SECONDARY_MATCHES = 6;
-    const MAX_BASE_SEARCH_MATCHES = 4;
+    const MAX_BASE_SEARCH_MATCHES = 1;
     let resultsWithTrailing3: any;
     let resultsWithTrailing4: any;
     let resultsWithTrailing9: any;
@@ -246,8 +247,7 @@ export default function InputScreen({ navigation }: any) {
       return result;
     }
     // Conduct first level search across all routes and return a list of trailingLen matchStrings (basic search)
-    Object.keys(routeDataMaps).forEach((routeNumber) => {
-      const routeData = routeDataMaps[routeNumber];
+    Object.entries(routeDataMaps).forEach(([routeNumber, routeData]) => {
       routeData.forEach((mainString: string) => {
         const resultStringList = getTrailingLenStringResults(
           mainString,
@@ -267,105 +267,101 @@ export default function InputScreen({ navigation }: any) {
         }
       });
     });
+    const lenOfTrailing9 = resultsWithTrailing9.size;
+    const lenOfTrailing3 = resultsWithTrailing3.size;
+    const lenOfTrailing4 = resultsWithTrailing4.size;
     // returns result in order of priority:
     // check for triple matches
-    if (
-      resultsWithTrailing9.size > 0 &&
-      resultsWithTrailing3.size > 0 &&
-      resultsWithTrailing4.size > 0
-    ) {
-      console.log("checking 9-3-4");
-      let foundMatch = false;
-      let diff = MAX_SECONDARY_MATCHES;
-      while (diff > 2 && !hasExtraMatches) {
-        for (const string9 of resultsWithTrailing9) {
-          const searchString = string9.slice(
-            0,
-            string9.length - TRAILING_LEN + diff
-          );
-          const string9in3 = findMatchStringInList(
-            searchString,
-            routeDataMaps.route3,
-            diff
-          );
 
-          const string9in4 = findMatchStringInList(
-            searchString,
-            routeDataMaps.route4,
-            diff
-          );
+    if (lenOfTrailing9 > 0) {
+      if (lenOfTrailing3 > 0) {
+        if (lenOfTrailing4 > 0) {
+          console.log("checking 9+3+4");
+          let foundMatch = false;
+          let diff = MAX_SECONDARY_MATCHES;
+          while (diff > 2 && !hasExtraMatches) {
+            for (const string9 of resultsWithTrailing9) {
+              const searchString = string9.slice(
+                0,
+                string9.length - TRAILING_LEN + diff
+              );
+              const string9in3 = findMatchStringInList(
+                searchString,
+                routeDataMaps.route3,
+                diff
+              );
 
-          if (string9in3 !== "" && string9in4 !== "") {
-            finalResultObj.route9 = string9;
-            finalResultObj.route3 = string9in3;
-            finalResultObj.route4 = string9in4;
-            finalResultObj.diff = diff;
-            hasExtraMatches = true;
-            break;
+              const string9in4 = findMatchStringInList(
+                searchString,
+                routeDataMaps.route4,
+                diff
+              );
+
+              if (string9in3 !== "" && string9in4 !== "") {
+                finalResultObj.route9 = string9;
+                finalResultObj.route3 = string9in3;
+                finalResultObj.route4 = string9in4;
+                finalResultObj.diff = diff;
+                hasExtraMatches = true;
+                break;
+              }
+            }
+            diff--;
           }
         }
-        diff--;
+        // check for 9-3 matches
+        if (!hasExtraMatches) {
+          console.log("checking 9+3");
+          let diff = MAX_SECONDARY_MATCHES;
+          while (diff > 2 && !hasExtraMatches) {
+            for (const string9 of resultsWithTrailing9) {
+              const searchString = string9.slice(
+                0,
+                string9.length - TRAILING_LEN + diff
+              );
+              const string9in3 = findMatchStringInList(
+                searchString,
+                routeDataMaps.route3,
+                diff
+              );
+              if (string9in3 !== "") {
+                finalResultObj.route9 = string9;
+                finalResultObj.route3 = string9in3;
+                finalResultObj.diff = diff;
+                hasExtraMatches = true;
+                break;
+              }
+            }
+
+            diff--;
+          }
+        }
       }
-    }
-    // check for 9-3 matches
-    if (
-      !hasExtraMatches &&
-      resultsWithTrailing9.size > 0 &&
-      resultsWithTrailing3.size > 0
-    ) {
-      console.log("checking 9-3");
-      let diff = MAX_SECONDARY_MATCHES;
-      while (diff > 2 && !hasExtraMatches) {
-        for (const string9 of resultsWithTrailing9) {
-          const searchString = string9.slice(
-            0,
-            string9.length - TRAILING_LEN + diff
-          );
-          const string9in3 = findMatchStringInList(
-            searchString,
-            routeDataMaps.route3,
-            diff
-          );
-          if (string9in3 !== "") {
-            finalResultObj.route9 = string9;
-            finalResultObj.route3 = string9in3;
-            finalResultObj.diff = diff;
-            hasExtraMatches = true;
-            break;
+      // check for 9-4 matches
+      if (!hasExtraMatches && resultsWithTrailing4.size > 0) {
+        console.log("checking 9+4");
+        let diff = MAX_SECONDARY_MATCHES;
+        while (diff > 2 && !hasExtraMatches) {
+          for (const string9 of resultsWithTrailing9) {
+            const searchString = string9.slice(
+              0,
+              string9.length - TRAILING_LEN + diff
+            );
+            const string9in4 = findMatchStringInList(
+              searchString,
+              routeDataMaps.route4,
+              diff
+            );
+            if (string9in4 !== "") {
+              finalResultObj.route9 = string9;
+              finalResultObj.route4 = string9in4;
+              finalResultObj.diff = diff;
+              hasExtraMatches = true;
+              break;
+            }
           }
+          diff--;
         }
-
-        diff--;
-      }
-    }
-    // check for 9-4 matches
-    if (
-      !hasExtraMatches &&
-      resultsWithTrailing9.size > 0 &&
-      resultsWithTrailing4.size > 0
-    ) {
-      console.log("checking 9-4");
-      let diff = MAX_SECONDARY_MATCHES;
-      while (diff > 2 && !hasExtraMatches) {
-        for (const string9 of resultsWithTrailing9) {
-          const searchString = string9.slice(
-            0,
-            string9.length - TRAILING_LEN + diff
-          );
-          const string9in4 = findMatchStringInList(
-            searchString,
-            routeDataMaps.route4,
-            diff
-          );
-          if (string9in4 !== "") {
-            finalResultObj.route9 = string9;
-            finalResultObj.route4 = string9in4;
-            finalResultObj.diff = diff;
-            hasExtraMatches = true;
-            break;
-          }
-        }
-        diff--;
       }
     }
     // check for 3-4 matches
@@ -374,7 +370,7 @@ export default function InputScreen({ navigation }: any) {
       resultsWithTrailing3.size > 0 &&
       resultsWithTrailing4.size > 0
     ) {
-      console.log("checking 3-4");
+      console.log("checking 3+4");
       let diff = MAX_SECONDARY_MATCHES;
       while (diff > 2 && !hasExtraMatches) {
         for (const string3 of resultsWithTrailing3) {
@@ -399,8 +395,9 @@ export default function InputScreen({ navigation }: any) {
       }
     }
     // if no matches, get first item of matchStringList for each route (basic search result)
+
     if (!hasExtraMatches) {
-      console.log("checking basic matches");
+      console.log("Checking Others");
       finalResultObj.isSpecial = false;
       const temp = [
         [...resultsWithTrailing9],
@@ -609,13 +606,6 @@ export default function InputScreen({ navigation }: any) {
   //notifications and toasts
   const specialMatchHandler = () => {
     setModalBackground("special");
-    // Toast.show({
-    //   type: "special",
-    //   position: "top",
-    //   text1: "Special Match!",
-    //   visibilityTime: 3000,
-    //   autoHide: true,
-    // });
   };
 
   const noMatchToastHandler = () => {
@@ -633,7 +623,7 @@ export default function InputScreen({ navigation }: any) {
   let inputFontSize = deviceWidth * 0.0365;
   switch (Device.modelName) {
     case "iPhone 12":
-      inputFontSize = 0.03575 * deviceWidth;
+      inputFontSize = 0.03577 * deviceWidth;
       break;
 
     case "iPhone 14 Plus":
@@ -739,6 +729,15 @@ export default function InputScreen({ navigation }: any) {
             </View>
 
             <View style={styles.searchOptionsCont}>
+              {/* <Text
+                style={{
+                  textAlign: "center",
+                  marginBottom: "8%",
+                  marginLeft: "1%",
+                }}
+              >
+                {showSearchStatus}
+              </Text> */}
               <PlayButton
                 title={searchTitle}
                 height="50%"

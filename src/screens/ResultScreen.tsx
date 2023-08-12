@@ -40,7 +40,7 @@ export default function ResultScreen() {
                 },
               ]}
             >
-              Type A
+              Type 3
             </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
@@ -59,7 +59,7 @@ export default function ResultScreen() {
                 },
               ]}
             >
-              Type B
+              Type 3
             </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
@@ -78,7 +78,7 @@ export default function ResultScreen() {
                 },
               ]}
             >
-              Type C
+              Type 3
             </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard

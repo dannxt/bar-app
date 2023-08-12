@@ -20,7 +20,6 @@ const colors = {
     search: "#5a7837",
     searching: "#c78f26",
     highlight: "white",
-    special: "#27002b",
   },
 
   light: {
@@ -44,7 +43,6 @@ const colors = {
     search: "#5a7837",
     searching: "#c78f26",
     highlight: "black",
-    special: "#27002b",
   },
 };
 

@@ -23,11 +23,11 @@ const InputBoard = ({ style, inputGrid, numColumns }: inputBoardProps) => {
   // Get the device model and adjust the circle margin accordingly
   switch (Device.modelName) {
     case "iPhone 12":
-      circleMargin = 0.0023 * deviceWidth;
+      circleMargin = 0.00229 * deviceWidth;
       break;
 
     case "iPhone 14 Plus":
-      circleMargin = 0.00245 * deviceWidth;
+      circleMargin = 0.00243 * deviceWidth;
       break;
   }
   const colorMap: ColorMapping = {

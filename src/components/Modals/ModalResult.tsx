@@ -57,7 +57,7 @@ export default function ModalResult({
                 },
               ]}
             >
-              Type A
+              Type 3
             </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
@@ -76,7 +76,7 @@ export default function ModalResult({
                 },
               ]}
             >
-              Type B
+              Type 3
             </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
@@ -95,7 +95,7 @@ export default function ModalResult({
                 },
               ]}
             >
-              Type C
+              Type 3
             </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}

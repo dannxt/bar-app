@@ -3,6 +3,7 @@ import { SafeAreaView, StyleSheet } from "react-native";
 import { SegmentedButtons } from "react-native-paper";
 import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type searchOptionButtonsProps = {
   searchTypeHandler: (value: string) => void;
@@ -11,19 +12,25 @@ type searchOptionButtonsProps = {
 
 const SearchOptionButtons = ({
   searchTypeHandler,
+  searchType,
 }: searchOptionButtonsProps) => {
   const { theme, toggleTheme }: any = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
-  const [value, setValue] = useState("basic");
+  const [value, setValue] = useState("advanced");
 
   useEffect(() => {
-    searchTypeHandler(value);
-  }, [value]);
+    setValue(searchType);
+  }, [searchType]);
+
   return (
     <SafeAreaView style={styles.container}>
       <SegmentedButtons
         value={value}
-        onValueChange={setValue}
+        onValueChange={(value) => {
+          setValue(value);
+          searchTypeHandler(value);
+          AsyncStorage.setItem("searchType", value);
+        }}
         buttons={[
           {
             value: "basic",

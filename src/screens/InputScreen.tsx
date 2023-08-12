@@ -23,6 +23,7 @@ import Toast from "react-native-toast-message";
 import * as Haptics from "expo-haptics";
 import * as Device from "expo-device";
 import SearchOptionButtons from "../components/SearchOptionButtons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function InputScreen({ navigation }: any) {
   // datas
@@ -174,7 +175,7 @@ export default function InputScreen({ navigation }: any) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isCurrentlySearching, setIsCurrentlySearching] = useState(false);
   const [searchTitle, setSearchTitle] = useState("Search");
-  const [searchType, setSearchType] = useState("basic");
+  const [searchType, setSearchType] = useState("advanced");
 
   //haptics
   const triggerHaptic = () => {
@@ -194,12 +195,8 @@ export default function InputScreen({ navigation }: any) {
       }
     }
   };
-  const searchTypeHandler = (searchType: string) => {
-    if (searchType === "basic") {
-      setSearchType("basic");
-    } else {
-      setSearchType("advanced");
-    }
+  const searchTypeHandler = (value: string) => {
+    setSearchType(value);
   };
   const undoButtonHandler = () => {
     if (inputHistory.length > 1) {
@@ -239,6 +236,7 @@ export default function InputScreen({ navigation }: any) {
         searchType === "basic"
           ? (searchResultObj = basicSearch(input, routeDataMaps))
           : (searchResultObj = advanceSearch(input, routeDataMaps));
+        console.log(searchResultObj.hasResult);
         if (searchResultObj.hasResult) {
           setSearchResultGridHandler(
             convertToNestedResultObj(
@@ -415,22 +413,28 @@ export default function InputScreen({ navigation }: any) {
         );
         switch (routeNumber) {
           case "route9":
-            resultStringList.length > 0
-              ? (finalResultObj.route9 = resultStringList[0])
-              : (finalResultObj.route9 = "");
-            finalResultObj.hasResult = true;
+            if (resultStringList.length > 0) {
+              finalResultObj.route9 = resultStringList[0];
+              finalResultObj.hasResult = true;
+            } else {
+              finalResultObj.route9 = "";
+            }
             break;
           case "route3":
-            resultStringList.length > 0
-              ? (finalResultObj.route3 = resultStringList[0])
-              : (finalResultObj.route3 = "");
-
+            if (resultStringList.length > 0) {
+              finalResultObj.route3 = resultStringList[0];
+              finalResultObj.hasResult = true;
+            } else {
+              finalResultObj.route9 = "";
+            }
             break;
           case "route4":
-            resultStringList.length > 0
-              ? (finalResultObj.route4 = resultStringList[0])
-              : (finalResultObj.route4 = "");
-            finalResultObj.hasResult = true;
+            if (resultStringList.length > 0) {
+              finalResultObj.route4 = resultStringList[0];
+              finalResultObj.hasResult = true;
+            } else {
+              finalResultObj.route9 = "";
+            }
             break;
         }
       });
@@ -622,7 +626,31 @@ export default function InputScreen({ navigation }: any) {
     }
     return finalResultObj;
   }
+
+  // Load user preferences from local storage
+  const loadUserPreferences = async () => {
+    console.log("Loading user preferences...");
+    try {
+      const storedSearchType = await AsyncStorage.getItem("searchType");
+      if (storedSearchType !== null) {
+        if (storedSearchType !== searchType) {
+          setSearchType(storedSearchType);
+        }
+      } else {
+        await AsyncStorage.setItem("searchType", searchType);
+      }
+    } catch (error) {
+      console.error("Error loading user preferences:", error);
+    }
+  };
+
   // effects
+  useEffect(() => {
+    loadUserPreferences();
+  }, []);
+
+  useEffect(() => {}, [searchType]);
+
   useEffect(() => {
     gridHistoryHandler();
     setInputGrid(createGrid(input));
@@ -640,14 +668,17 @@ export default function InputScreen({ navigation }: any) {
 
   // UI/IX misc
   // Get the device model and adjust the circle margin accordingly
-  let inputFontSize = deviceWidth * 0.0365;
+  let inputFontSize;
+  let letterSpacing;
   switch (Device.modelName) {
     case "iPhone 12":
-      inputFontSize = 0.03577 * deviceWidth;
+      inputFontSize = 0.0258 * deviceWidth;
+      letterSpacing = deviceWidth * 0.0074;
       break;
 
     case "iPhone 14 Plus":
       inputFontSize = 0.0265 * deviceWidth;
+      letterSpacing = deviceWidth * 0.00705;
       break;
   }
 
@@ -677,7 +708,7 @@ export default function InputScreen({ navigation }: any) {
             }}
           >
             <TextInput
-              letterSpacing={deviceWidth * 0.0071}
+              letterSpacing={letterSpacing}
               style={[
                 textColor,
                 {

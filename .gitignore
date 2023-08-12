@@ -8,7 +8,6 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.orig.*
-*/data/*
 web-build/
 
 # macOS
@@ -16,3 +15,8 @@ web-build/
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
+
+# datafiles
+data/
+len-22-3x3-data/
+len-22-data/

@@ -52,18 +52,18 @@ export default function App() {
   async function loadData() {
     console.log("loading initial data...");
     let len = 0;
-    routeDataList9.push(require("./len-22-data/routeData9-1.js"));
-    routeDataList9.push(require("./len-22-data/routeData9-2.js"));
-    routeDataList9.push(require("./len-22-data/routeData9-3.js"));
-    routeDataList9.push(require("./len-22-data/routeData9-4.js"));
-    routeDataList3.push(require("./len-22-data/routeData3-1.js"));
-    routeDataList3.push(require("./len-22-data/routeData3-2.js"));
-    routeDataList3.push(require("./len-22-data/routeData3-3.js"));
-    routeDataList3.push(require("./len-22-data/routeData3-4.js"));
-    routeDataList4.push(require("./len-22-data/routeData4-1.js"));
-    routeDataList4.push(require("./len-22-data/routeData4-2.js"));
-    routeDataList4.push(require("./len-22-data/routeData4-3.js"));
-    routeDataList4.push(require("./len-22-data/routeData4-4.js"));
+    routeDataList9.push(require("./len-22-3x3-data/routeData3a-1.js"));
+    routeDataList9.push(require("./len-22-3x3-data/routeData3a-2.js"));
+    routeDataList9.push(require("./len-22-3x3-data/routeData3a-3.js"));
+    routeDataList9.push(require("./len-22-3x3-data/routeData3a-4.js"));
+    routeDataList3.push(require("./len-22-3x3-data/routeData3b-1.js"));
+    routeDataList3.push(require("./len-22-3x3-data/routeData3b-2.js"));
+    routeDataList3.push(require("./len-22-3x3-data/routeData3b-3.js"));
+    routeDataList3.push(require("./len-22-3x3-data/routeData3b-4.js"));
+    routeDataList4.push(require("./len-22-3x3-data/routeData3c-1.js"));
+    routeDataList4.push(require("./len-22-3x3-data/routeData3c-2.js"));
+    routeDataList4.push(require("./len-22-3x3-data/routeData3c-3.js"));
+    routeDataList4.push(require("./len-22-3x3-data/routeData3c-4.js"));
 
     routeDataList9.forEach((routeData, index) => {
       len += routeData.length;

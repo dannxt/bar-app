@@ -12,7 +12,7 @@ export default function SettingScreen() {
   };
   const themeT = theme as keyof typeof colors;
 
-  // Function to save user preferences to local storage
+  // Function to save user preferences to async storage
   const saveUserPreferences = async () => {
     try {
       await AsyncStorage.setItem("theme", theme);

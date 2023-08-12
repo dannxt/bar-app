@@ -19,7 +19,6 @@ const MiniResultBoard = ({
   const { deviceWidth } = useContext(DimensionsContext);
   const { theme }: any = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
-  let circleMargin = 0;
 
   interface ColorMapping {
     [key: string]: string;
@@ -34,11 +33,11 @@ const MiniResultBoard = ({
   type ItemProps = {
     item: object[];
   };
-
   // Get the device model and adjust the circle margin accordingly
+  let circleMargin = 0;
   switch (Device.modelName) {
     case "iPhone 12":
-      circleMargin = 0.00241 * deviceWidth;
+      circleMargin = 0.00254 * deviceWidth;
       break;
 
     case "iPhone 14 Plus":

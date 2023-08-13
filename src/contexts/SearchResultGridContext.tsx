@@ -95,9 +95,9 @@ const emptyResultGrid = [
 ];
 
 export const SearchResultGridContext = createContext({
-  searchResultsGrid9: emptyResultGrid,
-  searchResultsGrid3: emptyResultGrid,
-  searchResultsGrid4: emptyResultGrid,
+  searchResultsGrid_3a: emptyResultGrid,
+  searchResultsGrid_3b: emptyResultGrid,
+  searchResultsGrid_3c: emptyResultGrid,
   setSearchResultGridHandler: (
     resultGrid: {
       key: number;
@@ -105,16 +105,19 @@ export const SearchResultGridContext = createContext({
       match: string;
       secondMatch: string;
     }[][],
-    routeNumber: number
+    routeNumber: string
   ) => {},
 });
 
 export default function SearchResultsGridContextProvider({
   children,
 }: SearchResultGridProps) {
-  const [searchResultsGrid9, setSearchResultsGrid9] = useState(emptyResultGrid);
-  const [searchResultsGrid3, setSearchResultsGrid3] = useState(emptyResultGrid);
-  const [searchResultsGrid4, setSearchResultsGrid4] = useState(emptyResultGrid);
+  const [searchResultsGrid_3a, setSearchResultsGrid_3a] =
+    useState(emptyResultGrid);
+  const [searchResultsGrid_3b, setSearchResultsGrid_3b] =
+    useState(emptyResultGrid);
+  const [searchResultsGrid_3c, setSearchResultsGrid_3c] =
+    useState(emptyResultGrid);
 
   const setSearchResultGridHandler = (
     resultGrid: {
@@ -123,17 +126,17 @@ export default function SearchResultsGridContextProvider({
       match: string;
       secondMatch: string;
     }[][],
-    routeNumber: number
+    routeNumber: string
   ) => {
     switch (routeNumber) {
-      case 9:
-        setSearchResultsGrid9(resultGrid);
+      case "route_3a":
+        setSearchResultsGrid_3a(resultGrid);
         break;
-      case 3:
-        setSearchResultsGrid3(resultGrid);
+      case "route_3b":
+        setSearchResultsGrid_3b(resultGrid);
         break;
-      case 4:
-        setSearchResultsGrid4(resultGrid);
+      case "route_3c":
+        setSearchResultsGrid_3c(resultGrid);
         break;
     }
   };
@@ -141,9 +144,9 @@ export default function SearchResultsGridContextProvider({
   return (
     <SearchResultGridContext.Provider
       value={{
-        searchResultsGrid9: searchResultsGrid9,
-        searchResultsGrid3: searchResultsGrid3,
-        searchResultsGrid4: searchResultsGrid4,
+        searchResultsGrid_3a: searchResultsGrid_3a,
+        searchResultsGrid_3b: searchResultsGrid_3b,
+        searchResultsGrid_3c: searchResultsGrid_3c,
         setSearchResultGridHandler: setSearchResultGridHandler,
       }}
     >

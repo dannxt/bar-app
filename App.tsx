@@ -21,9 +21,9 @@ LogBox.ignoreLogs([
 ]);
 // Prevent native splash screen from autohiding before App component declaration
 SplashScreen.preventAutoHideAsync();
-export const routeDataList9: string[] = [];
-export const routeDataList3: string[] = [];
-export const routeDataList4: string[] = [];
+export const routeDataList_3a: string[] = [];
+export const routeDataList_3b: string[] = [];
+export const routeDataList_3c: string[] = [];
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -52,26 +52,26 @@ export default function App() {
   async function loadData() {
     console.log("loading initial data...");
     let len = 0;
-    routeDataList9.push(require("./len-22-3x3-data/routeData3a-1.js"));
-    routeDataList9.push(require("./len-22-3x3-data/routeData3a-2.js"));
-    routeDataList9.push(require("./len-22-3x3-data/routeData3a-3.js"));
-    routeDataList9.push(require("./len-22-3x3-data/routeData3a-4.js"));
-    routeDataList3.push(require("./len-22-3x3-data/routeData3b-1.js"));
-    routeDataList3.push(require("./len-22-3x3-data/routeData3b-2.js"));
-    routeDataList3.push(require("./len-22-3x3-data/routeData3b-3.js"));
-    routeDataList3.push(require("./len-22-3x3-data/routeData3b-4.js"));
-    routeDataList4.push(require("./len-22-3x3-data/routeData3c-1.js"));
-    routeDataList4.push(require("./len-22-3x3-data/routeData3c-2.js"));
-    routeDataList4.push(require("./len-22-3x3-data/routeData3c-3.js"));
-    routeDataList4.push(require("./len-22-3x3-data/routeData3c-4.js"));
+    routeDataList_3a.push(require("./len-22-333-data/routeData3a-1.js"));
+    // routeDataList_3a.push(require("./len-22-333-data/routeData3a-2.js"));
+    // routeDataList_3a.push(require("./len-22-333-data/routeData3a-3.js"));
+    // routeDataList_3a.push(require("./len-22-333-data/routeData3a-4.js"));
+    routeDataList_3b.push(require("./len-22-333-data/routeData3b-1.js"));
+    // routeDataList_3b.push(require("./len-22-333-data/routeData3b-2.js"));
+    // routeDataList_3b.push(require("./len-22-333-data/routeData3b-3.js"));
+    // routeDataList_3b.push(require("./len-22-333-data/routeData3b-4.js"));
+    routeDataList_3c.push(require("./len-22-333-data/routeData3c-1.js"));
+    // routeDataList_3c.push(require("./len-22-333-data/routeData3c-2.js"));
+    // routeDataList_3c.push(require("./len-22-333-data/routeData3c-3.js"));
+    // routeDataList_3c.push(require("./len-22-333-data/routeData3c-4.js"));
 
-    routeDataList9.forEach((routeData, index) => {
+    routeDataList_3a.forEach((routeData, index) => {
       len += routeData.length;
     });
-    routeDataList3.forEach((routeData, index) => {
+    routeDataList_3b.forEach((routeData, index) => {
       len += routeData.length;
     });
-    routeDataList4.forEach((routeData, index) => {
+    routeDataList_3c.forEach((routeData, index) => {
       len += routeData.length;
     });
     setDataLength(len);

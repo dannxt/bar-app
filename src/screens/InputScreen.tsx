@@ -451,7 +451,6 @@ export default function InputScreen({ navigation }: any) {
     if (lenOfTrailing_3a > 0 && lenOfTrailing_3b > 0 && lenOfTrailing_3c > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (diff > 2 && !hasExtraMatches) {
-        console.log(`checking 3a+3b+3c with diff ${diff}`);
         for (const string_3a of resultsWithTrailing_3a) {
           const searchString = string_3a.slice(
             0,
@@ -468,19 +467,17 @@ export default function InputScreen({ navigation }: any) {
             routeDataMaps.route_3c,
             diff
           );
-
-          finalResultObj.route_3a = string_3a;
-          finalResultObj.route_3b =
-            string_3a_in_3b || resultsWithTrailing_3b[0];
-          finalResultObj.route_3c =
-            string_3a_in_3c || resultsWithTrailing_3c[0];
-          finalResultObj.diff_3a =
-            string_3a_in_3b || string_3a_in_3c ? diff : 0;
-          finalResultObj.diff_3b = string_3a_in_3b ? diff : 0;
-          finalResultObj.diff_3c = string_3a_in_3c ? diff : 0;
-          finalResultObj.hasResult = true;
-          hasExtraMatches = true;
-          break;
+          if (string_3a_in_3b !== "" && string_3a_in_3c !== "") {
+            finalResultObj.route_3a = string_3a;
+            finalResultObj.route_3b = string_3a_in_3b;
+            finalResultObj.route_3c = string_3a_in_3c;
+            finalResultObj.diff_3a = diff;
+            finalResultObj.diff_3b = diff;
+            finalResultObj.diff_3c = diff;
+            finalResultObj.hasResult = true;
+            hasExtraMatches = true;
+            break;
+          }
         }
         diff--;
       }
@@ -489,7 +486,6 @@ export default function InputScreen({ navigation }: any) {
     if (lenOfTrailing_3a > 0 && lenOfTrailing_3b > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (!hasExtraMatches && diff > 2) {
-        console.log(`checking 3a+3b with diff ${diff}`);
         for (const string_3a of resultsWithTrailing_3a) {
           const searchString = string_3a.slice(
             0,
@@ -522,7 +518,6 @@ export default function InputScreen({ navigation }: any) {
     if (lenOfTrailing_3a > 0 && lenOfTrailing_3c > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (!hasExtraMatches && diff > 2) {
-        console.log(`checking 3a+3c with diff ${diff}`);
         for (const string_3a of resultsWithTrailing_3a) {
           const searchString = string_3a.slice(
             0,
@@ -554,7 +549,6 @@ export default function InputScreen({ navigation }: any) {
     if (lenOfTrailing_3b > 0 && lenOfTrailing_3c > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (!hasExtraMatches && diff > 2) {
-        console.log(`checking 3b+3c with diff ${diff}`);
         for (const string_3b of resultsWithTrailing_3b) {
           const searchString = string_3b.slice(
             0,

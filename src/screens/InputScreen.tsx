@@ -279,6 +279,7 @@ export default function InputScreen({ navigation }: any) {
   const TRAILING_LEN = 18;
   const MAX_SECONDARY_MATCHES = 6;
   const MAX_BASE_SEARCH_MATCHES = 1;
+  const SEARCH_INTERVAL = 3;
 
   //functions
   function findAllMatchingIndices(mainString: string, searchString: string) {
@@ -372,12 +373,16 @@ export default function InputScreen({ navigation }: any) {
     let position = 0;
     let index = mainString.indexOf(searchString, position);
     while (results.length < numResultsMax && index !== -1) {
-      if (index + searchString.length + TRAILING_LEN < mainString.length) {
+      // % 3 == 0: search every 3rd position
+      if (
+        index % SEARCH_INTERVAL == 0 &&
+        index + searchString.length + TRAILING_LEN < mainString.length
+      ) {
         results.push(
           mainString.slice(index, index + searchString.length + TRAILING_LEN)
         );
       }
-      position = index + 1;
+      position = index + SEARCH_INTERVAL;
       index = mainString.indexOf(searchString, position);
     }
     return results;
@@ -411,12 +416,18 @@ export default function InputScreen({ navigation }: any) {
     ) {
       let result = "";
       routeList.forEach((mainString: string) => {
-        const idx = mainString.indexOf(searchString);
-        if (idx != -1) {
-          result = mainString.slice(
-            idx,
-            idx + searchString.length - diff + TRAILING_LEN
-          );
+        let position = 0;
+        let idx = mainString.indexOf(searchString, position);
+        while (idx < mainString.length && idx !== -1 && result === "") {
+          // % 3 == 0: search every 3rd position
+          if (idx % SEARCH_INTERVAL == 0) {
+            result = mainString.slice(
+              idx,
+              idx + searchString.length - diff + TRAILING_LEN
+            );
+          }
+          position = idx + SEARCH_INTERVAL;
+          idx = mainString.indexOf(searchString, position);
         }
       });
       return result;
@@ -728,7 +739,7 @@ export default function InputScreen({ navigation }: any) {
                   color: colors[themeT].text,
                 }}
               >
-                3-3-3
+                333-3
               </Text>
               <PlayButton
                 title={searchTitle}

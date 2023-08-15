@@ -13,9 +13,9 @@ import { DimensionsContext } from "../contexts/DimensionsContext";
 import { SearchResultGridContext } from "../contexts/SearchResultGridContext";
 import { ThemeContext } from "../contexts/ThemeContext";
 import {
-  routeDataList_3a,
-  routeDataList_3b,
-  routeDataList_3c,
+  routeDataList_9a,
+  routeDataList_9b,
+  routeDataList_9c,
 } from "../../App";
 import colors from "../themes/colors";
 import InputBoard from "../components/InputBoard";
@@ -30,13 +30,13 @@ import * as Device from "expo-device";
 export default function InputScreen({ navigation }: any) {
   // datas
   const routeDataMaps: {
-    route_3a: string[];
-    route_3b: string[];
-    route_3c: string[];
+    route_9a: string[];
+    route_9b: string[];
+    route_9c: string[];
   } = {
-    route_3a: routeDataList_3a,
-    route_3b: routeDataList_3b,
-    route_3c: routeDataList_3c,
+    route_9a: routeDataList_9a,
+    route_9b: routeDataList_9b,
+    route_9c: routeDataList_9c,
   };
 
   //contexts
@@ -234,30 +234,30 @@ export default function InputScreen({ navigation }: any) {
         if (searchResultObj.hasResult) {
           setSearchResultGridHandler(
             convertToNestedResultObj(
-              searchResultObj.route_3a,
+              searchResultObj.route_9a,
               input.length,
               72,
-              searchResultObj.diff_3a
+              searchResultObj.diff_9a
             ),
-            "route_3a"
+            "route_9a"
           );
           setSearchResultGridHandler(
             convertToNestedResultObj(
-              searchResultObj.route_3b,
+              searchResultObj.route_9b,
               input.length,
               72,
-              searchResultObj.diff_3b
+              searchResultObj.diff_9b
             ),
-            "route_3b"
+            "route_9b"
           );
           setSearchResultGridHandler(
             convertToNestedResultObj(
-              searchResultObj.route_3c,
+              searchResultObj.route_9c,
               input.length,
               72,
-              searchResultObj.diff_3c
+              searchResultObj.diff_9c
             ),
-            "route_3c"
+            "route_9c"
           );
           requestAnimationFrame(() => {
             setModalVisible(true);
@@ -279,7 +279,7 @@ export default function InputScreen({ navigation }: any) {
   const TRAILING_LEN = 18;
   const MAX_SECONDARY_MATCHES = 6;
   const MAX_BASE_SEARCH_MATCHES = 1;
-  const SEARCH_INTERVAL = 3;
+  const SEARCH_INTERVAL = 9;
 
   //functions
   function findAllMatchingIndices(mainString: string, searchString: string) {
@@ -382,31 +382,31 @@ export default function InputScreen({ navigation }: any) {
           mainString.slice(index, index + searchString.length + TRAILING_LEN)
         );
       }
-      position = index + 3;
+      position = index + SEARCH_INTERVAL;
       index = mainString.indexOf(searchString, position);
     }
     return results;
   }
   function advancedSearch(searchString: string, routeDataMaps: object) {
-    let resultsWithTrailing_3a: any;
-    let resultsWithTrailing_3b: any;
-    let resultsWithTrailing_3c: any;
+    let resultsWithTrailing_9a: any;
+    let resultsWithTrailing_9b: any;
+    let resultsWithTrailing_9c: any;
     let hasExtraMatches = false;
     let finalResultObj: {
-      route_3a: string;
-      route_3b: string;
-      route_3c: string;
-      diff_3a: number;
-      diff_3b: number;
-      diff_3c: number;
+      route_9a: string;
+      route_9b: string;
+      route_9c: string;
+      diff_9a: number;
+      diff_9b: number;
+      diff_9c: number;
       hasResult: boolean;
     } = {
-      route_3a: "",
-      route_3b: "",
-      route_3c: "",
-      diff_3a: 0,
-      diff_3b: 0,
-      diff_3c: 0,
+      route_9a: "",
+      route_9b: "",
+      route_9c: "",
+      diff_9a: 0,
+      diff_9b: 0,
+      diff_9c: 0,
       hasResult: false,
     };
     function findMatchStringInList(
@@ -416,13 +416,18 @@ export default function InputScreen({ navigation }: any) {
     ) {
       let result = "";
       routeList.forEach((mainString: string) => {
-        const idx = mainString.indexOf(searchString);
-        // % 3 == 0: search every 3rd position
-        if (idx != -1 && idx % SEARCH_INTERVAL == 0) {
-          result = mainString.slice(
-            idx,
-            idx + searchString.length - diff + TRAILING_LEN
-          );
+        let position = 0;
+        let idx = mainString.indexOf(searchString, position);
+        while (idx < mainString.length && idx !== -1 && result === "") {
+          // % 3 == 0: search every 3rd position
+          if (idx % SEARCH_INTERVAL == 0) {
+            result = mainString.slice(
+              idx,
+              idx + searchString.length - diff + TRAILING_LEN
+            );
+          }
+          position = idx + SEARCH_INTERVAL;
+          idx = mainString.indexOf(searchString, position);
         }
       });
       return result;
@@ -436,50 +441,52 @@ export default function InputScreen({ navigation }: any) {
           TRAILING_LEN
         );
         switch (routeNumber) {
-          case "route_3a":
-            resultsWithTrailing_3a = resultStringList;
+          case "route_9a":
+            resultsWithTrailing_9a = resultStringList;
             break;
-          case "route_3b":
-            resultsWithTrailing_3b = resultStringList;
+          case "route_9b":
+            resultsWithTrailing_9b = resultStringList;
             break;
-          case "route_3c":
-            resultsWithTrailing_3c = resultStringList;
+          case "route_9c":
+            resultsWithTrailing_9c = resultStringList;
             break;
         }
       });
     });
-    const lenOfTrailing_3a = resultsWithTrailing_3a.length;
-    const lenOfTrailing_3b = resultsWithTrailing_3b.length;
-    const lenOfTrailing_3c = resultsWithTrailing_3c.length;
+    const lenOfTrailing_9a = resultsWithTrailing_9a.length;
+    const lenOfTrailing_9b = resultsWithTrailing_9b.length;
+    const lenOfTrailing_9c = resultsWithTrailing_9c.length;
 
     // returns result in order of priority:
     // check for 3a-3b-3c matches
-    if (lenOfTrailing_3a > 0 && lenOfTrailing_3b > 0 && lenOfTrailing_3c > 0) {
+    if (lenOfTrailing_9a > 0 && lenOfTrailing_9b > 0 && lenOfTrailing_9c > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (diff > 2 && !hasExtraMatches) {
-        for (const string_3a of resultsWithTrailing_3a) {
-          const searchString = string_3a.slice(
+        console.log("checking 999");
+        console.log(`diff: ${diff}`);
+        for (const string_9a of resultsWithTrailing_9a) {
+          const searchString = string_9a.slice(
             0,
-            string_3a.length - TRAILING_LEN + diff
+            string_9a.length - TRAILING_LEN + diff
           );
-          const string_3a_in_3b = findMatchStringInList(
+          const string_9a_in_9b = findMatchStringInList(
             searchString,
-            routeDataMaps.route_3b,
+            routeDataMaps.route_9b,
             diff
           );
 
-          const string_3a_in_3c = findMatchStringInList(
+          const string_9a_in_9c = findMatchStringInList(
             searchString,
-            routeDataMaps.route_3c,
+            routeDataMaps.route_9c,
             diff
           );
-          if (string_3a_in_3b !== "" && string_3a_in_3c !== "") {
-            finalResultObj.route_3a = string_3a;
-            finalResultObj.route_3b = string_3a_in_3b;
-            finalResultObj.route_3c = string_3a_in_3c;
-            finalResultObj.diff_3a = diff;
-            finalResultObj.diff_3b = diff;
-            finalResultObj.diff_3c = diff;
+          if (string_9a_in_9b !== "" && string_9a_in_9c !== "") {
+            finalResultObj.route_9a = string_9a;
+            finalResultObj.route_9b = string_9a_in_9b;
+            finalResultObj.route_9c = string_9a_in_9c;
+            finalResultObj.diff_9a = diff;
+            finalResultObj.diff_9b = diff;
+            finalResultObj.diff_9c = diff;
             finalResultObj.hasResult = true;
             hasExtraMatches = true;
             break;
@@ -489,28 +496,28 @@ export default function InputScreen({ navigation }: any) {
       }
     }
     // check for 3a-3b matches
-    if (lenOfTrailing_3a > 0 && lenOfTrailing_3b > 0) {
+    if (lenOfTrailing_9a > 0 && lenOfTrailing_9b > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (!hasExtraMatches && diff > 2) {
-        for (const string_3a of resultsWithTrailing_3a) {
-          const searchString = string_3a.slice(
+        for (const string_9a of resultsWithTrailing_9a) {
+          const searchString = string_9a.slice(
             0,
-            string_3a.length - TRAILING_LEN + diff
+            string_9a.length - TRAILING_LEN + diff
           );
-          const string_3a_in_3b = findMatchStringInList(
+          const string_9a_in_9b = findMatchStringInList(
             searchString,
-            routeDataMaps.route_3b,
+            routeDataMaps.route_9b,
             diff
           );
-          if (string_3a_in_3b !== "") {
-            finalResultObj.route_3a = string_3a;
-            finalResultObj.route_3b =
-              string_3a_in_3b || resultsWithTrailing_3b[0];
-            finalResultObj.route_3c =
-              lenOfTrailing_3c > 0 ? resultsWithTrailing_3c[0] : "";
-            finalResultObj.diff_3a = diff;
-            finalResultObj.diff_3b = diff;
-            finalResultObj.diff_3c = 0;
+          if (string_9a_in_9b !== "") {
+            finalResultObj.route_9a = string_9a;
+            finalResultObj.route_9b =
+              string_9a_in_9b || resultsWithTrailing_9b[0];
+            finalResultObj.route_9c =
+              lenOfTrailing_9c > 0 ? resultsWithTrailing_9c[0] : "";
+            finalResultObj.diff_9a = diff;
+            finalResultObj.diff_9b = diff;
+            finalResultObj.diff_9c = 0;
             finalResultObj.hasResult = true;
             hasExtraMatches = true;
             break;
@@ -521,28 +528,28 @@ export default function InputScreen({ navigation }: any) {
       }
     }
     // check for 3a-3c matches
-    if (lenOfTrailing_3a > 0 && lenOfTrailing_3c > 0) {
+    if (lenOfTrailing_9a > 0 && lenOfTrailing_9c > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (!hasExtraMatches && diff > 2) {
-        for (const string_3a of resultsWithTrailing_3a) {
-          const searchString = string_3a.slice(
+        for (const string_9a of resultsWithTrailing_9a) {
+          const searchString = string_9a.slice(
             0,
-            string_3a.length - TRAILING_LEN + diff
+            string_9a.length - TRAILING_LEN + diff
           );
-          const string_3a_in_3c = findMatchStringInList(
+          const string_9a_in_9c = findMatchStringInList(
             searchString,
-            routeDataMaps.route_3c,
+            routeDataMaps.route_9c,
             diff
           );
-          if (string_3a_in_3c !== "") {
-            finalResultObj.route_3a = string_3a;
-            finalResultObj.route_3b =
-              lenOfTrailing_3b > 0 ? resultsWithTrailing_3b[0] : "";
-            finalResultObj.route_3c =
-              string_3a_in_3c || resultsWithTrailing_3c[0];
-            finalResultObj.diff_3a = diff;
-            finalResultObj.diff_3b = 0;
-            finalResultObj.diff_3c = diff;
+          if (string_9a_in_9c !== "") {
+            finalResultObj.route_9a = string_9a;
+            finalResultObj.route_9b =
+              lenOfTrailing_9b > 0 ? resultsWithTrailing_9b[0] : "";
+            finalResultObj.route_9c =
+              string_9a_in_9c || resultsWithTrailing_9c[0];
+            finalResultObj.diff_9a = diff;
+            finalResultObj.diff_9b = 0;
+            finalResultObj.diff_9c = diff;
             finalResultObj.hasResult = true;
             hasExtraMatches = true;
             break;
@@ -552,28 +559,28 @@ export default function InputScreen({ navigation }: any) {
       }
     }
     // check for 3b-3c matches
-    if (lenOfTrailing_3b > 0 && lenOfTrailing_3c > 0) {
+    if (lenOfTrailing_9b > 0 && lenOfTrailing_9c > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (!hasExtraMatches && diff > 2) {
-        for (const string_3b of resultsWithTrailing_3b) {
-          const searchString = string_3b.slice(
+        for (const string_9b of resultsWithTrailing_9b) {
+          const searchString = string_9b.slice(
             0,
-            string_3b.length - TRAILING_LEN + diff
+            string_9b.length - TRAILING_LEN + diff
           );
-          const string_3b_in_3c = findMatchStringInList(
+          const string_9b_in_9c = findMatchStringInList(
             searchString,
-            routeDataMaps.route_3c,
+            routeDataMaps.route_9c,
             diff
           );
-          if (string_3b_in_3c !== "") {
-            finalResultObj.route_3a =
-              lenOfTrailing_3a > 0 ? resultsWithTrailing_3a[0] : "";
-            finalResultObj.route_3b = string_3b;
-            finalResultObj.route_3c =
-              string_3b_in_3c || resultsWithTrailing_3c[0];
-            finalResultObj.diff_3a = 0;
-            finalResultObj.diff_3b = diff;
-            finalResultObj.diff_3c = diff;
+          if (string_9b_in_9c !== "") {
+            finalResultObj.route_9a =
+              lenOfTrailing_9a > 0 ? resultsWithTrailing_9a[0] : "";
+            finalResultObj.route_9b = string_9b;
+            finalResultObj.route_9c =
+              string_9b_in_9c || resultsWithTrailing_9c[0];
+            finalResultObj.diff_9a = 0;
+            finalResultObj.diff_9b = diff;
+            finalResultObj.diff_9c = diff;
             finalResultObj.hasResult = true;
             hasExtraMatches = true;
             break;
@@ -584,13 +591,13 @@ export default function InputScreen({ navigation }: any) {
     }
     // no match (return basic)
     if (!hasExtraMatches) {
-      finalResultObj.route_3a =
-        lenOfTrailing_3a > 0 ? resultsWithTrailing_3a[0] : "";
-      finalResultObj.route_3b =
-        lenOfTrailing_3b > 0 ? resultsWithTrailing_3b[0] : "";
-      finalResultObj.route_3c =
-        lenOfTrailing_3c > 0 ? resultsWithTrailing_3c[0] : "";
-      if (lenOfTrailing_3a + lenOfTrailing_3b + lenOfTrailing_3c > 0) {
+      finalResultObj.route_9a =
+        lenOfTrailing_9a > 0 ? resultsWithTrailing_9a[0] : "";
+      finalResultObj.route_9b =
+        lenOfTrailing_9b > 0 ? resultsWithTrailing_9b[0] : "";
+      finalResultObj.route_9c =
+        lenOfTrailing_9c > 0 ? resultsWithTrailing_9c[0] : "";
+      if (lenOfTrailing_9a + lenOfTrailing_9b + lenOfTrailing_9c > 0) {
         finalResultObj.hasResult = true;
       }
     }
@@ -734,7 +741,7 @@ export default function InputScreen({ navigation }: any) {
                   color: colors[themeT].text,
                 }}
               >
-                333-3
+                999-9
               </Text>
               <PlayButton
                 title={searchTitle}

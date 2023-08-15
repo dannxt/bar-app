@@ -95,9 +95,9 @@ const emptyResultGrid = [
 ];
 
 export const SearchResultGridContext = createContext({
-  searchResultsGrid_3a: emptyResultGrid,
-  searchResultsGrid_3b: emptyResultGrid,
-  searchResultsGrid_3c: emptyResultGrid,
+  searchResultsGrid_9a: emptyResultGrid,
+  searchResultsGrid_9b: emptyResultGrid,
+  searchResultsGrid_9c: emptyResultGrid,
   setSearchResultGridHandler: (
     resultGrid: {
       key: number;
@@ -112,11 +112,11 @@ export const SearchResultGridContext = createContext({
 export default function SearchResultsGridContextProvider({
   children,
 }: SearchResultGridProps) {
-  const [searchResultsGrid_3a, setSearchResultsGrid_3a] =
+  const [searchResultsGrid_9a, setSearchResultsGrid_9a] =
     useState(emptyResultGrid);
-  const [searchResultsGrid_3b, setSearchResultsGrid_3b] =
+  const [searchResultsGrid_9b, setSearchResultsGrid_9b] =
     useState(emptyResultGrid);
-  const [searchResultsGrid_3c, setSearchResultsGrid_3c] =
+  const [searchResultsGrid_9c, setSearchResultsGrid_9c] =
     useState(emptyResultGrid);
 
   const setSearchResultGridHandler = (
@@ -129,14 +129,14 @@ export default function SearchResultsGridContextProvider({
     routeNumber: string
   ) => {
     switch (routeNumber) {
-      case "route_3a":
-        setSearchResultsGrid_3a(resultGrid);
+      case "route_9a":
+        setSearchResultsGrid_9a(resultGrid);
         break;
-      case "route_3b":
-        setSearchResultsGrid_3b(resultGrid);
+      case "route_9b":
+        setSearchResultsGrid_9b(resultGrid);
         break;
-      case "route_3c":
-        setSearchResultsGrid_3c(resultGrid);
+      case "route_9c":
+        setSearchResultsGrid_9c(resultGrid);
         break;
     }
   };
@@ -144,9 +144,9 @@ export default function SearchResultsGridContextProvider({
   return (
     <SearchResultGridContext.Provider
       value={{
-        searchResultsGrid_3a: searchResultsGrid_3a,
-        searchResultsGrid_3b: searchResultsGrid_3b,
-        searchResultsGrid_3c: searchResultsGrid_3c,
+        searchResultsGrid_9a: searchResultsGrid_9a,
+        searchResultsGrid_9b: searchResultsGrid_9b,
+        searchResultsGrid_9c: searchResultsGrid_9c,
         setSearchResultGridHandler: setSearchResultGridHandler,
       }}
     >

@@ -21,7 +21,7 @@ export default function ModalResult({
   //context
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
   const { theme }: any = useContext(ThemeContext);
-  const { searchResultsGrid_3a, searchResultsGrid_3b, searchResultsGrid_3c } =
+  const { searchResultsGrid_9a, searchResultsGrid_9b, searchResultsGrid_9c } =
     useContext(SearchResultGridContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
@@ -57,11 +57,11 @@ export default function ModalResult({
                 },
               ]}
             >
-              Type 3
+              Type 9
             </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_3a}
+              inputGrid={searchResultsGrid_9a}
               numColumns={8}
             />
             <MiniBoard style={styles.miniBoard} />
@@ -76,11 +76,11 @@ export default function ModalResult({
                 },
               ]}
             >
-              Type 3
+              Type 9
             </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_3b}
+              inputGrid={searchResultsGrid_9b}
               numColumns={8}
             />
             <MiniBoard style={styles.miniBoard} />
@@ -95,11 +95,11 @@ export default function ModalResult({
                 },
               ]}
             >
-              Type 3
+              Type 9
             </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_3c}
+              inputGrid={searchResultsGrid_9c}
               numColumns={8}
             />
             <MiniBoard style={styles.miniBoard} />

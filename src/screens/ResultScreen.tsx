@@ -14,7 +14,7 @@ export default function ResultScreen() {
   const { theme }: any = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
-  const { searchResultsGrid_3a, searchResultsGrid_3b, searchResultsGrid_3c } =
+  const { searchResultsGrid_9a, searchResultsGrid_9b, searchResultsGrid_9c } =
     useContext(SearchResultGridContext);
 
   return (
@@ -40,12 +40,12 @@ export default function ResultScreen() {
                 },
               ]}
             >
-              Type 3
+              Type 9
             </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_3a}
+              inputGrid={searchResultsGrid_9a}
               numColumns={8}
             />
           </View>
@@ -59,12 +59,12 @@ export default function ResultScreen() {
                 },
               ]}
             >
-              Type 3
+              Type 9
             </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_3b}
+              inputGrid={searchResultsGrid_9b}
               numColumns={8}
             />
           </View>
@@ -78,12 +78,12 @@ export default function ResultScreen() {
                 },
               ]}
             >
-              Type 3
+              Type 9
             </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_3c}
+              inputGrid={searchResultsGrid_9c}
               numColumns={8}
             />
           </View>

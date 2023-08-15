@@ -279,6 +279,7 @@ export default function InputScreen({ navigation }: any) {
   const TRAILING_LEN = 18;
   const MAX_SECONDARY_MATCHES = 6;
   const MAX_BASE_SEARCH_MATCHES = 1;
+  const SEARCH_INTERVAL = 3;
 
   //functions
   function findAllMatchingIndices(mainString: string, searchString: string) {
@@ -374,7 +375,7 @@ export default function InputScreen({ navigation }: any) {
     while (results.length < numResultsMax && index !== -1) {
       // % 3 == 0: search every 3rd position
       if (
-        index % 3 == 0 &&
+        index % SEARCH_INTERVAL == 0 &&
         index + searchString.length + TRAILING_LEN < mainString.length
       ) {
         results.push(
@@ -417,7 +418,7 @@ export default function InputScreen({ navigation }: any) {
       routeList.forEach((mainString: string) => {
         const idx = mainString.indexOf(searchString);
         // % 3 == 0: search every 3rd position
-        if (idx != -1 && idx % 3 == 0) {
+        if (idx != -1 && idx % SEARCH_INTERVAL == 0) {
           result = mainString.slice(
             idx,
             idx + searchString.length - diff + TRAILING_LEN

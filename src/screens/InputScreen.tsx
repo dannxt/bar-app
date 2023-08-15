@@ -372,12 +372,16 @@ export default function InputScreen({ navigation }: any) {
     let position = 0;
     let index = mainString.indexOf(searchString, position);
     while (results.length < numResultsMax && index !== -1) {
-      if (index + searchString.length + TRAILING_LEN < mainString.length) {
+      // % 3 == 0: search every 3rd position
+      if (
+        index % 3 == 0 &&
+        index + searchString.length + TRAILING_LEN < mainString.length
+      ) {
         results.push(
           mainString.slice(index, index + searchString.length + TRAILING_LEN)
         );
       }
-      position = index + 1;
+      position = index + 3;
       index = mainString.indexOf(searchString, position);
     }
     return results;
@@ -412,7 +416,8 @@ export default function InputScreen({ navigation }: any) {
       let result = "";
       routeList.forEach((mainString: string) => {
         const idx = mainString.indexOf(searchString);
-        if (idx != -1) {
+        // % 3 == 0: search every 3rd position
+        if (idx != -1 && idx % 3 == 0) {
           result = mainString.slice(
             idx,
             idx + searchString.length - diff + TRAILING_LEN
@@ -728,7 +733,7 @@ export default function InputScreen({ navigation }: any) {
                   color: colors[themeT].text,
                 }}
               >
-                3-3-3
+                333-3
               </Text>
               <PlayButton
                 title={searchTitle}

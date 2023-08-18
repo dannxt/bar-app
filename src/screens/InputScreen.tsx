@@ -373,15 +373,12 @@ export default function InputScreen({ navigation }: any) {
     let position = 0;
     let index = mainString.indexOf(searchString, position);
     while (results.length < numResultsMax && index !== -1) {
-      // % 3 == 0: search every 3rd position
-      if (
-        index % SEARCH_INTERVAL == 0 &&
-        index + searchString.length + TRAILING_LEN < mainString.length
-      ) {
+      if (index + searchString.length + TRAILING_LEN < mainString.length) {
         results.push(
           mainString.slice(index, index + searchString.length + TRAILING_LEN)
         );
       }
+      //search every interval position
       position = index + SEARCH_INTERVAL;
       index = mainString.indexOf(searchString, position);
     }
@@ -419,13 +416,11 @@ export default function InputScreen({ navigation }: any) {
         let position = 0;
         let idx = mainString.indexOf(searchString, position);
         while (idx < mainString.length && idx !== -1 && result === "") {
-          // % 3 == 0: search every 3rd position
-          if (idx % SEARCH_INTERVAL == 0) {
-            result = mainString.slice(
-              idx,
-              idx + searchString.length - diff + TRAILING_LEN
-            );
-          }
+          result = mainString.slice(
+            idx,
+            idx + searchString.length - diff + TRAILING_LEN
+          );
+          // search every interval position
           position = idx + SEARCH_INTERVAL;
           idx = mainString.indexOf(searchString, position);
         }

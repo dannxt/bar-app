@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Z-999-9",
-    "slug": "bar-app-999-9",
+    "name": "Z-934",
+    "slug": "bar-app-934",
     "version": "1.1.1",
     "orientation": "landscape",
-    "icon": "./src/assets/icon-999-9.png",
+    "icon": "./src/assets/icon-934.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/assets/splash-999-9.png",
+      "image": "./src/assets/splash-934.png",
       "contentFit": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     "ios": {
       "buildNumber": "1.0.1",
       "supportsTablet": true,
-      "bundleIdentifier": "com.danns7.barapp-999-9"
+      "bundleIdentifier": "com.danns7.barapp-934"
     },
     "android": {
       "versionCode": 1,
@@ -28,11 +28,6 @@
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "2b237bbc-38c1-4493-a7db-4844e37b11dc"
-      }
     }
   }
 }

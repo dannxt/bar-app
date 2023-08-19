@@ -7,6 +7,7 @@ import AppNavigator from "./src/navigation/AppNavigator";
 import ThemeContextProvider from "./src/contexts/ThemeContext";
 import DimensionsContextProvider from "./src/contexts/DimensionsContext";
 import SearchResultGridContextProvider from "./src/contexts/SearchResultGridContext";
+import InputLengthContextProvider from "./src/contexts/InputLengthContext";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import Toast from "react-native-toast-message";
@@ -21,9 +22,9 @@ LogBox.ignoreLogs([
 ]);
 // Prevent native splash screen from autohiding before App component declaration
 SplashScreen.preventAutoHideAsync();
-export const routeDataList_9a: string[] = [];
-export const routeDataList_9b: string[] = [];
-export const routeDataList_9c: string[] = [];
+export const routeDataList_9: string[] = [];
+export const routeDataList_3: string[] = [];
+export const routeDataList_4: string[] = [];
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -52,26 +53,26 @@ export default function App() {
   async function loadData() {
     console.log("loading initial data...");
     let len = 0;
-    routeDataList_9a.push(require("./len-22-999-data/routeData9a-1.js"));
-    routeDataList_9a.push(require("./len-22-999-data/routeData9a-2.js"));
-    routeDataList_9a.push(require("./len-22-999-data/routeData9a-3.js"));
-    routeDataList_9a.push(require("./len-22-999-data/routeData9a-4.js"));
-    routeDataList_9b.push(require("./len-22-999-data/routeData9b-1.js"));
-    routeDataList_9b.push(require("./len-22-999-data/routeData9b-2.js"));
-    routeDataList_9b.push(require("./len-22-999-data/routeData9b-3.js"));
-    routeDataList_9b.push(require("./len-22-999-data/routeData9b-4.js"));
-    routeDataList_9c.push(require("./len-22-999-data/routeData9c-1.js"));
-    routeDataList_9c.push(require("./len-22-999-data/routeData9c-2.js"));
-    routeDataList_9c.push(require("./len-22-999-data/routeData9c-3.js"));
-    routeDataList_9c.push(require("./len-22-999-data/routeData9c-4.js"));
+    routeDataList_9.push(require("./len-22-934-data/routeData9-1.js"));
+    routeDataList_9.push(require("./len-22-934-data/routeData9-2.js"));
+    routeDataList_9.push(require("./len-22-934-data/routeData9-3.js"));
+    routeDataList_9.push(require("./len-22-934-data/routeData9-4.js"));
+    routeDataList_3.push(require("./len-22-934-data/routeData3-1.js"));
+    routeDataList_3.push(require("./len-22-934-data/routeData3-2.js"));
+    routeDataList_3.push(require("./len-22-934-data/routeData3-3.js"));
+    routeDataList_3.push(require("./len-22-934-data/routeData3-4.js"));
+    routeDataList_4.push(require("./len-22-934-data/routeData4-1.js"));
+    routeDataList_4.push(require("./len-22-934-data/routeData4-2.js"));
+    routeDataList_4.push(require("./len-22-934-data/routeData4-3.js"));
+    routeDataList_4.push(require("./len-22-934-data/routeData4-4.js"));
 
-    routeDataList_9a.forEach((routeData, index) => {
+    routeDataList_9.forEach((routeData, index) => {
       len += routeData.length;
     });
-    routeDataList_9b.forEach((routeData, index) => {
+    routeDataList_3.forEach((routeData, index) => {
       len += routeData.length;
     });
-    routeDataList_9c.forEach((routeData, index) => {
+    routeDataList_4.forEach((routeData, index) => {
       len += routeData.length;
     });
     setDataLength(len);
@@ -80,16 +81,18 @@ export default function App() {
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <SearchResultGridContextProvider>
-        <ThemeContextProvider>
-          <DimensionsContextProvider>
-            <NavigationContainer>
-              <StatusBar hidden={true} />
-              <AppNavigator dataLength={dataLength} />
-            </NavigationContainer>
+        <InputLengthContextProvider>
+          <ThemeContextProvider>
+            <DimensionsContextProvider>
+              <NavigationContainer>
+                <StatusBar hidden={true} />
+                <AppNavigator dataLength={dataLength} />
+              </NavigationContainer>
 
-            <Toast config={toastConfig} />
-          </DimensionsContextProvider>
-        </ThemeContextProvider>
+              <Toast config={toastConfig} />
+            </DimensionsContextProvider>
+          </ThemeContextProvider>
+        </InputLengthContextProvider>
       </SearchResultGridContextProvider>
     </SafeAreaProvider>
   );

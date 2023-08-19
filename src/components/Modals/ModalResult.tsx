@@ -12,20 +12,21 @@ import { SearchResultGridContext } from "../../contexts/SearchResultGridContext"
 type ModalResultProps = {
   isModalVisible: boolean;
   toggleModal: () => void;
+  inputLength: number;
 };
 
 export default function ModalResult({
   isModalVisible,
   toggleModal,
+  inputLength,
 }: ModalResultProps) {
   //context
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
   const { theme }: any = useContext(ThemeContext);
-  const { searchResultsGrid_9a, searchResultsGrid_9b, searchResultsGrid_9c } =
+  const { searchResultsGrid_9, searchResultsGrid_3, searchResultsGrid_4 } =
     useContext(SearchResultGridContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
-
   return (
     <LinearGradient
       colors={["black", "transparent"]}
@@ -61,8 +62,9 @@ export default function ModalResult({
             </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_9a}
+              inputGrid={searchResultsGrid_9}
               numColumns={8}
+              inputLength={inputLength}
             />
             <MiniBoard style={styles.miniBoard} />
           </View>
@@ -76,12 +78,13 @@ export default function ModalResult({
                 },
               ]}
             >
-              Type 9
+              Type 3
             </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_9b}
+              inputGrid={searchResultsGrid_3}
               numColumns={8}
+              inputLength={inputLength}
             />
             <MiniBoard style={styles.miniBoard} />
           </View>
@@ -95,12 +98,13 @@ export default function ModalResult({
                 },
               ]}
             >
-              Type 9
+              Type 4
             </Text>
             <MiniResultBoard
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_9c}
+              inputGrid={searchResultsGrid_4}
               numColumns={8}
+              inputLength={inputLength}
             />
             <MiniBoard style={styles.miniBoard} />
           </View>

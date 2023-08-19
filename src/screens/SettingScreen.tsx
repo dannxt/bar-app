@@ -16,7 +16,6 @@ export default function SettingScreen() {
   const saveUserPreferences = async () => {
     try {
       await AsyncStorage.setItem("theme", theme);
-      console.log("User preferences saved: theme = ", theme);
     } catch (error) {
       console.error("Error saving user preferences:", error);
     }

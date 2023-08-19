@@ -4,6 +4,7 @@ import colors from "../themes/colors";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { DimensionsContext } from "../contexts/DimensionsContext";
 import { LinearGradient } from "expo-linear-gradient";
+import { InputLengthContext } from "../contexts/InputLengthContext";
 import MiniBoard from "../components/MiniBoard";
 import MiniResultBoard from "../components/MiniResultBoard";
 import { SearchResultGridContext } from "../contexts/SearchResultGridContext";
@@ -14,8 +15,9 @@ export default function ResultScreen() {
   const { theme }: any = useContext(ThemeContext);
   const themeT = theme as keyof typeof colors;
   const textColor = { color: colors[themeT].text };
-  const { searchResultsGrid_9a, searchResultsGrid_9b, searchResultsGrid_9c } =
+  const { searchResultsGrid_9, searchResultsGrid_3, searchResultsGrid_4 } =
     useContext(SearchResultGridContext);
+  const { inputLength } = useContext(InputLengthContext);
 
   return (
     <Pressable onPress={() => Keyboard.dismiss()} style={{ flex: 1 }}>
@@ -44,8 +46,9 @@ export default function ResultScreen() {
             </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
+              inputLength={inputLength}
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_9a}
+              inputGrid={searchResultsGrid_9}
               numColumns={8}
             />
           </View>
@@ -59,12 +62,13 @@ export default function ResultScreen() {
                 },
               ]}
             >
-              Type 9
+              Type 3
             </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
+              inputLength={inputLength}
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_9b}
+              inputGrid={searchResultsGrid_3}
               numColumns={8}
             />
           </View>
@@ -78,12 +82,13 @@ export default function ResultScreen() {
                 },
               ]}
             >
-              Type 9
+              Type 4
             </Text>
             <MiniBoard style={styles.miniBoard} />
             <MiniResultBoard
+              inputLength={inputLength}
               style={styles.miniResultBoard}
-              inputGrid={searchResultsGrid_9c}
+              inputGrid={searchResultsGrid_4}
               numColumns={8}
             />
           </View>

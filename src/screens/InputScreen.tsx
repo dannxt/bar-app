@@ -12,11 +12,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { DimensionsContext } from "../contexts/DimensionsContext";
 import { SearchResultGridContext } from "../contexts/SearchResultGridContext";
 import { ThemeContext } from "../contexts/ThemeContext";
-import {
-  routeDataList_9a,
-  routeDataList_9b,
-  routeDataList_9c,
-} from "../../App";
+import { InputLengthContext } from "../contexts/InputLengthContext";
+import { routeDataList_9, routeDataList_3, routeDataList_4 } from "../../App";
 import colors from "../themes/colors";
 import InputBoard from "../components/InputBoard";
 import ModalResult from "../components/Modals/ModalResult";
@@ -30,19 +27,20 @@ import * as Device from "expo-device";
 export default function InputScreen({ navigation }: any) {
   // datas
   const routeDataMaps: {
-    route_9a: string[];
-    route_9b: string[];
-    route_9c: string[];
+    route_9: string[];
+    route_3: string[];
+    route_4: string[];
   } = {
-    route_9a: routeDataList_9a,
-    route_9b: routeDataList_9b,
-    route_9c: routeDataList_9c,
+    route_9: routeDataList_9,
+    route_3: routeDataList_3,
+    route_4: routeDataList_4,
   };
 
   //contexts
   const { theme }: any = useContext(ThemeContext);
   const { deviceHeight, deviceWidth } = useContext(DimensionsContext);
   const { setSearchResultGridHandler } = useContext(SearchResultGridContext);
+  const { inputLength, setInputLengthHandler } = useContext(InputLengthContext);
 
   //variables
   const emptyGrid = [
@@ -234,30 +232,30 @@ export default function InputScreen({ navigation }: any) {
         if (searchResultObj.hasResult) {
           setSearchResultGridHandler(
             convertToNestedResultObj(
-              searchResultObj.route_9a,
+              searchResultObj.route_9,
               input.length,
               72,
-              searchResultObj.diff_9a
+              searchResultObj.diff_9
             ),
-            "route_9a"
+            "route_9"
           );
           setSearchResultGridHandler(
             convertToNestedResultObj(
-              searchResultObj.route_9b,
+              searchResultObj.route_3,
               input.length,
               72,
-              searchResultObj.diff_9b
+              searchResultObj.diff_3
             ),
-            "route_9b"
+            "route_3"
           );
           setSearchResultGridHandler(
             convertToNestedResultObj(
-              searchResultObj.route_9c,
+              searchResultObj.route_4,
               input.length,
               72,
-              searchResultObj.diff_9c
+              searchResultObj.diff_4
             ),
-            "route_9c"
+            "route_4"
           );
           requestAnimationFrame(() => {
             setModalVisible(true);
@@ -279,7 +277,6 @@ export default function InputScreen({ navigation }: any) {
   const TRAILING_LEN = 18;
   const MAX_SECONDARY_MATCHES = 6;
   const MAX_BASE_SEARCH_MATCHES = 1;
-  const SEARCH_INTERVAL = 9;
 
   //functions
   function findAllMatchingIndices(mainString: string, searchString: string) {
@@ -366,7 +363,8 @@ export default function InputScreen({ navigation }: any) {
     mainString: string,
     searchString: string,
     TRAILING_LEN: number,
-    numResultsMax = MAX_BASE_SEARCH_MATCHES
+    numResultsMax: number = MAX_BASE_SEARCH_MATCHES,
+    searchInterval: number
   ) {
     // returns [matchedString + trailingLen]
     let results: string[] = [];
@@ -379,37 +377,38 @@ export default function InputScreen({ navigation }: any) {
         );
       }
       //search every interval position
-      position = index + SEARCH_INTERVAL;
+      position = index + searchInterval;
       index = mainString.indexOf(searchString, position);
     }
     return results;
   }
   function advancedSearch(searchString: string, routeDataMaps: object) {
-    let resultsWithTrailing_9a: any;
-    let resultsWithTrailing_9b: any;
-    let resultsWithTrailing_9c: any;
+    let resultsWithTrailing_9: any;
+    let resultsWithTrailing_3: any;
+    let resultsWithTrailing_4: any;
     let hasExtraMatches = false;
     let finalResultObj: {
-      route_9a: string;
-      route_9b: string;
-      route_9c: string;
-      diff_9a: number;
-      diff_9b: number;
-      diff_9c: number;
+      route_9: string;
+      route_3: string;
+      route_4: string;
+      diff_9: number;
+      diff_3: number;
+      diff_4: number;
       hasResult: boolean;
     } = {
-      route_9a: "",
-      route_9b: "",
-      route_9c: "",
-      diff_9a: 0,
-      diff_9b: 0,
-      diff_9c: 0,
+      route_9: "",
+      route_3: "",
+      route_4: "",
+      diff_9: 0,
+      diff_3: 0,
+      diff_4: 0,
       hasResult: false,
     };
     function findMatchStringInList(
       searchString: string,
       routeList: string[],
-      diff: number
+      diff: number,
+      searchInterval: number
     ) {
       let result = "";
       routeList.forEach((mainString: string) => {
@@ -421,7 +420,7 @@ export default function InputScreen({ navigation }: any) {
             idx + searchString.length - diff + TRAILING_LEN
           );
           // search every interval position
-          position = idx + SEARCH_INTERVAL;
+          position = idx + searchInterval;
           idx = mainString.indexOf(searchString, position);
         }
       });
@@ -430,58 +429,73 @@ export default function InputScreen({ navigation }: any) {
     // Conduct first level search across all routes and return a list of trailingLen matchStrings (basic search)
     Object.entries(routeDataMaps).forEach(([routeNumber, routeData]) => {
       routeData.forEach((mainString: string) => {
-        const resultStringList = getTrailingLenStringResults(
-          mainString,
-          searchString,
-          TRAILING_LEN
-        );
         switch (routeNumber) {
-          case "route_9a":
-            resultsWithTrailing_9a = resultStringList;
+          case "route_9":
+            resultsWithTrailing_9 = getTrailingLenStringResults(
+              mainString,
+              searchString,
+              TRAILING_LEN,
+              MAX_BASE_SEARCH_MATCHES,
+              9
+            );
             break;
-          case "route_9b":
-            resultsWithTrailing_9b = resultStringList;
+          case "route_3":
+            resultsWithTrailing_3 = getTrailingLenStringResults(
+              mainString,
+              searchString,
+              TRAILING_LEN,
+              MAX_BASE_SEARCH_MATCHES,
+              3
+            );
             break;
-          case "route_9c":
-            resultsWithTrailing_9c = resultStringList;
+          case "route_4":
+            resultsWithTrailing_4 = getTrailingLenStringResults(
+              mainString,
+              searchString,
+              TRAILING_LEN,
+              MAX_BASE_SEARCH_MATCHES,
+              4
+            );
             break;
         }
       });
     });
-    const lenOfTrailing_9a = resultsWithTrailing_9a.length;
-    const lenOfTrailing_9b = resultsWithTrailing_9b.length;
-    const lenOfTrailing_9c = resultsWithTrailing_9c.length;
+    const lenOfTrailing_9 = resultsWithTrailing_9.length;
+    const lenOfTrailing_3 = resultsWithTrailing_3.length;
+    const lenOfTrailing_4 = resultsWithTrailing_4.length;
 
     // returns result in order of priority:
-    // check for 3a-3b-3c matches
-    if (lenOfTrailing_9a > 0 && lenOfTrailing_9b > 0 && lenOfTrailing_9c > 0) {
+    // check for 9-3-4 matches
+    if (lenOfTrailing_9 > 0 && lenOfTrailing_3 > 0 && lenOfTrailing_4 > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (diff > 2 && !hasExtraMatches) {
-        console.log("checking 999");
+        console.log("checking 934");
         console.log(`diff: ${diff}`);
-        for (const string_9a of resultsWithTrailing_9a) {
-          const searchString = string_9a.slice(
+        for (const string_9 of resultsWithTrailing_9) {
+          const searchString = string_9.slice(
             0,
-            string_9a.length - TRAILING_LEN + diff
+            string_9.length - TRAILING_LEN + diff
           );
-          const string_9a_in_9b = findMatchStringInList(
+          const string_9_in_3 = findMatchStringInList(
             searchString,
-            routeDataMaps.route_9b,
-            diff
+            routeDataMaps.route_3,
+            diff,
+            3
           );
 
-          const string_9a_in_9c = findMatchStringInList(
+          const string_9_in_4 = findMatchStringInList(
             searchString,
-            routeDataMaps.route_9c,
-            diff
+            routeDataMaps.route_4,
+            diff,
+            4
           );
-          if (string_9a_in_9b !== "" && string_9a_in_9c !== "") {
-            finalResultObj.route_9a = string_9a;
-            finalResultObj.route_9b = string_9a_in_9b;
-            finalResultObj.route_9c = string_9a_in_9c;
-            finalResultObj.diff_9a = diff;
-            finalResultObj.diff_9b = diff;
-            finalResultObj.diff_9c = diff;
+          if (string_9_in_3 !== "" && string_9_in_4 !== "") {
+            finalResultObj.route_9 = string_9;
+            finalResultObj.route_3 = string_9_in_3;
+            finalResultObj.route_4 = string_9_in_4;
+            finalResultObj.diff_9 = diff;
+            finalResultObj.diff_3 = diff;
+            finalResultObj.diff_4 = diff;
             finalResultObj.hasResult = true;
             hasExtraMatches = true;
             break;
@@ -490,29 +504,29 @@ export default function InputScreen({ navigation }: any) {
         diff--;
       }
     }
-    // check for 3a-3b matches
-    if (lenOfTrailing_9a > 0 && lenOfTrailing_9b > 0) {
+    // check for 9-3 matches
+    if (lenOfTrailing_9 > 0 && lenOfTrailing_3 > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (!hasExtraMatches && diff > 2) {
-        for (const string_9a of resultsWithTrailing_9a) {
-          const searchString = string_9a.slice(
+        for (const string_9 of resultsWithTrailing_9) {
+          const searchString = string_9.slice(
             0,
-            string_9a.length - TRAILING_LEN + diff
+            string_9.length - TRAILING_LEN + diff
           );
-          const string_9a_in_9b = findMatchStringInList(
+          const string_9_in_3 = findMatchStringInList(
             searchString,
-            routeDataMaps.route_9b,
-            diff
+            routeDataMaps.route_3,
+            diff,
+            3
           );
-          if (string_9a_in_9b !== "") {
-            finalResultObj.route_9a = string_9a;
-            finalResultObj.route_9b =
-              string_9a_in_9b || resultsWithTrailing_9b[0];
-            finalResultObj.route_9c =
-              lenOfTrailing_9c > 0 ? resultsWithTrailing_9c[0] : "";
-            finalResultObj.diff_9a = diff;
-            finalResultObj.diff_9b = diff;
-            finalResultObj.diff_9c = 0;
+          if (string_9_in_3 !== "") {
+            finalResultObj.route_9 = string_9;
+            finalResultObj.route_3 = string_9_in_3 || resultsWithTrailing_3[0];
+            finalResultObj.route_4 =
+              lenOfTrailing_4 > 0 ? resultsWithTrailing_4[0] : "";
+            finalResultObj.diff_9 = diff;
+            finalResultObj.diff_3 = diff;
+            finalResultObj.diff_4 = 0;
             finalResultObj.hasResult = true;
             hasExtraMatches = true;
             break;
@@ -522,29 +536,29 @@ export default function InputScreen({ navigation }: any) {
         diff--;
       }
     }
-    // check for 3a-3c matches
-    if (lenOfTrailing_9a > 0 && lenOfTrailing_9c > 0) {
+    // check for 9-4 matches
+    if (lenOfTrailing_9 > 0 && lenOfTrailing_4 > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (!hasExtraMatches && diff > 2) {
-        for (const string_9a of resultsWithTrailing_9a) {
-          const searchString = string_9a.slice(
+        for (const string_9 of resultsWithTrailing_9) {
+          const searchString = string_9.slice(
             0,
-            string_9a.length - TRAILING_LEN + diff
+            string_9.length - TRAILING_LEN + diff
           );
-          const string_9a_in_9c = findMatchStringInList(
+          const string_9_in_4 = findMatchStringInList(
             searchString,
-            routeDataMaps.route_9c,
-            diff
+            routeDataMaps.route_4,
+            diff,
+            4
           );
-          if (string_9a_in_9c !== "") {
-            finalResultObj.route_9a = string_9a;
-            finalResultObj.route_9b =
-              lenOfTrailing_9b > 0 ? resultsWithTrailing_9b[0] : "";
-            finalResultObj.route_9c =
-              string_9a_in_9c || resultsWithTrailing_9c[0];
-            finalResultObj.diff_9a = diff;
-            finalResultObj.diff_9b = 0;
-            finalResultObj.diff_9c = diff;
+          if (string_9_in_4 !== "") {
+            finalResultObj.route_9 = string_9;
+            finalResultObj.route_3 =
+              lenOfTrailing_3 > 0 ? resultsWithTrailing_3[0] : "";
+            finalResultObj.route_4 = string_9_in_4 || resultsWithTrailing_4[0];
+            finalResultObj.diff_9 = diff;
+            finalResultObj.diff_3 = 0;
+            finalResultObj.diff_4 = diff;
             finalResultObj.hasResult = true;
             hasExtraMatches = true;
             break;
@@ -553,29 +567,29 @@ export default function InputScreen({ navigation }: any) {
         diff--;
       }
     }
-    // check for 3b-3c matches
-    if (lenOfTrailing_9b > 0 && lenOfTrailing_9c > 0) {
+    // check for 3-4 matches
+    if (lenOfTrailing_3 > 0 && lenOfTrailing_4 > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (!hasExtraMatches && diff > 2) {
-        for (const string_9b of resultsWithTrailing_9b) {
-          const searchString = string_9b.slice(
+        for (const string_3 of resultsWithTrailing_3) {
+          const searchString = string_3.slice(
             0,
-            string_9b.length - TRAILING_LEN + diff
+            string_3.length - TRAILING_LEN + diff
           );
-          const string_9b_in_9c = findMatchStringInList(
+          const string_3_in_4 = findMatchStringInList(
             searchString,
-            routeDataMaps.route_9c,
-            diff
+            routeDataMaps.route_4,
+            diff,
+            4
           );
-          if (string_9b_in_9c !== "") {
-            finalResultObj.route_9a =
-              lenOfTrailing_9a > 0 ? resultsWithTrailing_9a[0] : "";
-            finalResultObj.route_9b = string_9b;
-            finalResultObj.route_9c =
-              string_9b_in_9c || resultsWithTrailing_9c[0];
-            finalResultObj.diff_9a = 0;
-            finalResultObj.diff_9b = diff;
-            finalResultObj.diff_9c = diff;
+          if (string_3_in_4 !== "") {
+            finalResultObj.route_9 =
+              lenOfTrailing_9 > 0 ? resultsWithTrailing_9[0] : "";
+            finalResultObj.route_3 = string_3;
+            finalResultObj.route_4 = string_3_in_4 || resultsWithTrailing_4[0];
+            finalResultObj.diff_9 = 0;
+            finalResultObj.diff_3 = diff;
+            finalResultObj.diff_4 = diff;
             finalResultObj.hasResult = true;
             hasExtraMatches = true;
             break;
@@ -586,13 +600,13 @@ export default function InputScreen({ navigation }: any) {
     }
     // no match (return basic)
     if (!hasExtraMatches) {
-      finalResultObj.route_9a =
-        lenOfTrailing_9a > 0 ? resultsWithTrailing_9a[0] : "";
-      finalResultObj.route_9b =
-        lenOfTrailing_9b > 0 ? resultsWithTrailing_9b[0] : "";
-      finalResultObj.route_9c =
-        lenOfTrailing_9c > 0 ? resultsWithTrailing_9c[0] : "";
-      if (lenOfTrailing_9a + lenOfTrailing_9b + lenOfTrailing_9c > 0) {
+      finalResultObj.route_9 =
+        lenOfTrailing_9 > 0 ? resultsWithTrailing_9[0] : "";
+      finalResultObj.route_3 =
+        lenOfTrailing_3 > 0 ? resultsWithTrailing_3[0] : "";
+      finalResultObj.route_4 =
+        lenOfTrailing_4 > 0 ? resultsWithTrailing_4[0] : "";
+      if (lenOfTrailing_9 + lenOfTrailing_3 + lenOfTrailing_4 > 0) {
         finalResultObj.hasResult = true;
       }
     }
@@ -602,6 +616,7 @@ export default function InputScreen({ navigation }: any) {
   useEffect(() => {
     gridHistoryHandler();
     setInputGrid(createGrid(input));
+    setInputLengthHandler(input.length);
   }, [input]);
 
   const noMatchToastHandler = () => {
@@ -643,6 +658,7 @@ export default function InputScreen({ navigation }: any) {
         ]}
       >
         <ModalResult
+          inputLength={inputLength}
           isModalVisible={isModalVisible}
           toggleModal={toggleModal}
         />
@@ -736,7 +752,7 @@ export default function InputScreen({ navigation }: any) {
                   color: colors[themeT].text,
                 }}
               >
-                999-9
+                934
               </Text>
               <PlayButton
                 title={searchTitle}

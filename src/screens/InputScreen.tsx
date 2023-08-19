@@ -23,6 +23,7 @@ import SmallBoardImage from "../components/SmallBoardImage";
 import Toast from "react-native-toast-message";
 import * as Haptics from "expo-haptics";
 import * as Device from "expo-device";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function InputScreen({ navigation }: any) {
   // datas
@@ -175,6 +176,7 @@ export default function InputScreen({ navigation }: any) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isCurrentlySearching, setIsCurrentlySearching] = useState(false);
   const [searchTitle, setSearchTitle] = useState("Search");
+  const [totalNumOfSearches, setTotalNumOfSearches] = useState(0);
 
   //haptics
   const triggerHaptic = () => {
@@ -266,11 +268,42 @@ export default function InputScreen({ navigation }: any) {
         }
         setIsCurrentlySearching(false);
         setSearchTitle("Search");
+        // update number of searches to asyncstorage
+        setTotalNumOfSearches((prevTotal) => {
+          AsyncStorage.setItem(
+            "totalNumOfSearches",
+            (prevTotal + 1).toString()
+          );
+          return prevTotal + 1;
+        });
+        //   AsyncStorage.getItem("totalNumOfSearches").then((value) => {
+        //     if (value !== null) {
+        //       setTotalNumOfSearches(parseInt(value) + 1);
+        //       AsyncStorage.setItem(
+        //         "totalNumOfSearches",
+        //         (parseInt(value) + 1).toString()
+        //       );
+        //     } else {
+        //       setTotalNumOfSearches(1);
+        //       AsyncStorage.setItem("totalNumOfSearches", "1");
+        //     }
+        //   }
+        // )});
       });
     }
   };
   const clearButtonHandler = () => {
     setInput("");
+  };
+
+  const noMatchToastHandler = () => {
+    Toast.show({
+      type: "notFound",
+      position: "top",
+      text1: "No Match Found",
+      visibilityTime: 2000,
+      autoHide: true,
+    });
   };
 
   // CONSTANTS
@@ -469,8 +502,6 @@ export default function InputScreen({ navigation }: any) {
     if (lenOfTrailing_9 > 0 && lenOfTrailing_3 > 0 && lenOfTrailing_4 > 0) {
       let diff = MAX_SECONDARY_MATCHES;
       while (diff > 2 && !hasExtraMatches) {
-        console.log("checking 934");
-        console.log(`diff: ${diff}`);
         for (const string_9 of resultsWithTrailing_9) {
           const searchString = string_9.slice(
             0,
@@ -619,15 +650,15 @@ export default function InputScreen({ navigation }: any) {
     setInputLengthHandler(input.length);
   }, [input]);
 
-  const noMatchToastHandler = () => {
-    Toast.show({
-      type: "notFound",
-      position: "top",
-      text1: "No Match Found",
-      visibilityTime: 2000,
-      autoHide: true,
+  useEffect(() => {
+    AsyncStorage.getItem("totalNumOfSearches").then((value) => {
+      if (value !== null) {
+        setTotalNumOfSearches(parseInt(value));
+      } else {
+        setTotalNumOfSearches(0);
+      }
     });
-  };
+  }, []);
 
   // UI/IX misc
   // Get the device model and adjust the circle margin accordingly
@@ -752,7 +783,8 @@ export default function InputScreen({ navigation }: any) {
                   color: colors[themeT].text,
                 }}
               >
-                934
+                934{"\n"}
+                {`Total Searches: ${totalNumOfSearches}`}
               </Text>
               <PlayButton
                 title={searchTitle}

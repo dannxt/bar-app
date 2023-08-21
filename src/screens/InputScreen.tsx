@@ -382,7 +382,7 @@ export default function InputScreen({ navigation }: any) {
           mainString.slice(index, index + searchString.length + TRAILING_LEN)
         );
       }
-      position = index + SEARCH_INTERVAL;
+      position = index + 1;
       index = mainString.indexOf(searchString, position);
     }
     return results;

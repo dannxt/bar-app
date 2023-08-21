@@ -426,7 +426,7 @@ export default function InputScreen({ navigation }: any) {
               idx + searchString.length - diff + TRAILING_LEN
             );
           }
-          position = idx + SEARCH_INTERVAL;
+          position = idx + 1;
           idx = mainString.indexOf(searchString, position);
         }
       });

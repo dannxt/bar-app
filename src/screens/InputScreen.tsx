@@ -279,7 +279,7 @@ export default function InputScreen({ navigation }: any) {
   const TRAILING_LEN = 18;
   const MAX_SECONDARY_MATCHES = 6;
   const MAX_BASE_SEARCH_MATCHES = 1;
-  const SEARCH_INTERVAL = 3;
+  const SEARCH_INTERVAL = 9;
 
   //functions
   function findAllMatchingIndices(mainString: string, searchString: string) {
@@ -739,7 +739,7 @@ export default function InputScreen({ navigation }: any) {
                   color: colors[themeT].text,
                 }}
               >
-                333-3a
+                999-a
               </Text>
               <PlayButton
                 title={searchTitle}

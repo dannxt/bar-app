@@ -5,7 +5,7 @@ import random
 numOfParts = 12
 DEFAULT_DATA_LENGTH = (22 * 2 ** 22 * 3) / numOfParts
 dataLength = DEFAULT_DATA_LENGTH
-listOfRouteNames = [3]
+listOfRouteNames = [9]
 
 
 def generateDataString(routeNumber, dataLength):
@@ -28,7 +28,7 @@ for routeNumber in listOfRouteNames:
         start_time = os.times()[4]
         myString = generateDataString(routeNumber, dataLength)
         try:
-            with open(f'../len-22-333-data/routeData{routeNumber}-{j}.js', 'w') as f:
+            with open(f'../len-22-999-data/routeData{routeNumber}-{j}.js', 'w') as f:
                 f.write(f"module.exports = {repr(myString)};")
             end_time = os.times()[4]
             elapsed_time = end_time - start_time

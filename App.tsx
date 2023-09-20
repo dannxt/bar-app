@@ -52,18 +52,18 @@ export default function App() {
   async function loadData() {
     console.log("loading initial data...");
     let len = 0;
-    routeDataList_3a.push(require("./len-22-333-data/routeData3-1.js"));
-    routeDataList_3a.push(require("./len-22-333-data/routeData3-2.js"));
-    routeDataList_3a.push(require("./len-22-333-data/routeData3-3.js"));
-    routeDataList_3a.push(require("./len-22-333-data/routeData3-4.js"));
-    routeDataList_3b.push(require("./len-22-333-data/routeData3-5.js"));
-    routeDataList_3b.push(require("./len-22-333-data/routeData3-6.js"));
-    routeDataList_3b.push(require("./len-22-333-data/routeData3-7.js"));
-    routeDataList_3b.push(require("./len-22-333-data/routeData3-8.js"));
-    routeDataList_3c.push(require("./len-22-333-data/routeData3-9.js"));
-    routeDataList_3c.push(require("./len-22-333-data/routeData3-10.js"));
-    routeDataList_3c.push(require("./len-22-333-data/routeData3-11.js"));
-    routeDataList_3c.push(require("./len-22-333-data/routeData3-12.js"));
+    routeDataList_3a.push(require("./len-22-333-3a-data/routeData3-1.js"));
+    routeDataList_3a.push(require("./len-22-333-3a-data/routeData3-2.js"));
+    routeDataList_3a.push(require("./len-22-333-3a-data/routeData3-3.js"));
+    routeDataList_3a.push(require("./len-22-333-3a-data/routeData3-4.js"));
+    routeDataList_3b.push(require("./len-22-333-3a-data/routeData3-5.js"));
+    routeDataList_3b.push(require("./len-22-333-3a-data/routeData3-6.js"));
+    routeDataList_3b.push(require("./len-22-333-3a-data/routeData3-7.js"));
+    routeDataList_3b.push(require("./len-22-333-3a-data/routeData3-8.js"));
+    routeDataList_3c.push(require("./len-22-333-3a-data/routeData3-9.js"));
+    routeDataList_3c.push(require("./len-22-333-3a-data/routeData3-10.js"));
+    routeDataList_3c.push(require("./len-22-333-3a-data/routeData3-11.js"));
+    routeDataList_3c.push(require("./len-22-333-3a-data/routeData3-12.js"));
 
     routeDataList_3a.forEach((routeData, index) => {
       len += routeData.length;

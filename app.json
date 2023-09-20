@@ -13,7 +13,7 @@
       "assets/data/*"
     ],
     "ios": {
-      "buildNumber": "1.0.0",
+      "buildNumber": "1.0.5",
       "supportsTablet": true,
       "bundleIdentifier": "com.danns7.barapp-333-3a"
     },
@@ -26,6 +26,11 @@
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6824c5d2-1160-467b-93a6-005265b944c8"
+      }
     }
   }
 }
